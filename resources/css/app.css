@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: "Montserrat";
+}
+
+.fc-button {
+    color: black !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.fc-today-button,
+.fc-daygrid-day-events {
+    display: none !important;
+}
+.fc .fc-daygrid-day-top {
+    justify-content: center;
+    cursor: pointer;
+}
+
+.fc-day-today {
+    background: transparent !important;
+}
+
+.clickable-row {
+    cursor: pointer;
+    position: relative;
+}
+
+/* .clickable-row:hover::after {
+    left: 0;
+    position: absolute;
+    display: inline-block;
+    content: "";
+    background: #42aef1;
+    width: 10px;
+    height: 100%;
+    border-radius: 0 10px 10px 0;
+} */
+
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #25364f;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #25364fc9;
+}
