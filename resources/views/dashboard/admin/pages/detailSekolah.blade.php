@@ -10,7 +10,7 @@
                 </ul>
             </div>
         </header>
-        <div class="w-full h-full flex flex-col px-16 py-3 gap-2">
+        <div class="w-full h-full flex flex-col px-16 gap-2">
             <div class="info-sekolah flex relative">
                 <img src="{{ asset('storage/sekolah/' . $data->logo) }}"
                     class="w-44 h-44 aspect-square rounded-circle border-4 border-darkblue-500 z-10" alt="">
@@ -19,6 +19,9 @@
                 </div>
                 <div
                     class="w-full h-1/2 rounded-box text-white p-5 flex justify-end px-16 items-center absolute bottom-0 left-0 bg-darkblue-500">
+                    <a href="{{ route('sekolah.edit', ['sekolah' => $data->id]) }}"
+                        class="absolute top-0 right-0 px-3 py-2"><i
+                            class="fa-solid fa-pen rounded-circle border border-white p-2"></i></a>
                     <div class="data w-10/12">
                         <div class="contact flex gap-10 text-xs">
                             <div class="email flex gap-2 justify-center items-center">
@@ -44,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="data w-full h-full border border-black rounded-box">
+            <div class="data w-full h-full border flex flex-col border-black rounded-box">
                 <div
                     class="flex justify-between bg-gray-300 gap-2 w-full rounded-box outline outline-gray-300 p-1 text-center">
                     <a href="" class="link-hover w-full bg-darkblue-500 text-white p-1 rounded-box">Kelas Industri
@@ -52,11 +55,22 @@
                     <a href="" class="link-hover w-full text-gray-500 p-1 rounded-box">Pengajar
                         ({{ $data->pengajar->count() }})</a>
                 </div>
-                <div class="w-full h-full grid place-content-center">
+                <div class="w-full h-full flex flex-col justify-between relative">
                     @if ($data->kelas->count() > 0)
-                        <h1>Ada data</h1>
+                        @foreach ($data->kelas as $kelas)
+                        @endforeach
                     @else
-                        <h1>Gada Data</h1>
+                        <div class="w-full h-full flex flex-col font-semibold text-gray-300 justify-center items-center ">
+                            <img src="{{ asset('img/404_kelas.png') }}" alt="">
+                            <h1>Belum ada kelas!</h1>
+                        </div>
+                        <div class="w-full h-max flex justify-between px-5 py-1 items-center">
+                            <a href=""
+                                class="btn rounded-circle text-black bg-transparent border-none hover:bg-transparent"><i
+                                    class="fa-solid fa-up-right-from-square text-xl"></i></a>
+                            <a href="{{ route('kelas.create') }}" class="btn rounded-circle text-white text-xl"><i
+                                    class="fa-solid fa-plus"></i></a>
+                        </div>
                     @endif
                 </div>
             </div>

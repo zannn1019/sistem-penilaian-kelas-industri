@@ -37,10 +37,6 @@
                             <h1 class="font-semibold">Provinsi</h1>
                             <select class="select select-bordered w-full" data-theme="light" id="provinsi" name="provinsi">
                                 <option disabled selected>Provinsi</option>
-                                @foreach ($data_provinsi as $provinsi)
-                                    <option value="{{ $provinsi->name }}" data-id="{{ $provinsi->id }}">
-                                        {{ $provinsi->name }}</option>
-                                @endforeach
                             </select>
                         </div>
                         <div class="w-full text-sm">
@@ -95,43 +91,73 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            function populateSelectOptions(data, targetElement) {
-                $(targetElement).html('');
-                data.forEach(value => {
-                    $(targetElement).append(
-                        `<option value="${value.name}" data-id="${value.id}">${value.name}</option>`);
-                });
-            }
             $("#input-photo").on("change", function(e) {
                 const file = URL.createObjectURL(e.target.files[0]);
                 $("#photo-preview").attr("src", file);
             });
-
-            $("#provinsi").change(function() {
-                var selectedOption = $(this).find('option:selected');
-                const id_prov = selectedOption.data('id');
-                $("#kabupaten-kota").removeAttr('disabled');
-                $.getJSON("http://127.0.0.1:8000/api/getData/regencies/" + id_prov, function(data) {
-                    populateSelectOptions(data, "#kabupaten-kota")
+            $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/provinsi', function(data) {
+                $.each(data.provinsi, function(index, provinsi) {
+                    $('#provinsi').append(
+                        `<option value="${provinsi.nama}"data-id='${provinsi.id}'>${provinsi.nama}</option>`
+                    );
                 });
             });
 
-            $("#kabupaten-kota").change(function() {
-                var selectedOption = $(this).find('option:selected');
-                const id_kabkot = selectedOption.data('id');
-                $("#kecamatan").removeAttr('disabled');
-                $.getJSON("http://127.0.0.1:8000/api/getData/districts/" + id_kabkot, function(data) {
-                    populateSelectOptions(data, "#kecamatan")
-                });
+            $('#provinsi').change(function() {
+                let selectedProvinsi = $(this).find(':selected').data('id');
+                $('#kabupaten-kota').empty();
+                $('#kabupaten-kota').removeAttr('disabled');
+                $('#kabupaten-kota').append(new Option('Pilih Kabupaten/Kota', ''));
+
+                if (selectedProvinsi !== '') {
+                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' +
+                        selectedProvinsi,
+                        function(data) {
+                            $.each(data.kota_kabupaten, function(index, kabupaten) {
+                                $('#kabupaten-kota').append(
+                                    `<option value="${kabupaten.nama}"data-id='${kabupaten.id}'>${kabupaten.nama}</option>`
+                                );
+                            });
+                        });
+                }
             });
 
-            $("#kecamatan").change(function() {
-                var selectedOption = $(this).find('option:selected');
-                const id_kec = selectedOption.data('id');
-                $("#kelurahan").removeAttr('disabled');
-                $.getJSON("http://127.0.0.1:8000/api/getData/villages/" + id_kec, function(data) {
-                    populateSelectOptions(data, "#kelurahan")
-                });
+            $('#kabupaten-kota').change(function() {
+                let selectedKabupaten = $(this).find(':selected').data('id');
+                $('#kecamatan').empty();
+                $('#kecamatan').removeAttr('disabled');
+                $('#kecamatan').append(new Option('Pilih Kecamatan', ''));
+
+                if (selectedKabupaten !== '') {
+                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=' +
+                        selectedKabupaten,
+                        function(data) {
+                            $.each(data.kecamatan, function(index, kecamatan) {
+                                $('#kecamatan').append(
+                                    `<option value="${kecamatan.nama}"data-id='${kecamatan.id}'>${kecamatan.nama}</option>`
+                                );
+                                console.log(kecamatan.id)
+                            });
+                        });
+                }
+            });
+            $('#kecamatan').change(function() {
+                let selectedKecamatan = $(this).find(':selected').data('id');
+                $('#kelurahan').empty();
+                $('#kelurahan').removeAttr('disabled');
+                $('#kelurahan').append(new Option('Pilih Kelurahan', ''));
+
+                if (selectedKecamatan !== '') {
+                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=' +
+                        selectedKecamatan,
+                        function(data) {
+                            $.each(data.kelurahan, function(index, kelurahan) {
+                                $('#kelurahan').append(
+                                    `<option value="${kelurahan.nama}"data-id='${kelurahan.id}'>${kelurahan.nama}</option>`
+                                );
+                            });
+                        });
+                }
             });
         });
     </script>

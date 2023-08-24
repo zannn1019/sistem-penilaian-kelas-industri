@@ -25,6 +25,8 @@ class RedirectIfAuthenticated
                     return redirect(RouteServiceProvider::PENGAJAR_HOME);
                 } else if (auth()->user()->role == "admin") {
                     return redirect(RouteServiceProvider::ADMIN_HOME);
+                } else {
+                    return redirect(RouteServiceProvider::HOME);
                 }
             }
         }

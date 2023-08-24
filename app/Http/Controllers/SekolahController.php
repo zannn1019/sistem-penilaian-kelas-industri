@@ -83,8 +83,8 @@ class SekolahController extends Controller
     {
         return view('dashboard.admin.forms.editSekolah', [
             'title' => 'Sekolah',
-            'full' => false,
-            'data' => $sekolah
+            'full' => true,
+            'data' => $sekolah,
         ]);
     }
 
