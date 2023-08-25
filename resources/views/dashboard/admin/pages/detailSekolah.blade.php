@@ -2,43 +2,43 @@
 @section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full flex gap-3 items-center text-2xl">
-            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-sm:text-lg text-black"></a>
-            <div class="text-sm breadcrumbs">
+            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+            <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
                     <li>{{ $data->nama }}</li>
                 </ul>
             </div>
         </header>
-        <div class="w-full h-full flex flex-col px-16 gap-2">
-            <div class="info-sekolah flex relative">
+        <div class="w-full h-full flex flex-col max-md:px-5 px-16 gap-2">
+            <div class="info-sekolah flex max-md:flex-col max-md:items-center gap-5 relative w-full">
                 <img src="{{ asset('storage/sekolah/' . $data->logo) }}"
-                    class="w-44 h-44 aspect-square rounded-circle border-4 border-darkblue-500 z-10" alt="">
+                    class="w-44 h-44 z-10 aspect-square bg-white rounded-circle border-4 border-darkblue-500" alt="">
                 <div class="info w-full text-center">
                     <h1 class="text-5xl font-semibold py-2 border-b border-black w-full">{{ $data->nama }}</h1>
                 </div>
                 <div
-                    class="w-full h-1/2 rounded-box text-white p-5 flex justify-end px-16 items-center absolute bottom-0 left-0 bg-darkblue-500">
+                    class="w-full h-1/2 rounded-box text-white p-5 flex justify-end max-md:justify-start px-16 max-md:px-0 items-center absolute bottom-0 left-0 bg-darkblue-500">
                     <a href="{{ route('sekolah.edit', ['sekolah' => $data->id]) }}"
                         class="absolute top-0 right-0 px-3 py-2"><i
                             class="fa-solid fa-pen rounded-circle border border-white p-2"></i></a>
-                    <div class="data w-10/12">
-                        <div class="contact flex gap-10 text-xs">
-                            <div class="email flex gap-2 justify-center items-center">
-                                <i class="fa-solid fa-envelope text-xl"></i>
+                    <div class="data w-10/12 max-md:w-full max-md:px-5 max-md:pt-12 max-sm:pt-0 max-sm:pb-0 max-md:pb-5">
+                        <div class="contact flex max-md:flex-col max-md:gap-0 gap-10 text-xs">
+                            <div class="email flex gap-2 max-md:justify-start justify-center items-center">
+                                <i class="fa-solid fa-envelope text-lg"></i>
                                 <span><b>Email</b></span>
                                 <span> | </span>
                                 <span>{{ $data->email }}</span>
                             </div>
-                            <div class="phone flex gap-2 justify-center items-center">
-                                <i class="fa-solid fa-phone text-xl"></i>
+                            <div class="phone flex gap-2 max-md:justify-start justify-center items-center">
+                                <i class="fa-solid fa-phone text-lg"></i>
                                 <span><b>No. Telepon</b></span>
                                 <span>|</span>
                                 <span>{{ $data->no_telp }}</span>
                             </div>
                         </div>
                         <div class="address flex items-center gap-2 text-xs">
-                            <span><i class="fa-solid fa-school text-lg"></i></span>
+                            <span><i class="fa-solid fa-school text-sm"></i></span>
                             <span><b>Alamat</b></span>
                             <span>|</span>
                             <span
@@ -49,7 +49,7 @@
             </div>
             <div class="data w-full h-full border flex flex-col border-black rounded-box">
                 <div
-                    class="flex justify-between bg-gray-300 gap-2 w-full rounded-box outline outline-gray-300 p-1 text-center">
+                    class="flex justify-between bg-gray-300 gap-2 w-full rounded-box outline outline-gray-300 p-1 text-center max-sm:flex-col">
                     <a href="" class="link-hover w-full bg-darkblue-500 text-white p-1 rounded-box">Kelas Industri
                         ({{ $data->kelas->count() }})</a>
                     <a href="" class="link-hover w-full text-gray-500 p-1 rounded-box">Pengajar

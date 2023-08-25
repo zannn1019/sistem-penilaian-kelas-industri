@@ -1,15 +1,35 @@
 @extends('dashboard.layouts.main')
 
+@mobile
+    @php
+        $jumlah = 7;
+    @endphp
+@elsemobile
+    @php
+        $jumlah = 10;
+    @endphp
+@endmobile
+
 @section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto">
-        <div class="w-full h-24 grid grid-cols-2 max-sm:grid-cols-1 grid-rows-1">
+        <div class="w-full h-24 grid grid-cols-2 max-md:grid-cols-1 grid-rows-1">
             <div class="w-full border-2 p-2 h-full rounded-3xl shadow-xl flex flex-col justify-center items-center">
                 <h1 class="font-semibold">Instansi Terkait</h1>
                 <div class="w-full h-full flex justify-center items-center">
                     @foreach ($data_sekolah as $sekolah)
-                        <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" alt=""
-                            class="w-10 aspect-square object-contain -mr-3 rounded-circle">
+                        @if ($loop->iteration > $jumlah)
+                            @if ($loop->last)
+                                <div
+                                    class="w-10 bg-bluesea-200 shadow-lg border border-bluesea-400 aspect-square object-contain -mr-3 rounded-circle flex justify-center items-center">
+                                    {{ $loop->count - $jumlah }}+
+                                </div>
+                            @endif
+                        @else
+                            <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" alt=""
+                                class="w-10 aspect-square object-contain -mr-3 rounded-circle">
+                        @endif
                     @endforeach
+
                     <a href="{{ route('sekolah.index') }}"
                         class="w-10 bg-gray-200 rounded-circle aspect-square shadow-box border-2 border-darkblue-100 flex justify-center items-center"><i
                             class="fa-solid fa-plus"></i></a>
@@ -18,11 +38,11 @@
         </div>
         <div class="w-full h-full flex gap-5 max-md:flex-col">
             <div
-                class="w-8/12 max-md:w-full flex flex-col h-full shadow-2xl bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-2xl">
+                class="w-8/12 max-md:w-full max-sm:h-max max-sm:max-h-96 flex flex-col h-full shadow-2xl bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-2xl">
                 <div class="w-full h-3/6 flex items-center justify-center">
-                    <div class="w-auto text-center">
-                        <h1 class="bg-tosca-500 px-5 py-1 rounded-2xl max-sm:text-sm">{{ date('d M Y') }}</h1>
-                        <h1 class="text-8xl text-white">{{ $daftar_pengajar->count() }}</h1>
+                    <div class="w-auto text-center py-10">
+                        <h1 class="bg-tosca-500 px-5 py-1 rounded-2xl max-sm:text-xs">{{ date('d M Y') }}</h1>
+                        <h1 class="text-8xl text-white max-sm:text-2xl">{{ $daftar_pengajar->count() }}</h1>
                         <span class="text-white text-xl max-sm:text-sm">Pengajar</span>
                     </div>
                     <img src="{{ asset('img/meet.png') }}" alt=""

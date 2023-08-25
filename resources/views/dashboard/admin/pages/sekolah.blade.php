@@ -3,7 +3,7 @@
     $warna = collect(['tosca', 'bluesea', 'bluesky']);
 @endphp
 @section('content')
-    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
+    <div class="w-full h-full text-black p-5 flex flex-col gap-10 overflow-y-auto relative">
         <div class="header flex justify-between">
             <h1 class="text-4xl max-sm:text-2xl font-semibold">Sekolah Yang Terdaftar <span
                     class="text-lg">({{ $data_sekolah->count() }})</span></h1>
@@ -12,7 +12,7 @@
             </a>
         </div>
         <div class="w-full h-full grid grid-cols-4 max-sm:grid-cols-1 max-md:grid-cols-2 gap-2">
-            @foreach ($data_sekolah as $sekolah)
+            @foreach ($data_sekolah->paginate(8) as $sekolah)
                 @php
                     $data_warna = $warna->random();
                 @endphp
@@ -58,5 +58,6 @@
                 </div>
             @endforeach
         </div>
+        {{ $data_sekolah->paginate(8)->links('components.pagination') }}
     </div>
 @endsection

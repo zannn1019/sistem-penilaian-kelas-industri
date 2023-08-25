@@ -2,37 +2,39 @@
 @section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full flex gap-3 items-center text-2xl">
-            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-sm:text-lg text-black"></a>
-            <div class="text-sm breadcrumbs">
+            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-sm:text-xl text-black"></a>
+            <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
                     <li>Sekolah Baru</li>
                 </ul>
             </div>
         </header>
-        <form class="w-full h-auto px-16 flex gap-2" action="{{ route('sekolah.store') }}" method="POST"
-            enctype="multipart/form-data">
+        <form class="w-full h-auto px-16 flex gap-2 max-md:flex-col max-md:px-5" action="{{ route('sekolah.store') }}"
+            method="POST" enctype="multipart/form-data">
             @csrf
-            <div
-                class="input-logo bg-gray-100 w-36 aspect-square border border-black h-36 rounded-circle flex justify-center items-center relative">
+            <div class="max-md:w-full max-md:flex max-md:justify-center">
                 <div
-                    class="overflow-hidden text-4xl text-gray-500 w-full h-full bg-gray-200 z-10 flex justify-center items-center rounded-circle border border-black relative hover:brightness-50 ">
-                    <input type="file" name="logo" id="input-photo"
-                        class="z-10 w-full h-full rounded-circle cursor-pointer opacity-0 absolute top-0 left-0">
-                    <i class="fa-solid fa-plus "></i>
-                    <img src="" alt="" class="absolute top-0 left-0 w-full h-full pointer-events-none z-20"
-                        id="photo-preview">
+                    class="input-logo bg-gray-100 w-36 max-md:w-53 aspect-square border border-black h-36 rounded-circle flex justify-center items-center relative">
+                    <div
+                        class="overflow-hidden text-4xl text-gray-500 w-full h-full bg-gray-200 z-10 flex justify-center items-center rounded-circle border border-black relative hover:brightness-50 ">
+                        <input type="file" name="logo" id="input-photo"
+                            class="z-10 w-full h-full rounded-circle cursor-pointer opacity-0 absolute top-0 left-0">
+                        <i class="fa-solid fa-plus "></i>
+                        <img src="" alt=""
+                            class="absolute top-0 left-0 w-full h-full pointer-events-none z-20" id="photo-preview">
+                    </div>
+                    <div
+                        class="absolute max-md:hidden w-64 h-10 bg-gradient-to-r from-bluesky-500 to-bluesea-500 top-0 left-12 rounded-6xl border border-black text-white font-semibold text-sm flex items-center justify-end px-2">
+                        Tambah logo sekolah</div>
                 </div>
-                <div
-                    class="absolute w-64 h-10 bg-gradient-to-r from-bluesky-500 to-bluesea-500 top-0 left-12 rounded-6xl border border-black text-white font-semibold text-sm flex items-center justify-end px-2">
-                    Tambah logo sekolah</div>
             </div>
-            <div class="w-full h-full py-14 flex flex-col gap-2" data-theme="light">
+            <div class="w-full h-max py-14 max-md:py-2 flex flex-col gap-2" data-theme="light">
                 <input type="text" placeholder="Nama Sekolah" name="nama"
                     class="input input-bordered w-full text-xl h-16 text-black font-semibold border-black focus:outline-none" />
                 <div class="w-full border border-black rounded-xl p-3 flex gap-2 flex-col">
                     <h1 class="font-semibold pb-2">Alamat Sekolah</h1>
-                    <div class="w-full grid grid-cols-2 gap-2">
+                    <div class="w-full grid grid-cols-2 gap-2 max-sm:grid-cols-1">
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Provinsi</h1>
                             <select class="select select-bordered w-full" data-theme="light" id="provinsi" name="provinsi">
@@ -67,7 +69,7 @@
                         </div>
                     </div>
                     <hr class="border-black">
-                    <div class="w-full grid gap-2 grid-cols-2">
+                    <div class="w-full grid gap-2 grid-cols-2 max-sm:grid-cols-1">
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Email</h1>
                             <input type="text" placeholder="Type here" class="input input-bordered w-full"

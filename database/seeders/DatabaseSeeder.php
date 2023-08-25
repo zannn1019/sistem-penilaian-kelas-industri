@@ -14,15 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'foto' => 'admin.jpg',
-            'nik' => '123456',
-            'nama' => 'Admin',
-            'username' => 'admin',
-            'password' => Hash::make('password'), // Ganti dengan password yang Anda inginkan
-            'no_telp' => '123456789',
-            'role' => 'admin',
-        ]);
+        // User::create([
+        //     'foto' => 'admin.jpg',
+        //     'nik' => '123456',
+        //     'nama' => 'Admin',
+        //     'username' => 'admin',
+        //     'password' => Hash::make('password'), // Ganti dengan password yang Anda inginkan
+        //     'no_telp' => '123456789',
+        //     'role' => 'admin',
+        // ]);
+        \App\Models\Sekolah::factory(1000)->create();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

@@ -29,7 +29,7 @@ class DashboardController extends Controller
             return view('dashboard.admin.pages.dashboard', [
                 'title' => "Dashboard",
                 'full' => false,
-                'data_sekolah' => Sekolah::all(),
+                'data_sekolah' => Sekolah::orderBy("id", "DESC")->get(),
                 'daftar_pengajar' => User::where("role", '=', 'pengahar')->get(),
                 'mapel' => Mapel::all()->count(),
                 'kelas' => Kelas::all()->count(),

@@ -14,16 +14,27 @@
 </head>
 
 <body
-    class="overflow-x-hidden max-sm:flex h-screen max-md:grid max-md:place-content-center bg-gradient-to-tr from-bluesky-500 from-10% to-darkblue-500 to-90%">
-    @if (Session::has('succes'))
-        <div class="alert bg-green-100 text-success border border-success absolute -right-3 top-3 w-auto shadow-xl opacity-0"
-            id="alert">
+    class="overflow-x-hidden max-sm:flex max-md:h-max max-md:min-h-screen h-screen max-md:grid max-md:place-content-center bg-gradient-to-tr from-bluesky-500 from-10% to-darkblue-500 to-90%">
+    @if (Session::has('success'))
+        <div
+            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-green-100 text-success border border-success absolute -right-3 top-3 w-auto shadow-xl opacity-0">
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Welcome back <b>{{ auth()->user()->nama }}</b>!</span>
+            <span>{{ Session::get('success') }}!</span>
+        </div>
+    @endif
+    @if (Session::has('error'))
+        <div
+            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-red-200 text-error border border-error absolute -right-3 top-3 w-auto shadow-xl opacity-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ Session::get('error') }}!</span>
         </div>
     @endif
     <div class="container-fluid w-full h-full p-10 max-sm:p-0 max-h-full">
@@ -50,7 +61,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     <script>
-        $("#alert").velocity({
+        $(".alert").velocity({
             properties: {
                 opacity: 1,
                 translateX: -20,
@@ -60,7 +71,7 @@
             }
         })
         setTimeout(() => {
-            $("#alert").velocity({
+            $(".alert").velocity({
                 properties: {
                     opacity: 0,
                     translateX: -0,

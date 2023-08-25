@@ -24,7 +24,11 @@ class UserController extends Controller
         ]);
         if (Auth::attempt($data)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard')->with('succes', ' a');
+            if (auth()->user()->role == "pengajar") {
+                return redirect()->intended('pengajar/dashboard')->with('success', "Welcome Back " . auth()->user()->nama);
+            } else if (auth()->user()->role == "admin") {
+                return redirect()->intended('admin/dashboard')->with('success', "Welcome Back " . auth()->user()->nama);
+            }
         }
         return back()->with('error', 'Incorect username or password');
     }

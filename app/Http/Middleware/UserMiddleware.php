@@ -16,14 +16,9 @@ class UserMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         $user = $request->user();
-
-        // if ($user) {
-        //     if ($user->role === "admin") {
-        //         return redirect('/pengajar/dashboard');
-        //     } elseif ($user->role === "pengajar") {
-        //         return redirect('/pengajar/dashboard');
-        //     }
-        // }
-        return $next($request);
+        if ($user->role == $role) {
+            return $next($request);
+        }
+        return abort(403, 'Unauthorized');
     }
 }

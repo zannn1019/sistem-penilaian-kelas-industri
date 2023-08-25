@@ -18,7 +18,7 @@ class SekolahController extends Controller
         return view('dashboard.admin.pages.sekolah', [
             'title' => "Sekolah",
             'full' => false,
-            'data_sekolah' => Sekolah::all(),
+            'data_sekolah' => Sekolah::orderBy('id', 'DESC'),
             'kelas' => Kelas::class
         ]);
     }
@@ -60,7 +60,7 @@ class SekolahController extends Controller
             $validated_data['logo'] = $fileName;
         }
         Sekolah::create($validated_data);
-        return redirect()->route('sekolah.show', ["sekolah" => Sekolah::latest()->get()->first()->id]);
+        return redirect()->route('sekolah.show', ["sekolah" => Sekolah::latest()->get()->first()->id])->with('success', 'Sekolah berhasil ditambahkan');
     }
 
     /**
@@ -96,7 +96,12 @@ class SekolahController extends Controller
         $validated_data = $request->validate([
             'logo' => [''],
             'nama' => ['required'],
-            'alamat' => ['required'],
+            'provinsi' => ['required'],
+            'kabupaten_kota' => ['required'],
+            'kecamatan' => ['required'],
+            'kelurahan' => ['required'],
+            'jalan' => ['required'],
+            'email' => ['required'],
             'no_telp' => ['required']
         ]);
         if ($request->hasFile('logo')) {
@@ -109,7 +114,7 @@ class SekolahController extends Controller
             $validated_data['logo'] = $sekolah->logo;
         }
         $sekolah->update($validated_data);
-        return back();
+        return redirect()->route('sekolah.show', ["sekolah" => $sekolah->id])->with('success', "Informasi sekolah berhasil diubah");
     }
 
     /**
