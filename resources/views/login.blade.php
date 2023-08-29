@@ -14,13 +14,13 @@
 
 <body class="h-screen overflow-hidden">
     <div class="container-fluid w-full h-full flex justify-center items-center">
-        <div class="absolute top-0 left-0 p-5">
+        <div class="absolute z-10 top-0 left-0 p-5">
             <img src="{{ asset('img/logo_white.png') }}" alt="" class="w-16">
         </div>
         <img src="{{ asset('img/login_bg.png') }}" alt=""
-            class="absolute top-0 left-0 -z-10 w-full h-full object-cover">
+            class="absolute top-0 left-0 w-full h-full object-cover">
         <div
-            class="login bg-white p-10 rounded-box w-1/2 max-sm:w-10/12 justify-center items-center flex flex-col gap-3">
+            class="login z-10 bg-white p-10 rounded-box w-1/2 max-sm:w-10/12 justify-center items-center flex flex-col gap-3">
             <h1 class="text-5xl text-bluesky-500 font-bold">Login</h1>
             <p class="text-center text-black text-md">Masukkan Username dan Password Anda. Kami akan segera mengarahkan
                 Anda ke

@@ -35,7 +35,10 @@ class KelasController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.admin.forms.createKelas', [
+            'title' => "Kelas",
+            'full' => true
+        ]);
     }
 
     /**

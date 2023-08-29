@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('nama');
             $table->string('username');
             $table->string('password');
+            $table->string('email')->unique();
             $table->string('no_telp');
             $table->enum('role', ['admin', 'pengajar']);
+            $table->enum('status', ['aktif', 'nonaktif']);
             $table->timestamps();
         });
     }

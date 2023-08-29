@@ -94,7 +94,7 @@
                     <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Instansi Sekolah
                     </h1>
                     <div
-                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute">
+                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $data_sekolah->count() }}</h1>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Mata Pelajaran
                     </h1>
                     <div
-                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute">
+                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $mapel }}</h1>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                     <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Kelas Industri
                     </h1>
                     <div
-                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute">
+                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $kelas }}</h1>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                     <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Siswa/Siswi
                     </h1>
                     <div
-                        class="w-16 h-16 text-3xl font-semib    old border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute">
+                        class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $siswa }}</h1>
                     </div>
                 </div>

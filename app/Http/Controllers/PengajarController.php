@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengajar;
 use App\Models\User;
+use App\Models\Pengajar;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class PengajarController extends Controller
@@ -16,7 +17,7 @@ class PengajarController extends Controller
         return view('dashboard.admin.pages.pengajar', [
             'title' => "Pengajar",
             'full' => false,
-            'data_pengajar' => User::where('role', '=', 'pengajar')->get()
+            'data_pengajar' => User::where('role', '=', 'pengajar')
         ]);
     }
 
@@ -25,7 +26,10 @@ class PengajarController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.admin.forms.createPengajar', [
+            'title' => "Pengajar",
+            'full' => true
+        ]);
     }
 
     /**
@@ -33,15 +37,18 @@ class PengajarController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Pengajar $pengajar)
+    public function show(User $pengajar)
     {
-        //
+        return view('dashboard.admin.pages.detailPengajar', [
+            'title' => "Pengajar",
+            'full' => true,
+            'data_pengajar' => $pengajar,
+        ]);
     }
 
     /**

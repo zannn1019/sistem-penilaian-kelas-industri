@@ -28,11 +28,9 @@ class SekolahController extends Controller
      */
     public function create()
     {
-        $provinsi = json_decode(file_get_contents('https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json'));
         return view('dashboard.admin.forms.createSekolah', [
             'title' => "Sekolah",
             'full' => true,
-            'data_provinsi' => $provinsi
         ]);
     }
 
@@ -43,14 +41,17 @@ class SekolahController extends Controller
     {
         $validated_data = $request->validate([
             'logo' => ['required'],
-            'nama' => ['required'],
+            'nama' => ['required', 'unique:sekolah,nama'],
             'provinsi' => ['required'],
             'kabupaten_kota' => ['required'],
             'kecamatan' => ['required'],
             'kelurahan' => ['required'],
             'jalan' => ['required'],
-            'email' => ['required'],
+            'email' => ['required', 'email:dns'],
             'no_telp' => ['required']
+        ], [
+            'nama.unique' => "Sekolah dengan nama tersebut sudah ada!",
+            'email.email:dns' => "Alamat email tidak valid!"
         ]);
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');

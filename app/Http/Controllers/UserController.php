@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,7 +55,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated_data = $request->validate([
+            'foto' => ['required'],
+            'nik' => ['required', 'unique:users,nik'],
+            'nama' => ['required'],
+            'username' => ['required', 'unique:users,username'],
+            'password' => ['confirmed', 'required'],
+            'email' => ['required', 'email:dns'],
+            'no_telp' => ['required']
+        ]);
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
+            $file->move('storage/pengajar', $fileName);
+            $validated_data['foto'] = $fileName;
+        }
+        $validated_data['role'] = "pengajar";
+        $validated_data['statue'] = "aktif";
+        User::create($validated_data);
+        return redirect()->route('pengajar.index')->with('success', 'Pengajar berhasil ditambahkan');
     }
 
     /**
@@ -78,7 +98,40 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        if ($request->foto != null) {
+            $validated_data = $request->validate([
+                'foto' => [],
+                'nik' => ['required'],
+                'nama' => ['required'],
+                'username' => ['required'],
+                'email' => ['required', 'email:dns'],
+                'no_telp' => ['required'],
+                'status' => ['required']
+            ]);
+            if ($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                $extension = $file->getClientOriginalExtension();
+                $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
+                $file->move('storage/pengajar', $fileName);
+                $validated_data['foto'] = $fileName;
+            } else {
+                $validated_data['foto'] = $user->logo;
+            }
+        } else {
+            $validated_data = $request->validate([
+                'nik' => ['required'],
+                'nama' => ['required'],
+                'username' => ['required'],
+                'email' => ['required', 'email:dns'],
+                'no_telp' => ['required'],
+                'status' => ['required']
+            ]);
+        }
+        if ($user->update($validated_data)) {
+            return back()->with('success', "Informasi berhasil diubah!");
+        } else {
+            return back()->with('success', "Informasi gagal diubah!");
+        }
     }
 
     /**
