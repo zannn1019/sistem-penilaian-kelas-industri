@@ -14,23 +14,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'foto' => 'admin.jpg',
-            'nik' => '123456',
-            'nama' => 'Admin',
-            'username' => 'admin',
-            'password' => Hash::make('password'), // Ganti dengan password yang Anda inginkan
-            'email' => "admin@gmail.com",
-            'no_telp' => '123456789',
-            'role' => 'admin',
-            'status' => "aktif"
-        ]);
-        // \App\Models\Sekolah::factory(1)->create();
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        // User::create([
+        //     'foto' => 'admin.jpg',
+        //     'nik' => '123456',
+        //     'nama' => 'Admin',
+        //     'username' => 'admin',
+        //     'password' => Hash::make('password'),
+        //     'email' => "admin@gmail.com",
+        //     'no_telp' => '123456789',
+        //     'role' => 'admin',
+        //     'status' => "aktif"
         // ]);
+        // User::create([
+        //     'foto' => '11.jpeg',
+        //     'nik' => fake()->nik(),
+        //     'nama' => fake()->name(),
+        //     'username' => fake()->userName(),
+        //     'password' => Hash::make(fake()->password()),
+        //     'email' => fake()->email(),
+        //     'no_telp' => fake()->phoneNumber(),
+        //     'role' => 'pengajar',
+        //     'status' => collect(['aktif', 'nonaktif'])->random(1)->first()
+        // ]);
+        // \App\Models\Sekolah::factory(1)->create();
     }
 }

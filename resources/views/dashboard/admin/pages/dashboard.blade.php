@@ -29,8 +29,7 @@
                                 class="w-10 aspect-square object-contain -mr-3 rounded-circle">
                         @endif
                     @endforeach
-
-                    <a href="{{ route('sekolah.index') }}"
+                    <a href="{{ route('sekolah.create') }}"
                         class="w-10 bg-gray-200 rounded-circle aspect-square shadow-box border-2 border-darkblue-100 flex justify-center items-center"><i
                             class="fa-solid fa-plus"></i></a>
                 </div>
@@ -52,7 +51,7 @@
                     class="w-full h-3/6 rounded-2xl bg-gray-100 shadow-inner grid grid-cols-2 max-sm:grid-cols-1 overflow-hidden">
                     <div class="h-auto flex flex-col gap-1 overflow-y-auto bg-white p-2 shadow-box">
                         <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-5">
-                            <input type="text" class="bg-transparent focus:outline-none p-2 w-full">
+                            <input type="text" class="bg-transparent  p-2 w-full">
                             <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
                         </div>
                         @foreach ($daftar_pengajar as $pengajar)

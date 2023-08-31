@@ -25,6 +25,10 @@ class UserController extends Controller
         ]);
         if (Auth::attempt($data)) {
             $request->session()->regenerate();
+            activity()
+                ->useLog(auth()->user()->role)
+                ->causedBy(auth()->user())
+                ->log('Login');
             if (auth()->user()->role == "pengajar") {
                 return redirect()->intended('pengajar/dashboard')->with('success', "Welcome Back " . auth()->user()->nama);
             } else if (auth()->user()->role == "admin") {
@@ -36,6 +40,10 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        activity()
+            ->useLog(auth()->user()->role)
+            ->causedBy(auth()->user())
+            ->log('Logout');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

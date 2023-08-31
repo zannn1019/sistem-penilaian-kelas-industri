@@ -34,7 +34,7 @@
             </div>
             <div class="w-full h-full py-14 max-md:py-2 flex flex-col gap-2" data-theme="light">
                 <input type="text" placeholder="Nama Sekolah" name="nama" value="{{ $data->nama }}"
-                    class="input input-bordered w-full text-xl h-16 text-black font-semibold border-black focus:outline-none" />
+                    class="input input-bordered focus:outline-none w-full text-xl h-16 text-black font-semibold border-black " />
                 <div class="w-full border border-black rounded-xl p-3 flex gap-2 flex-col">
                     <h1 class="font-semibold pb-2">Alamat Sekolah</h1>
                     <div class="w-full grid grid-cols-2 gap-2 max-md:grid-cols-1">
@@ -67,7 +67,8 @@
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Jalan</h1>
-                            <input type="text" placeholder="Type here" class="input input-bordered w-full" name="jalan"
+                            <input type="text" placeholder="Type here"
+                                class="input input-bordered focus:outline-none w-full" name="jalan"
                                 value="{{ $data->jalan }}" />
                         </div>
                     </div>
@@ -76,11 +77,12 @@
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Email</h1>
                             <input type="text" placeholder="Type here" value="{{ $data->email }}"
-                                class="input input-bordered w-full" name="email" />
+                                class="input input-bordered focus:outline-none w-full" name="email" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Nomor Telepon</h1>
-                            <input type="text" placeholder="Type here" class="input input-bordered w-full" name="no_telp"
+                            <input type="text" placeholder="Type here"
+                                class="input input-bordered focus:outline-none w-full" name="no_telp"
                                 value="{{ $data->no_telp }}" />
                         </div>
                     </div>

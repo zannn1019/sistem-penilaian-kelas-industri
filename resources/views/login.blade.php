@@ -37,20 +37,21 @@
                     </div>
                 @endif
                 @csrf
-                <div class="login-input text-white p-0 input input-bordered flex gap-2 bg-gray-200 rounded-3xl">
+                <div
+                    class="login-input text-white p-0 input input-bordered focus:outline-none flex gap-2 bg-gray-200 rounded-3xl">
                     <div class="icon bg-bluesky-500 px-4 py-3 rounded-full">
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <input type="text" name="username" placeholder="Username" id="username"
-                        class="bg-transparent  w-full focus:outline-none focus:border-none text-black focus:bg-transparent"
-                        required>
+                        class="bg-transparent  w-full  focus:border-none text-black focus:bg-transparent" required>
                 </div>
-                <div class="login-input text-white p-0 input input-bordered flex gap-2 bg-gray-200 rounded-3xl">
+                <div
+                    class="login-input text-white p-0 input input-bordered focus:outline-none flex gap-2 bg-gray-200 rounded-3xl">
                     <div class="icon bg-bluesky-500 px-4 py-3 rounded-full">
                         <i class="fa-solid fa-eye"></i>
                     </div>
                     <input type="password" name="password" placeholder="Password" id="password"
-                        class="bg-transparent w-full focus:outline-none focus:border-none text-black " required>
+                        class="bg-transparent w-full  focus:border-none text-black " required>
                 </div>
                 <div class="submit-btn w-full flex justify-center items-center">
                     <input type="submit" value="Login" id="submit_btn"

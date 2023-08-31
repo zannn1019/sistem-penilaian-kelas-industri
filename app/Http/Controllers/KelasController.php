@@ -50,19 +50,11 @@ class KelasController extends Controller
             'id_sekolah' => ['required'],
             'tingkat' => ['required'],
             'jurusan' => ['required'],
-            'nama' => ['required'],
-            'sticker' => ['required']
+            'kelas' => ['required'],
+            'nama_kelas' => ['required']
         ]);
-        $sekolah = Sekolah::find($validated_data['id_sekolah'])->nama;
-        if ($request->hasFile('sticker')) {
-            $file = $request->file('sticker');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = Str::slug($sekolah) . '-' . Str::slug($validated_data['jurusan']) . '.' . $extension;
-            $file->move('storage/jurusan', $fileName);
-            $validated_data['sticker'] = $fileName;
-        }
         Kelas::create($validated_data);
-        return back();
+        return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()]);
     }
 
     /**
@@ -97,9 +89,17 @@ class KelasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, Kelas $kela)
     {
-        //
+        $validated_data = $request->validate([
+            'id_sekolah' => ['required'],
+            'tingkat' => ['required'],
+            'jurusan' => ['required'],
+            'kelas' => ['required'],
+            'nama_kelas' => ['required']
+        ]);
+        $kela->update($validated_data);
+        return back()->with('success', 'Data kelas berhasil di ubah!');
     }
 
     /**

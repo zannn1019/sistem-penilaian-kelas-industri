@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mapel;
 use App\Models\User;
 use App\Models\Pengajar;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class PengajarController extends Controller
         return view('dashboard.admin.pages.pengajar', [
             'title' => "Pengajar",
             'full' => false,
-            'data_pengajar' => User::where('role', '=', 'pengajar')
+            'data_pengajar' => User::where('role', '=', 'pengajar')->orderBy("id", "DESC")
         ]);
     }
 
@@ -44,10 +45,24 @@ class PengajarController extends Controller
      */
     public function show(User $pengajar)
     {
+        $jumlah_sekolah = Pengajar::withCount('sekolah')->where('id_user', '=', $pengajar->id)->first()->sekolah_count ?? '0';
+        $jumlah_kelas = Pengajar::withCount('kelas')->where('id_user', '=', $pengajar->id)->get();
+        $jumlah_tugas = 0;
+        $jumlah_siswa = 0;
+        $data_mapel = Pengajar::where('id_user', '=', $pengajar->id)->get();
+        foreach ($jumlah_kelas as $kelas) {
+            dd($kelas);
+        }
         return view('dashboard.admin.pages.detailPengajar', [
             'title' => "Pengajar",
             'full' => true,
             'data_pengajar' => $pengajar,
+            'jumlah_sekolah' => $jumlah_sekolah,
+            'jumlah_kelas' => $jumlah_kelas->count(),
+            'jumlah_siswa' => $jumlah_siswa,
+            'jumlah_tugas' => $jumlah_tugas,
+            'data_mapel' => $data_mapel,
+            'daftar_mapel' => Mapel::all()
         ]);
     }
 

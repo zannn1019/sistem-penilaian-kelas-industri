@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MapelController;
 use App\Http\Controllers\PengajarController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\SiswaController;
@@ -46,5 +47,6 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         Route::resource('/pengajar', PengajarController::class)->names('pengajar');
         Route::resource('/siswa', SiswaController::class)->names('siswa');
         Route::resource('user', UserController::class)->names('users');
+        Route::resource('/mapel', MapelController::class)->names('mapel');
     });
 });

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('pengajar', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_sekolah')->constrained('sekolah');
-            $table->foreignId('id_kelas')->constrained('kelas');
-            $table->foreignId('id_mapel')->constrained('mapel');
+            $table->foreignId('id_sekolah')->nullable()->constrained('sekolah');
+            $table->foreignId('id_kelas')->nullable()->constrained('kelas');
+            $table->foreignId('id_mapel')->nullable()->constrained('mapel');
             $table->timestamps();
         });
     }

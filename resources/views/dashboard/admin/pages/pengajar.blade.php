@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.main')
 @section('content')
-    <div class="w-full h-full p-5 text-black flex flex-col gap-2 overflow-y-auto">
+    <div class="w-full h-full p-5 text-black flex flex-col gap-5 overflow-y-auto overflow-x-hidden">
         <div class="w-full flex justify-between">
             <div class="flex items-end gap-1 font-semibold">
                 <h1 class="text-3xl">Daftar Pengajar</h1>
@@ -12,10 +12,26 @@
                 </a>
             </div>
         </div>
-        <div class="grid grid-rows-2 max-sm:grid-cols-1 max-md:grid-cols-2 grid-cols-4 gap-2 w-full h-full">
+        <div class="w-full h-full grid grid-cols-4 max-sm:grid-cols-1 max-md:grid-cols-2 gap-3">
             @foreach ($data_pengajar->paginate(8) as $pengajar)
+                @php
+                    if (Cache::has('is_online' . $pengajar->id) && $pengajar->status == 'aktif') {
+                        $is_online = true;
+                        $bg = 'bg-bluesea-100';
+                        $btn = 'bg-bluesea-500';
+                    } else {
+                        $is_online = false;
+                        if ($pengajar->status == 'aktif') {
+                            $bg = 'bg-tosca-100';
+                            $btn = 'bg-tosca-500';
+                        } else {
+                            $bg = 'bg-darkblue-100';
+                            $btn = 'bg-darkblue-500';
+                        }
+                    }
+                @endphp
                 <div
-                    class="w-full h-full {{ $pengajar->status == 'aktif' ? 'bg-tosca-100' : 'bg-gray-200 text-gray-500' }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
+                    class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
                     <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
                         <label tabindex="0" class="cursor-pointer">
                             <i class="fa-solid fa-ellipsis"></i>
@@ -37,8 +53,11 @@
                             <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt="">
                         </div>
                     </div>
-                    <h1 class="font-semibold leading-3">{{ $pengajar->nama }}</h1>
-                    <span class="capitalize text-sm">{{ $pengajar->status }}</span>
+                    <h1 class="font-semibold truncate w-full px-2 text-center">{{ $pengajar->nama }}</h1>
+                    <span class="capitalize text-xs">
+                        {!! $is_online == true
+                            ? 'Mengakses : ' . '<b>' . Cache::get('at_page' . $pengajar->id) . '</b>'
+                            : $pengajar->status !!}</span>
                     <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
                         <div>
                             <h1 class="text-xs">Sekolah</h1>
@@ -55,11 +74,11 @@
                     </div>
                     <div class="w-full flex justify-evenly p-2">
                         <a href="{{ route('pengajar.show', ['pengajar' => $pengajar->id]) }}"
-                            class="{{ $pengajar->status == 'aktif' ? 'bg-tosca-400' : 'bg-gray-500' }} px-3 py-1 rounded-box text-white text-xs"><i
+                            class="{{ $btn }} px-3 py-1 rounded-box text-white text-xs"><i
                                 class="fa-solid fa-user"></i> Profile</a>
                         <div class="dropdown bg-transparent" data-theme="light">
                             <div tabindex="0"
-                                class="{{ $pengajar->status == 'aktif' ? 'bg-tosca-400' : 'bg-gray-500' }} cursor-pointer px-3 py-1 rounded-box text-white text-xs">
+                                class="{{ $btn }} cursor-pointer px-3 py-1 rounded-box text-white text-xs">
                                 <i class="fa-solid fa-envelope"></i> Contact
                             </div>
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-44 ">

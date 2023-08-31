@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,12 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        //
+        $data_kelas = Kelas::find(Request::capture()->kelas);
+        return view('dashboard.admin.forms.createSiswa', [
+            'title' => "Siswa",
+            'full' => true,
+            'data' => $data_kelas
+        ]);
     }
 
     /**
@@ -28,16 +34,22 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
+        $tahun_ajaran = $request->tahun_ajar == null ? date("Y") . '/' . date("Y") + 1 : $request->tahun_ajar;
+        $semester = $request->semester == null ? '1' : $request->semester;
+        $request['tahun_ajar'] = $tahun_ajaran;
+        $request['semester'] = $semester;
         $validated_data = $request->validate([
             'id_sekolah' => ['required'],
             'id_kelas' => ['required'],
-            'tahun_ajar' => ['required'],
             'nis' => ['required', 'unique:siswa,nis'],
             'nama' => ['required'],
-            'no_telp' => ['required']
+            'no_telp' => ['required'],
+            'tahun_ajar' => ['required'],
+            'semester' => ['required']
         ]);
+        // dd($validated_data);
         Siswa::create($validated_data);
-        return back();
+        return redirect()->route('kelas.show', ['kela' => $request->id_kelas])->with('success', 'Siswa berhasil ditambahkan!');
     }
 
     /**

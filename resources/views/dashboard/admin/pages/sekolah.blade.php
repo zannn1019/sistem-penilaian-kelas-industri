@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.main')
 @php
-    $warna = collect(['tosca', 'bluesea', 'bluesky']);
+    $warna = collect(['tosca', 'bluesea', 'blue']);
 @endphp
 @section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-10 overflow-y-auto relative">
@@ -44,7 +44,7 @@
                                     {{ $sekolah->pengajar->count() }}
                                     Pengajar</span>
                                 <span><i class="fa-solid fa-graduation-cap"></i>
-                                    {{ $sekolah->kelas->count() }}
+                                    {{ $sekolah->kelas->groupBy('jurusan')->count() }}
                                     Jurusan</span>
                                 <span><i class="fa-solid fa-users-rectangle"></i>
                                     {{ $sekolah->kelas->count() }}

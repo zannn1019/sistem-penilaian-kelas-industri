@@ -1,8 +1,6 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    @extends('dashboard.layouts.main')
-@section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full flex gap-3 items-center text-2xl">
             <a href="{{ route('pengajar.index') }}" class="fa-solid fa-chevron-left max-sm:text-xl text-black"></a>
@@ -38,9 +36,9 @@
                     data-tip="@error('nama'){{ $message }}  @enderror">
                 </div>
                 <div
-                    class="input-nama flex justify-center items-center input input-bordered @error('nama')input-error placeholder:text-error @enderror  w-full text-xl h-16 text-black font-semibold focus:outline-none">
+                    class="input-nama flex justify-center items-center input input-bordered focus:outline-none @error('nama')input-error placeholder:text-error @enderror  w-full text-xl h-16 text-black font-semibold ">
                     <input type="text" placeholder="Nama Pengajar" name="nama" id="nama-pengajar"
-                        class=" w-full h-full focus:outline-none" required pattern="[A-Z a-z 0-9 -]+" maxlength="75"
+                        class=" w-full h-full " required pattern="[A-Z a-z 0-9 -]+" maxlength="75"
                         value="{{ old('nama') }}" />
                     <span class="font-normal" id="indicator">0</span>
                     <span class="font-normal">/75</span>
@@ -51,38 +49,39 @@
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">NIK</h1>
                             <input required type="text" placeholder="Masukkan NIK"
-                                class="input input-bordered @error('nik')input-error placeholder:text-error @enderror w-full"
+                                class="input input-bordered focus:outline-none @error('nik')input-error placeholder:text-error @enderror w-full"
                                 name="nik" value="{{ old('nik') }}" pattern="[0-9]+" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Username</h1>
                             <input required type="text" placeholder="Masukkan username"
-                                class="input input-bordered @error('username')input-error placeholder:text-error @enderror w-full"
+                                class="input input-bordered focus:outline-none @error('username')input-error placeholder:text-error @enderror w-full"
                                 name="username" value="{{ old('username') }}" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Password</h1>
                             <input required type="password" placeholder="Buat sandi akun"
-                                class="input input-bordered @error('password')input-error placeholder:text-error @enderror w-full"
+                                class="input input-bordered focus:outline-none @error('password')input-error placeholder:text-error @enderror w-full"
                                 name="password" value="{{ old('password') }}" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Konfirmasi Password</h1>
                             <input required type="password" placeholder="Ketik ulang sandi"
-                                class="input input-bordered @error('password_confirmation')input-error placeholder:text-error @enderror w-full"
+                                class="input input-bordered focus:outline-none @error('password_confirmation')input-error placeholder:text-error @enderror w-full"
                                 name="password_confirmation" value="{{ old('password_confirmation') }}" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Email</h1>
                             <input required type="email" placeholder="Masukkan email yang valid"
-                                class="input input-bordered @error('email')input-error placeholder:text-error @enderror w-full"
+                                class="input input-bordered focus:outline-none @error('email')input-error placeholder:text-error @enderror w-full"
                                 name="email" value="{{ old('email') }}" />
                         </div>
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Nomor Telepon</h1>
                             <input required pattern="[0-9]{10,15}" type="text"
-                                placeholder="Masukkan nomor telepon yang valid" class="input input-bordered w-full"
-                                name="no_telp" {{ old('no_telp') }} />
+                                placeholder="Masukkan nomor telepon yang valid"
+                                class="input input-bordered focus:outline-none w-full" name="no_telp"
+                                {{ old('no_telp') }} />
                         </div>
                     </div>
                 </div>
@@ -109,7 +108,4 @@
             });
         });
     </script>
-@endsection
-
-
 @endsection

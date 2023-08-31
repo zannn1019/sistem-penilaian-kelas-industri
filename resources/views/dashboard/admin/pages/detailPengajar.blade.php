@@ -14,7 +14,7 @@
             </div>
             <div class="h-full">
                 <div class="button r" id="button-3">
-                    <input type="checkbox" class="checkbox" id="edit-btn" />
+                    <input type="checkbox" class="checkbox-custom" id="edit-btn" />
                     <div class="knobs"></div>
                     <div class="layer"></div>
                 </div>
@@ -27,7 +27,7 @@
                 @csrf
                 @method('PATCH')
                 <div class="profile-picture flex justify-center items-center relative">
-                    <div
+                    <div id="edit-gambar"
                         class="input-logo bg-gray-100 w-52 max-md:w-53 aspect-square border border-black rounded-circle flex justify-center items-center relative">
                         <div
                             class="overflow-hidden text-4xl text-gray-500 w-full h-full bg-gray-200 z-10 flex justify-center items-center rounded-circle border border-black relative">
@@ -91,7 +91,16 @@
                             <input type="text" name="nik" id=""
                                 class="profile-input profile-input-2 w-full flex items-center px-2 bg-transparent" disabled
                                 value="{{ $data_pengajar->nik }}">
-                            <span class="px-2">SQL,PHP,PYTON</span>
+                            <span class="px-2 font-semibold">
+                                @foreach ($data_mapel as $mapel)
+                                    <div class="badge badge-outline bg-tosca-200 border-tosca-500 text-tosca-700">
+                                        {{ $mapel->nama_mapel }}</div>
+                                @endforeach
+                                <a onclick="mapel_modal.showModal()" class="badge badge-outline cursor-pointer hidden"
+                                    id="mapel-add">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                            </span>
                         </div>
                     </div>
                     <div class="w-full hidden grid-cols-1 max-sm:grid">
@@ -110,28 +119,28 @@
                                 class="w-full overflow-hidden rounded-3xl bg-darkblue-200 relative flex justify-center items-center gap-2 h-24">
                                 <img src="{{ asset('img/sekolah.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
-                                <h1 class="text-4xl font-semibold ">10</h1>
+                                <h1 class="text-4xl font-semibold ">{{ $jumlah_sekolah }}</h1>
                                 <span class="font-semibold">Sekolah</span>
                             </div>
                             <div
                                 class="w-full overflow-hidden rounded-3xl bg-bluesea-100 relative flex justify-center items-center gap-2 h-24">
                                 <img src="{{ asset('img/kelas.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
-                                <h1 class="text-4xl font-semibold ">10</h1>
+                                <h1 class="text-4xl font-semibold ">{{ $jumlah_kelas }}</h1>
                                 <span class="font-semibold">Kelas</span>
                             </div>
                             <div
                                 class="w-full overflow-hidden rounded-3xl bg-bluesky-100 relative flex justify-center items-center gap-2 h-24">
                                 <img src="{{ asset('img/tugas.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
-                                <h1 class="text-4xl font-semibold ">10</h1>
+                                <h1 class="text-4xl font-semibold ">{{ $jumlah_tugas }}</h1>
                                 <span class="font-semibold">Tugas</span>
                             </div>
                             <div
                                 class="w-full overflow-hidden rounded-3xl bg-tosca-100 relative flex justify-center items-center gap-2 h-24">
                                 <img src="{{ asset('img/siswa.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
-                                <h1 class="text-4xl font-semibold ">10</h1>
+                                <h1 class="text-4xl font-semibold ">{{ $jumlah_siswa }}</h1>
                                 <span class="font-semibold">Siswa</span>
                             </div>
                         </div>
@@ -144,28 +153,95 @@
             </div>
         </form>
     </div>
+    <dialog id="mapel_modal" class="modal">
+        <form method="{{ route('pengajar.store') }}" method="POST" class="modal-box overflow-y-visible"
+            data-theme="light">
+            @csrf
+            <h3 class="font-bold text-lg">Tambah Mapel</h3>
+            <p class="pt-4">Nama mapel</p>
+            <div class="input-autocomplete relative w-full">
+                <input type="text" name="nama_mapel" class="input input-bordered border-black w-full"
+                    id="input-autocomplete">
+                <div id="result"
+                    class="hidden absolute z-20 w-full border border-black rounded-lg mt-1 bg-white max-h-40 overflow-auto">
+                </div>
+            </div>
+            <div class="modal-action">
+                <button class="btn" id="close-btn">Close</button>
+            </div>
+        </form>
+    </dialog>
 @endsection
 
 @section('script')
     <script>
         $(document).ready(function() {
+            mapel_modal.showModal()
+
+            function isValidLetter(key) {
+                return /^[a-zA-Z]$/.test(key);
+            }
+
+            $("#input-autocomplete").keyup(function(e) {
+                if ($(this).val() != "") {
+                    if (isValidLetter(e.key)) {
+                        $("#result").removeClass("hidden")
+                        $("#result").empty();
+                        let query = $(this).val()
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('mapel.index') }}",
+                            data: {
+                                'query': query
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if (response.error == null) {
+                                    $.each(response, function(i, val) {
+                                        let option =
+                                            `<div class="result-item cursor-pointer hover:bg-gray-100 p-2 rounded-lg text-xs" data-id='${val.id}'>${val.nama_mapel}</div>`
+                                        $("#result").append(option);
+                                    });
+                                } else {
+                                    let option =
+                                        `<div class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg text-xs" >Tambahkan mapel "${query}"</div>`
+                                    $("#result").append(option);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    $("#result").addClass("hidden")
+                }
+            })
+            $("#result").on("click", ".result-item", function() {
+                let id = $(this).data('id')
+            });
+
+
+            $("#close-btn").click(function(e) {
+                e.preventDefault()
+                mapel_modal.close()
+            })
             $("#input-photo").on("change", function(e) {
                 const file = URL.createObjectURL(e.target.files[0]);
                 $("#photo-preview").attr("src", file);
             });
             $("#edit-btn").click(function() {
                 if ($(this).is(':checked')) {
-                    $("#edit-1").addClass('hover:brightness-50');
-                    $("#edit-1 > input").removeClass('hidden');
+                    $("#edit-gambar").addClass('hover:brightness-50');
+                    $("#input-photo").removeClass('hidden');
                     $(".profile-input").removeAttr('disabled');
                     $(".profile-input.profile-input-2").addClass('border border-black');
                     $("#edit-submit").removeAttr('disabled')
+                    $("#mapel-add").removeClass('hidden')
                 } else {
-                    $("#edit-1").removeClass('hover:brightness-50');
-                    $("#edit-1 > input").addClass('hidden');
+                    $("#edit-gambar").removeClass('hover:brightness-50');
+                    $("#input-photo").addClass('hidden');
                     $(".profile-input").attr('disabled', 'true');
                     $("#edit-submit").attr('disabled', 'true')
                     $(".profile-input.profile-input-2").removeClass('border border-black');
+                    $("#mapel-add").addClass('hidden')
                 }
             })
         })

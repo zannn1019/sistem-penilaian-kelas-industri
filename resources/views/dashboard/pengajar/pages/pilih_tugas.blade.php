@@ -20,8 +20,7 @@
                                         <h3 class="font-semibold text-2xl text-center w-full">Masukkan Nama Tugas</h3>
                                         <div class="w-full flex rounded-6xl bg-gray-300 justify-center items-center px-5"
                                             id="input-batas">
-                                            <input type="text"
-                                                class="bg-transparent w-full h-full p-3 rounded-6xl focus:outline-none"
+                                            <input type="text" class="bg-transparent w-full h-full p-3 rounded-6xl "
                                                 maxlength="30">
                                             <span class="font-semibold">0</span>
                                             <b class="font-semibold">/30</b>
@@ -44,8 +43,7 @@
                                         <h3 class="font-semibold text-2xl text-center w-full">Masukkan Nama Kuis</h3>
                                         <div class="w-full flex rounded-6xl bg-gray-300 justify-center items-center px-5"
                                             id="input-batas">
-                                            <input type="text"
-                                                class="bg-transparent w-full h-full p-3 rounded-6xl focus:outline-none"
+                                            <input type="text" class="bg-transparent w-full h-full p-3 rounded-6xl "
                                                 maxlength="30">
                                             <span class="font-semibold">0</span>
                                             <b class="font-semibold">/30</b>
@@ -67,8 +65,7 @@
                                         <h3 class="font-semibold text-2xl text-center w-full">Masukkan Nama Ujian</h3>
                                         <div class="w-full flex rounded-6xl bg-gray-300 justify-center items-center px-5"
                                             id="input-batas">
-                                            <input type="text"
-                                                class="bg-transparent w-full h-full p-3 rounded-6xl focus:outline-none"
+                                            <input type="text" class="bg-transparent w-full h-full p-3 rounded-6xl "
                                                 maxlength="30">
                                             <span class="font-semibold">0</span>
                                             <b class="font-semibold">/30</b>

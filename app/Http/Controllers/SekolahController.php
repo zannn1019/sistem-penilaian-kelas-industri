@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
+use App\Models\Pengajar;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -67,13 +68,18 @@ class SekolahController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sekolah $sekolah)
+    public function show(Sekolah $sekolah, Request $request)
     {
+        if ($request->get('data') == "kelas" || $request->get('data') == null) {
+            $data = Kelas::where('id_sekolah', '=', $sekolah->id);
+        } else {
+            $data = Pengajar::where('id_sekolah', '=', $sekolah->id);
+        }
         return view("dashboard.admin.pages.detailSekolah", [
             'title' => "Sekolah",
             'full' => true,
             'data' => $sekolah,
-            'data_kelas' => Kelas::where('id_sekolah', '=', $sekolah->id)->get()
+            'data_kelas' => $data
         ]);
     }
 

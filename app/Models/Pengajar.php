@@ -13,20 +13,20 @@ class Pengajar extends Model
     ];
     protected $table = 'pengajar';
 
-    // protected $with = ['kelas'];
+    protected $with = ['sekolah', 'kelas'];
 
     // public function user()
     // {
     //     return $this->belongsTo(User::class, 'id_user');
     // }
-    // public function kelas()
-    // {
-    //     return $this->hasMany(Kelas::class, 'id');
-    // }
-    // public function sekolah()
-    // {
-    //     return $this->hasMany(Sekolah::class, 'id_sekolah');
-    // }
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'id');
+    }
+    public function sekolah()
+    {
+        return $this->belongsTo(Sekolah::class, 'id_sekolah');
+    }
     // public function mapel()
     // {
     //     return $this->belongsTo(Mapel::class, 'id_mapel');
