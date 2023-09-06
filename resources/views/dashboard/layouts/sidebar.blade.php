@@ -71,16 +71,24 @@
         <div class="logo avatar p-5 ">
             <img src="{{ asset('img/logo_white.png') }}" alt="" class="w-full" draggable="false">
         </div>
-        <div class="page_link text-white flex flex-col gap-10 ">
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
+        <div class="page_link text-white flex flex-col w-full gap-2">
+            <a href="{{ route('mapel.index') }}"
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Mapel' ? 'bg-white text-black' : '' }}">
+                <i class="fa-regular fa-message"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">MAPEL</h1>
+            </a>
+            <a href=""
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'FAQ' ? 'bg-white text-black' : '' }}">
                 <i class="fa-regular fa-message"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">PESAN</h1>
             </a>
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
+            <a href=""
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Pengaturan' ? 'bg-white text-black' : '' }}">
                 <i class="fa-solid fa-gear"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">PENGATURAN</h1>
             </a>
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
+            <a href=""
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT EDIT</h1>
             </a>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mapel;
-use App\Models\User;
 use App\Models\Pengajar;
+use App\Models\User;
+use App\Models\PengajarMapel;
+use App\Models\PengajarSekolah;
+use App\Models\Sekolah;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -13,12 +16,21 @@ class PengajarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $pengajar = User::where('role', '=', 'pengajar')->where("nama", 'LIKE', $query . '%')->get();
+            if ($pengajar->count()) {
+                return response()->json($pengajar);
+            } else {
+                return response()->json(['error' => "Pengajar not found"]);
+            }
+        }
         return view('dashboard.admin.pages.pengajar', [
             'title' => "Pengajar",
             'full' => false,
-            'data_pengajar' => User::where('role', '=', 'pengajar')->orderBy("id", "DESC")
+            'data_pengajar' => User::where('role', '=', 'pengajar')->latest(),
         ]);
     }
 
@@ -38,6 +50,31 @@ class PengajarController extends Controller
      */
     public function store(Request $request)
     {
+        $tipe = $request->get('tipe');
+        if ($tipe == "mapel") {
+            if ($request->id_mapel != null) {
+                $id = explode(',', $request->id_mapel);
+            } else {
+                $id = [];
+            }
+            $user = User::find($request->id_user);
+            foreach ($user->mapel()->get() as $mapel) {
+                array_push($id, $mapel->id);
+            }
+            $user->mapel()->sync($id);
+            return back()->with("success", 'Mapel pengajar berhasil di tambah!');
+        } elseif ($tipe == "sekolah") {
+            $user = User::find($request->id_user);
+            $id_sekolah = $request->id_sekolah;
+            $id_kelas = $request->id_kelas;
+
+            if (!$user->sekolah()->wherePivot('id_sekolah', $id_sekolah)->wherePivot('id_kelas', $id_kelas)->exists()) {
+                $user->sekolah()->attach($id_sekolah, ['id_kelas' => $id_kelas]);
+                return back()->with("success", 'Pengajar berhasil ditambahkan!');
+            } else {
+                return back()->with("error", 'Pengajar sudah terhubung dengan sekolah dan kelas ini sebelumnya.');
+            }
+        }
     }
 
     /**
@@ -45,48 +82,53 @@ class PengajarController extends Controller
      */
     public function show(User $pengajar)
     {
-        $jumlah_sekolah = Pengajar::withCount('sekolah')->where('id_user', '=', $pengajar->id)->first()->sekolah_count ?? '0';
-        $jumlah_kelas = Pengajar::withCount('kelas')->where('id_user', '=', $pengajar->id)->get();
         $jumlah_tugas = 0;
+        $jumlah_kelas = $pengajar->kelas()->get();
         $jumlah_siswa = 0;
-        $data_mapel = Pengajar::where('id_user', '=', $pengajar->id)->get();
         foreach ($jumlah_kelas as $kelas) {
-            dd($kelas);
+            $jumlah_siswa += $kelas->siswa()->count();
         }
+        $data_mapel = Mapel::all();
         return view('dashboard.admin.pages.detailPengajar', [
             'title' => "Pengajar",
             'full' => true,
             'data_pengajar' => $pengajar,
-            'jumlah_sekolah' => $jumlah_sekolah,
-            'jumlah_kelas' => $jumlah_kelas->count(),
             'jumlah_siswa' => $jumlah_siswa,
             'jumlah_tugas' => $jumlah_tugas,
-            'data_mapel' => $data_mapel,
-            'daftar_mapel' => Mapel::all()
+            'mapel_pengajar' => $pengajar->mapel()->get(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pengajar $pengajar)
-    {
-        //
-    }
+    // public function edit(Pengajar $pengajar)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pengajar $pengajar)
-    {
-        //
-    }
+    // public function update(Request $request, Pengajar $pengajar)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pengajar $pengajar)
+    public function destroy(User $pengajar, Request $request)
     {
-        //
+        if ($request->ajax()) {
+            if ($request->get('tipe') == "mapel") {
+                $id_mapel = $request->id_mapel;
+                if ($pengajar->mapel()->detach($id_mapel)) {
+                    return response()->json(['success' => "Data berhasil di hapus"]);
+                } else {
+                    return response()->json(['error' => "Data gagal di hapus"]);
+                }
+            }
+        }
     }
 }

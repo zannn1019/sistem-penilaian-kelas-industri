@@ -14,6 +14,7 @@
         </div>
         <div class="w-full h-full grid grid-cols-4 max-sm:grid-cols-1 max-md:grid-cols-2 gap-3">
             @foreach ($data_pengajar->paginate(8) as $pengajar)
+                {{-- @dd($pengajar) --}}
                 @php
                     if (Cache::has('is_online' . $pengajar->id) && $pengajar->status == 'aktif') {
                         $is_online = true;
@@ -61,15 +62,15 @@
                     <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
                         <div>
                             <h1 class="text-xs">Sekolah</h1>
-                            <span class="font-semibold">1</span>
-                        </div>
-                        <div>
-                            <h1 class="text-xs">Sekolah</h1>
-                            <span class="font-semibold">1</span>
+                            <span class="font-semibold">{{ $pengajar->sekolah()->groupBy('id_sekolah')->count() }}</span>
                         </div>
                         <div>
                             <h1 class="text-xs">Kelas</h1>
-                            <span class="font-semibold">1</span>
+                            <span class="font-semibold">{{ $pengajar->kelas()->count() }}</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xs">Mapel</h1>
+                            <span class="font-semibold">{{ $pengajar->mapel()->count() }}</span>
                         </div>
                     </div>
                     <div class="w-full flex justify-evenly p-2">

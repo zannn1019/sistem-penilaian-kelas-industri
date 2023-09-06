@@ -41,13 +41,13 @@
                         <div class="w-full flex gap-2 justify-between items-center">
                             <div class="sub-info text-xs flex flex-col gap-1">
                                 <span><i class="fa-solid fa-chalkboard-user"></i>
-                                    {{ $sekolah->pengajar->count() }}
+                                    {{ $sekolah->pengajar()->groupBy('id_user')->count() }}
                                     Pengajar</span>
                                 <span><i class="fa-solid fa-graduation-cap"></i>
-                                    {{ $sekolah->kelas->groupBy('jurusan')->count() }}
+                                    {{ $sekolah->kelas()->get()->groupBy('jurusan')->count() }}
                                     Jurusan</span>
                                 <span><i class="fa-solid fa-users-rectangle"></i>
-                                    {{ $sekolah->kelas->count() }}
+                                    {{ $sekolah->kelas()->count() }}
                                     Kelas</span>
                             </div>
                             <div class="w-14 h-14 aspect-square">

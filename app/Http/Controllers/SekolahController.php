@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Kelas;
-use App\Models\Pengajar;
 use App\Models\Sekolah;
-use Illuminate\Http\Request;
+use App\Models\Pengajar;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\PengajarSekolah;
+use Illuminate\Support\Facades\DB;
+
+use function Laravel\Prompts\select;
 
 class SekolahController extends Controller
 {
@@ -73,13 +78,22 @@ class SekolahController extends Controller
         if ($request->get('data') == "kelas" || $request->get('data') == null) {
             $data = Kelas::where('id_sekolah', '=', $sekolah->id);
         } else {
-            $data = Pengajar::where('id_sekolah', '=', $sekolah->id);
+            $data = $sekolah->pengajar();
         }
+        $pengajar = DB::table('pengajar_sekolah')
+            ->select('id_user')
+            ->where('id_sekolah', '=', $sekolah->id)
+            ->groupBy('id_user')
+            ->get();
+
         return view("dashboard.admin.pages.detailSekolah", [
             'title' => "Sekolah",
             'full' => true,
-            'data' => $sekolah,
-            'data_kelas' => $data
+            'info_sekolah' => $sekolah,
+            'data' => $data,
+            'jumlah_pengajar' => $pengajar,
+            'data_kelas' => Kelas::where('id_sekolah', '=', $sekolah->id)->get(),
+            'data_pengajar' => User::where('role', '=', 'pengajar')->get()
         ]);
     }
 

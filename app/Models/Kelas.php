@@ -13,10 +13,10 @@ class Kelas extends Model
     ];
     protected $with = ['siswa'];
 
-    // public function pengajar()
-    // {
-    //     return $this->belongsTo(Pengajar::class);
-    // }
+    public function pengajar()
+    {
+        return $this->belongsToMany(User::class, 'pengajar_sekolah', 'id_kelas', 'id_user');
+    }
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class, 'id_sekolah');

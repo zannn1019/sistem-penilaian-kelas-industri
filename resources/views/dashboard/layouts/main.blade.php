@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
-    <title>{{ $title }}</title>
+    <title> {{ Str::title(auth()->user()->role) }} - {{ $title }}</title>
     <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     @vite('resources/css/app.css')
@@ -17,7 +17,7 @@
     class="overflow-x-hidden max-sm:flex max-md:h-max max-md:min-h-screen h-screen max-md:grid max-md:place-content-center bg-gradient-to-tr from-bluesky-500 from-10% to-darkblue-500 to-90%">
     @if (Session::has('success'))
         <div
-            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-green-100 text-success border border-success absolute -right-3 top-3 w-auto shadow-xl opacity-0">
+            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-green-100 text-success border border-success absolute -right-3 top-3 w-auto shadow-xl opacity-0 pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -28,7 +28,7 @@
     @endif
     @if (Session::has('error'))
         <div
-            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-red-200 text-error border border-error absolute -right-3 top-3 w-auto shadow-xl opacity-0">
+            class="alert max-sm:w-11/12 max-sm:flex z-50 bg-red-200 text-error border border-error absolute -right-3 top-3 w-auto shadow-xl opacity-0 pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -80,7 +80,7 @@
                     duration: 800
                 }
             })
-        }, 1500);
+        }, 3000);
     </script>
     @yield('script')
 </body>

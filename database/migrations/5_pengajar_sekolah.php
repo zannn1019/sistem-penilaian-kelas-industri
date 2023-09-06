@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengajar_mapel', function (Blueprint $table) {
+        Schema::create('pengajar_sekolah', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_user')->constrained('users');
+            $table->foreignId('id_sekolah')->nullable()->constrained('sekolah');
+            $table->foreignId('id_kelas')->nullable()->constrained('kelas');
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengajar_mapel');
+        Schema::dropIfExists('pengajar_sekolah');
     }
 };

@@ -15,13 +15,24 @@ class MapelController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $mapel = Mapel::where('nama_mapel', 'LIKE', $query . "%")->get();
+            $pengajarId = $request->get('id');
+            $mapel = Mapel::where('nama_mapel', 'LIKE',  $query . "%")
+                ->whereNotIn('id', function ($query) use ($pengajarId) {
+                    $query->select('id_mapel')
+                        ->from('pengajar_mapel')
+                        ->where('id_user', $pengajarId);
+                })
+                ->get();
             if ($mapel->count()) {
                 return response()->json($mapel);
             } else {
                 return response()->json(['error' => "Mapel not found"]);
             }
         }
+        return view('dashboard.admin.pages.mapel', [
+            'title' => 'Mapel',
+            'full' => true
+        ]);
     }
 
     /**

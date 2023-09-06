@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pengajar')->constrained('pengajar');
+            $table->foreignId('id_pengajar')->constrained('pengajar_mapel');
             $table->enum('tipe', ['tugas', 'quiz', 'PTS', 'PAS']);
             $table->string('kode_tugas');
             $table->string('nama');

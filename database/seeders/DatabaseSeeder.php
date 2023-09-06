@@ -25,17 +25,9 @@ class DatabaseSeeder extends Seeder
         //     'role' => 'admin',
         //     'status' => "aktif"
         // ]);
-        // User::create([
-        //     'foto' => '11.jpeg',
-        //     'nik' => fake()->nik(),
-        //     'nama' => fake()->name(),
-        //     'username' => fake()->userName(),
-        //     'password' => Hash::make(fake()->password()),
-        //     'email' => fake()->email(),
-        //     'no_telp' => fake()->phoneNumber(),
-        //     'role' => 'pengajar',
-        //     'status' => collect(['aktif', 'nonaktif'])->random(1)->first()
-        // ]);
+        // \App\Models\User::factory(10)->create();
         // \App\Models\Sekolah::factory(1)->create();
+        // \App\Models\Siswa::factory(35)->create();
+        // \App\Models\Mapel::factory(10)->create();
     }
 }

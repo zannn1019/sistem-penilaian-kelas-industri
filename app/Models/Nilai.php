@@ -13,10 +13,6 @@ class Nilai extends Model
     ];
     protected $table = 'nilai';
     // protected $with = ['tugas'];
-    // public function pengajar()
-    // {
-    //     return $this->belongsTo(Pengajar::class);
-    // }
     // public function tugas()
     // {
     //     return $this->belongsTo(Tugas::class, 'id_tugas');

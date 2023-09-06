@@ -16,8 +16,4 @@ class Tugas extends Model
     // {
     //     return $this->hasMany(Nilai::class);
     // }
-    // public function pengajar()
-    // {
-    //     return $this->belongsTo(Pengajar::class, 'id_pengajar');
-    // }
 }

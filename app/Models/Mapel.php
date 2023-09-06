@@ -12,8 +12,8 @@ class Mapel extends Model
         'id'
     ];
     protected $table = 'mapel';
-    // public function Pengajar()
-    // {
-    //     return $this->hasMany(Pengajar::class);
-    // }
+    public function pengajar()
+    {
+        return $this->belongsToMany(User::class, 'pengajar_mapel', 'id_mapel', 'id_user');
+    }
 }

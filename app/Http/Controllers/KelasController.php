@@ -54,7 +54,7 @@ class KelasController extends Controller
             'nama_kelas' => ['required']
         ]);
         Kelas::create($validated_data);
-        return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()]);
+        return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()])->with('success', 'Data kelas berhasil ditambahkan!');
     }
 
     /**
@@ -63,7 +63,6 @@ class KelasController extends Controller
     public function show(Kelas $kela)
     {
         if (auth()->user()->role == "pengajar") {
-
             return view('dashboard.pengajar.pages.pilih_tugas', [
                 'title' => 'Pilih Tugas',
                 'full' => true,

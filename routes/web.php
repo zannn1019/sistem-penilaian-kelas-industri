@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminPengajarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
@@ -48,5 +49,10 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         Route::resource('/siswa', SiswaController::class)->names('siswa');
         Route::resource('user', UserController::class)->names('users');
         Route::resource('/mapel', MapelController::class)->names('mapel');
+        Route::controller(AdminPengajarController::class)->group(function () {
+            Route::get('/pengajarDashboard/{pengajar}', 'index')->name('admin-dashboard-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas', 'kelas')->name('admin-kelas-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}', 'showKelas')->name('admin-detail-kelas-pengajar');
+        });
     });
 });

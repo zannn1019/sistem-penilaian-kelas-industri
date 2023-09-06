@@ -55,7 +55,7 @@
         <div class="navbar-end ">
             <div class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black">
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none  text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
+                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
                     placeholder="Type here to search...">
                 <button
                     class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>
@@ -121,7 +121,7 @@
         <div class="navbar-end ">
             <div class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black">
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none  text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
+                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
                     placeholder="Type here to search...">
                 <button
                     class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>
