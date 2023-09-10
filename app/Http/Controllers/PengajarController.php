@@ -19,6 +19,24 @@ class PengajarController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            if ($request->get('pengajar')) {
+                $id = $request->get('pengajar');
+                $user = User::find($id);
+                $jumlah_siswa = 0;
+                if ($user->count()) {
+                    foreach ($user->kelas()->get() as $kelas) {
+                        $jumlah_siswa += $kelas->siswa()->count();
+                    }
+                    return response()->json([
+                        'data' => $user,
+                        'jumlah_sekolah' => $user->sekolah()->groupBy('id_sekolah')->count(),
+                        'jumlah_kelas' => $user->kelas()->count(),
+                        'jumlah_siswa' => $jumlah_siswa
+                    ]);
+                } else {
+                    return response()->json(['error' => "Pengajar not found"]);
+                }
+            }
             $query = $request->get('query');
             $pengajar = User::where('role', '=', 'pengajar')->where("nama", 'LIKE', $query . '%')->get();
             if ($pengajar->count()) {

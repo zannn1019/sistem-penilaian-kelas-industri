@@ -1,17 +1,28 @@
 @extends('dashboard.layouts.main')
 @section('content')
-    <div class="w-full h-full p-5 text-black flex flex-col gap-5 overflow-y-auto overflow-x-hidden">
-        <div class="w-full flex justify-between">
-            <div class="flex items-end gap-1 font-semibold">
-                <h1 class="text-3xl">Daftar Pengajar</h1>
-                <span>({{ $data_pengajar->count() }})</span>
+    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative "id="content">
+        <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
+            <div class="w-full flex gap-3 py-3">
+                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                    class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+                <div class="w-full flex flex-col text-xs">
+                    <div class="text-sm max-sm:hidden breadcrumbs p-0">
+                        <ul>
+                            <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
+                            <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
+                                    Pengajar</a>
+                            </li>
+                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
+                                    Pengajar</a></li>
+                            <li>Daftar Pengajar</li>
+                        </ul>
+                    </div>
+                    <h1 class="text-3xl font-semibold">Kelas Industri - {{ $info_kelas->sekolah->nama }}</h1>
+                    <h1 class="text-5xl font-semibold">
+                        {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                </div>
             </div>
-            <div>
-                <a href="{{ route('pengajar.create') }}" class="btn text-white rounded-circle text-xl shadow-custom">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
-            </div>
-        </div>
+        </header>
         <div class="w-full h-full grid grid-cols-4 max-sm:grid-cols-1 max-md:grid-cols-2 gap-3">
             @foreach ($data_pengajar->paginate(8) as $pengajar)
                 @php
@@ -91,5 +102,28 @@
             @endforeach
         </div>
         {{ $data_pengajar->paginate(8)->links('components.pagination') }}
+        <a href="{{ route('siswa.create', ['kelas' => $info_kelas->id]) }}"
+            class="btn btn-circle self-end max-sm:self-start sticky"><i
+                class="fa-solid fa-plus text-white text-2xl "></i></a>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $("#indicator").text($("#nama_kelas").val().length)
+            $("#nama_kelas").keyup(function() {
+                $("#indicator").text($(this).val().length)
+            })
+            $("#nama_kelas").keydown(function() {
+                $("#indicator").text($(this).val().length)
+            })
+
+            $("#close-btn").click(function(e) {
+                e.preventDefault()
+                kelasModal.close()
+                $("#bg-blur").addClass('hidden')
+            })
+        });
+    </script>
 @endsection

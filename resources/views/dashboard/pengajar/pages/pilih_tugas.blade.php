@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full h-full p-5 flex relative" id="content">
         <div class="h-full text-3xl flex flex-col justify-between">
-            <a href="{{ route('kelas') }}" class="fa-solid fa-chevron-left max-sm:text-lg text-black"></a>
+            <a href="{{ url()->previous() }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
             <div class="w-full max-sm:h-44">
                 <div class="relative z-20 flex flex-col gap-2" id="add">
                     <div class="relative">

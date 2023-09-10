@@ -4,7 +4,7 @@
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full h-14 flex gap-3 items-center text-2xl justify-between">
             <div class="flex justify-center items-center gap-2">
-                <a href="{{ route('pengajar.index') }}" class="fa-solid fa-chevron-left max-sm:text-xl text-black"></a>
+                <a href="{{ route('pengajar.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="text-sm max-sm:hidden breadcrumbs">
                     <ul>
                         <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>

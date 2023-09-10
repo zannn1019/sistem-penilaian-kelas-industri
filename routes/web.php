@@ -9,6 +9,7 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\PengajarController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\TugasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,10 +50,14 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         Route::resource('/siswa', SiswaController::class)->names('siswa');
         Route::resource('user', UserController::class)->names('users');
         Route::resource('/mapel', MapelController::class)->names('mapel');
+        Route::resource('/tugas', TugasController::class)->names('tugas');
         Route::controller(AdminPengajarController::class)->group(function () {
             Route::get('/pengajarDashboard/{pengajar}', 'index')->name('admin-dashboard-pengajar');
             Route::get('/pengajarDashboard/{pengajar}/kelas', 'kelas')->name('admin-kelas-pengajar');
-            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}', 'showKelas')->name('admin-detail-kelas-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}', 'showMapel')->name('admin-show-mapel-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}/siswa', 'showSiswa')->name('admin-show-siswa-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}/pengajar', 'showPengajar')->name('admin-show-pengajar-pengajar');
+            Route::get('/pengajarDashboard/{pengajar}/kelas/{kelas}/mapel/{mapel}', 'showTugas')->name('admin-show-tugas-pengajar');
         });
     });
 });

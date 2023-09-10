@@ -2,6 +2,6 @@
 @section('content')
     <div class="w-full p-5 text-black">
         <h1>Hello World</h1>
-        <a href="{{ route('dashboard-admin') }}">Back</a>
+        <a href="{{ url()->previous() }}">Back</a>
     </div>
 @endsection

@@ -20,7 +20,8 @@
                     class="w-44 h-44 z-[5] aspect-square bg-white rounded-circle border-4 border-darkblue-500"
                     alt="">
                 <div class="info w-full text-center">
-                    <h1 class="text-5xl font-semibold py-2 border-b border-black w-full">{{ $info_sekolah->nama }}</h1>
+                    <h1 class="text-5xl font-semibold py-2 border-b border-black w-full text-start">
+                        {{ $info_sekolah->nama }}</h1>
                 </div>
                 <div
                     class="w-full h-1/2 rounded-box text-white p-5 flex justify-end max-md:justify-start px-16 max-md:px-0 items-center absolute bottom-0 left-0 bg-darkblue-500">

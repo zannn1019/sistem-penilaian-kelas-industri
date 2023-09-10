@@ -45,8 +45,19 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
-    protected $with = ['sekolah', 'mapel', 'kelas'];
+    protected $with = ['sekolah', 'mapel', 'kelas', 'tugas'];
 
+    public function tugas()
+    {
+        return $this->hasManyThrough(
+            Tugas::class,
+            PengajarMapel::class,
+            'id_user',
+            'id_pengajar',
+            'id',
+            'id'
+        );
+    }
     public function kelas()
     {
         return $this->belongsToMany(Kelas::class, 'pengajar_sekolah', 'id_user', 'id_kelas')->withTimestamps();

@@ -30,7 +30,7 @@ class DashboardController extends Controller
                 'title' => "Dashboard",
                 'full' => false,
                 'data_sekolah' => Sekolah::orderBy("id", "DESC")->get(),
-                'daftar_pengajar' => User::where("role", '=', 'pengajar')->get(),
+                'daftar_pengajar' => User::where("role", '=', 'pengajar')->latest()->get(),
                 'mapel' => Mapel::all()->count(),
                 'kelas' => Kelas::all()->count(),
                 'siswa' => Siswa::all()->count()

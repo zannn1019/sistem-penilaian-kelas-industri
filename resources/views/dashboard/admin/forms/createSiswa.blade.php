@@ -2,8 +2,7 @@
 @section('content')
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative "id="content">
         <header class="w-full flex gap-3 items-center text-2xl">
-            <a href="{{ route('kelas.show', ['kela' => $data->id]) }}"
-                class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+            <a href="{{ route('kelas.show', $data->id) }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
             <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>

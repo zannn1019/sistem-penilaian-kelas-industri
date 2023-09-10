@@ -1,4 +1,4 @@
-<div class="w-full p-5">
+{{-- <div class="w-full p-5">
     <div class="flex h-50 justify-center items-center gap-2 text-lg">
         @if ($paginator->onFirstPage())
             <div class="prev w-auto h-auto grid grid-cols-2 grid-rows-1 gap-1">
@@ -56,5 +56,22 @@
                     rel="prev"><i class="fa-solid fa-chevron-right"></i></span>
             </div>
         @endif
+    </div>
+</div> --}}
+<div class="w-full flex justify-center items-center">
+    <div class="p-5 flex justify-center items-center gap-2 text-xs">
+        <span>Page</span>
+        <a class="text-lg" href="{{ $paginator->previousPageUrl() }}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <form action="">
+            <input type="number" max="{{ $paginator->lastPage() }}" min="1" name="page"
+                value="{{ $paginator->currentPage() }}" class="w-16 text-center bg-transparent input input-bordered">
+        </form>
+        <a class="text-lg" href="{{ $paginator->nextPageUrl() }}">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+        <span>of</span>
+        <span>{{ $paginator->lastPage() }}</span>
     </div>
 </div>

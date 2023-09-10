@@ -49,35 +49,42 @@
                 </div>
                 <div
                     class="w-full h-3/6 rounded-2xl bg-gray-100 shadow-inner grid grid-cols-2 max-sm:grid-cols-1 overflow-hidden">
-                    <div class="h-auto flex flex-col gap-1 overflow-y-auto bg-white p-2 shadow-box">
-                        <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-5">
-                            <input type="text" class="bg-transparent  p-2 w-full">
-                            <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
+                    <div class="h-auto flex flex-col gap-1 overflow-y-auto bg-white shadow-box">
+                        <div class="p-2">
+                            <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-2">
+                                <input type="text" class="bg-transparent p-2 w-full">
+                                <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
+                            </div>
                         </div>
                         @foreach ($daftar_pengajar as $pengajar)
                             <div data-id="{{ $pengajar->id }}"
-                                class="w-full p-1 flex gap-2 cursor-pointer hover:bg-gray-200 text-sm {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
+                                class="info-pengajar w-full flex gap-2 cursor-pointer hover:bg-gray-200 text-sm pr-2 {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
+                                <div class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
+                                </div>
                                 <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
-                                    class="w-10 rounded-circle aspect-square">
-                                <div class="info w-full text-xs flex flex-col gap-1">
+                                    class="w-11 rounded-circle aspect-square ml-2 py-1">
+                                <div class="info w-full text-xs flex flex-col gap-1 py-2">
                                     <h1>{{ $pengajar->nama }}</h1>
                                     <div class="w-full flex justify-between">
                                         <span class="text-2xs"><i
                                                 class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            4 sekolah</span>
+                                            {{ $pengajar->sekolah()->groupBy('id_sekolah')->count() }} sekolah</span>
                                         <span class="text-2xs"><i
-                                                class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            4 sekolah</span>
+                                                class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                            {{ $pengajar->kelas()->count() }} kelas</span>
                                         <span class="text-2xs"><i
-                                                class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            4 sekolah</span>
+                                                class="fa-solid fa-id-card bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                            {{ $pengajar->nik }}</span>
                                     </div>
+                                </div>
+                                <div class="h-full flex justify-center items-center text-xl hidden indikator-pengajar">
+                                    <i class="fa-solid fa-chevron-right"></i>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                    <div
-                        class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 max-sm:hidden text-center">
+                    <div class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 max-sm:hidden text-center "
+                        id="profile-pengajar">
                         <h1>Lihat profil lengkap pengajar</h1>
                         <a href="{{ route('pengajar.index') }}"
                             class="btn bg-bluesky-500 border-none hover:bg-bluesky-600 outline-none text-white rounded-6xl shadow-custom px-5 text-sm">
@@ -130,4 +137,75 @@
             </div>
         </div>
     </div>
+    <template id="info-pengajar-template">
+        <div class="w-full flex flex-col h-full justify-center items-center relative">
+            <a href="{{ route('pengajar.show', ['pengajar' => 15]) }}" class="absolute top-0 right-0" id="link_profile">
+                <i class="fa-solid fa-up-right-from-square"></i>
+            </a>
+            <img src="{{ asset('storage/pengajar/ahmad-fauza.jpg') }}" alt=""
+                class="aspect-square w-24 rounded-circle" id="foto_pengajar">
+            <h1 class="text-black font-semibold leading-3" id="nama_pengajar">Ahmad Fauzan</h1>
+            <span class="text-gray-400">Pengajar</span>
+            <table>
+                <tr class="border border-black">
+                    <th class="border border-black p-2 text-xs">SEKOLAH</th>
+                    <th class="border border-black p-2 text-xs">KELAS</th>
+                    <th class="border border-black p-2 text-xs">SISWA</th>
+                </tr>
+                <tr>
+                    <td class="py-2 text-lg font-semibold" id="jumlah_sekolah">10</td>
+                    <td class="py-2 text-lg font-semibold" id="jumlah_kelas">10</td>
+                    <td class="py-2 text-lg font-semibold" id="jumlah_siswa">10</td>
+                </tr>
+            </table>
+        </div>
+    </template>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            function infoPengajarCard(id, nama, foto, jumlah_sekolah, jumlah_kelas, jumlah_siswa) {
+                const template = document.getElementById('info-pengajar-template');
+                const clone = document.importNode(template.content, true);
+                const namaPengajar = clone.getElementById('nama_pengajar');
+                const fotoPengajar = clone.getElementById('foto_pengajar');
+                const jumlahSekolah = clone.getElementById('jumlah_sekolah');
+                const jumlahKelas = clone.getElementById('jumlah_kelas');
+                const jumlahSiswa = clone.getElementById('jumlah_siswa');
+                const linkProfile = clone.getElementById('link_profile');
+
+                namaPengajar.textContent = nama;
+                fotoPengajar.setAttribute('src', "{{ asset('storage/pengajar') }}/" + foto);
+                linkProfile.setAttribute('href', "/admin/pengajar/" + id);
+                jumlahSekolah.textContent = jumlah_sekolah;
+                jumlahKelas.textContent = jumlah_kelas;
+                jumlahSiswa.textContent = jumlah_siswa;
+
+                return clone
+            }
+            $(".info-pengajar").click(function() {
+                let id = $(this).data('id')
+                $(this).find('.indikator-pengajar').removeClass('hidden');
+                $(".indikator-pengajar").not($(this).find('.indikator-pengajar')).addClass('hidden');
+                $("#profile-pengajar").addClass("bg-white border-l")
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('pengajar.index') }}",
+                    data: {
+                        pengajar: id
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        let clone = infoPengajarCard(response.data.id, response.data.nama,
+                            response.data
+                            .foto,
+                            response
+                            .jumlah_sekolah, response.jumlah_kelas, response.jumlah_siswa)
+                        $("#profile-pengajar").html('')
+                        $("#profile-pengajar").append(clone)
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

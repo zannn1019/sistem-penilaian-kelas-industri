@@ -88,7 +88,7 @@
                 @foreach ($info_pengajar->kelas()->get()->count() > 3
             ? $info_pengajar->kelas()->get()->random(3)
             : $info_pengajar->kelas()->get() as $kelas)
-                    <a href="{{ route('admin-detail-kelas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $kelas->id]) }}"
+                    <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $kelas->id]) }}"
                         class="box p-2">
                         <h1 class="font-bold">{{ $kelas->nama_kelas }}</h1>
                         <div class="box-content w-11/12 h-44 bg-blue-200 rounded-2xl flex flex-col gap-2 p-4 shadow-lg">

@@ -16,4 +16,5 @@ class Tugas extends Model
     // {
     //     return $this->hasMany(Nilai::class);
     // }
+
 }

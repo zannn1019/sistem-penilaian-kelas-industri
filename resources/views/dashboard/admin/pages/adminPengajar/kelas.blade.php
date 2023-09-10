@@ -4,7 +4,7 @@
     <div class="w-full h-full p-5 flex flex-col gap-2">
         <header class="w-full flex justify-between gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 items-center">
-                <a href="{{ route('admin-dashboard-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                <a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
@@ -26,6 +26,11 @@
         <div
             class="w-full h-24 max-sm:h-auto max-sm:gap-5 max-md:grid-cols-1 max-md:h-auto grid grid-cols-2 max-sm:grid-cols-1 text-black p-5 max-sm:px-5 px-10 z-10 place-content-end">
             <div class="info flex items-end gap-3">
+                <div
+                    class="input w-full max-w-xs bg-transparent flex items-center gap-2 border-none rounded-6xl bg-zinc-300">
+                    <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
+                    <input type="text" placeholder="Telusuri Kelas" class=" w-full h-full bg-transparent" />
+                </div>
             </div>
             <div class="w-full flex justify-end items-end gap-2">
                 <div class="filter bg-gray-200 flex rounded-2xl transition-all justify-end items-end " id="filter"
@@ -81,7 +86,7 @@
             class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 gap-5 p-5 max-sm:p-0 h-full max-md:grid-cols-1 ">
             @foreach ($info_pengajar->kelas()->paginate(8) as $kelas)
                 <div class="box w-full h-56 p-2">
-                    <a href="{{ route('admin-detail-kelas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $kelas->id]) }}"
+                    <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $kelas->id]) }}"
                         class="w-full flex h-full bg-blue-200 rounded-box p-5 shadow-lg flex-col">
                         <div class="w-full flex justify-between h-2/6">
                             <div class="info">
@@ -91,7 +96,9 @@
                             <img src="{{ asset('storage/sekolah/' . $kelas->sekolah->logo) }}" alt="">
                         </div>
                         <div class="w-full h-full grid grid-cols-2 gap-2 justify-between items-center text-black">
-                            <img src="{{ asset('img/data_kelas.png') }}" alt="" class="w-full">
+                            <img src="{{ asset('img/data_kelas.png') }}" alt=""
+                                class="max-md:w-1/2 max-sm:w-3/4
+                            ">
                             <div class="info flex flex-col text-xs gap-2">
                                 <span><i class="fa-solid fa-chalkboard"></i>
                                     {{ $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas }}</span>
