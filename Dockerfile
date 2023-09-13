@@ -5,15 +5,15 @@ USER root
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
-        libpng-dev \
-        zlib1g-dev \
-        libxml2-dev \
-        libzip-dev \
-        libonig-dev \
-        libpq-dev \
-        zip \
-        curl \
-        unzip \
+    libpng-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libzip-dev \
+    libonig-dev \
+    libpq-dev \
+    zip \
+    curl \
+    unzip \
     && docker-php-ext-configure gd \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install -j$(nproc) gd \
@@ -26,23 +26,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_pgsql \
     && docker-php-source delete
 
-# RUN apt-get -y install curl gnupg
-# RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
-# RUN apt-get -y install nodejs
-# RUN npm instal
-
-# RUN apt-get install -y git-core curl build-essential openssl libssl-dev \
-#  && git clone https://github.com/nodejs/node.git \
-#  && cd node \
-#  && ./configure \
-#  && make \
-#  && sudo make install
-
 COPY . /var/www/html
 
 COPY ./.env /var/www/html/.env
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
 
 EXPOSE 80 443
