@@ -45,7 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
-    protected $with = ['sekolah', 'mapel', 'kelas', 'tugas'];
+    // protected $with = ['sekolah', 'mapel', 'kelas', 'tugas'];
 
     public function tugas()
     {

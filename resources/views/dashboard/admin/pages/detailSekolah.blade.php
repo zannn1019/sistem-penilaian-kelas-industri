@@ -4,9 +4,9 @@
 @endphp
 @section('content')
     <div class="absolute inset-0 backdrop-blur-lg z-10 w-full h-full hidden" id="bg-blur"></div>
-    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative"id="content">
+    <div class="w-full h-full text-black p-5 max-sm:p-0  flex flex-col gap-2 overflow-y-auto relative"id="content">
         <header class="w-full flex gap-3 items-center text-2xl">
-            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black max-sm:p-5"></a>
             <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
@@ -15,7 +15,7 @@
             </div>
         </header>
         <div class="w-full h-full flex flex-col max-md:px-5 px-16 gap-2">
-            <div class="info-sekolah flex max-md:flex-col max-md:items-center gap-5 relative w-full">
+            <div class="info-sekolah flex max-md:flex-col max-md:items-center gap-5 relative w-full max-md:pb-10">
                 <img src="{{ asset('storage/sekolah/' . $info_sekolah->logo) }}"
                     class="w-44 h-44 z-[5] aspect-square bg-white rounded-circle border-4 border-darkblue-500"
                     alt="">
@@ -24,7 +24,7 @@
                         {{ $info_sekolah->nama }}</h1>
                 </div>
                 <div
-                    class="w-full h-1/2 rounded-box text-white p-5 flex justify-end max-md:justify-start px-16 max-md:px-0 items-center absolute bottom-0 left-0 bg-darkblue-500">
+                    class="w-full h-1/2 rounded-box text-white p-5 flex justify-end max-md:justify-start px-20 max-md:px-0 items-center absolute bottom-0 left-0 bg-darkblue-500">
                     <a href="{{ route('sekolah.edit', ['sekolah' => $info_sekolah->id]) }}"
                         class="absolute top-0 right-0 px-3 py-2"><i
                             class="fa-solid fa-pen rounded-circle border border-white p-2"></i></a>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="w-full h-full flex flex-col gap-2 justify-between relative">
                     @if ($info_sekolah->kelas->count() > 0)
-                        <div class="w-full grid grid-cols-3 max-md:grid-cols-1 p-2 gap-2">
+                        <div class="w-full grid grid-cols-3 max-md:grid-cols-1 p-2 max-sm:p-0 gap-2">
                             @php
                                 $uniqueResults = [];
                             @endphp
@@ -83,15 +83,17 @@
                                                     <h1 class="text-black text-xs font-semibold">
                                                         {{ $info->sekolah->nama }}
                                                     </h1>
-                                                    <h1 class="text-{{ $data_warna }}-500 font-bold text-2xl">
+                                                    <h1
+                                                        class="text-{{ $data_warna }}-500 font-bold text-2xl max-sm:text-lg">
                                                         {{ $info->nama_kelas }}
                                                     </h1>
                                                 </div>
                                                 <img src="{{ asset('storage/sekolah/' . $info->sekolah->logo) }}"
-                                                    alt="">
+                                                    alt="" class="w-12 h-12 aspect-square rounded-circle">
                                             </div>
                                             <div class="flex w-full text-black text-sm items-center justify-evenly gap-5">
-                                                <img src="{{ asset('img/data_kelas.png') }}" alt="" class="w-36">
+                                                <img src="{{ asset('img/data_kelas.png') }}" alt=""
+                                                    class="w-36 max-sm:w-24">
                                                 <div class="status flex flex-col gap-1 text-xs">
                                                     <h1 class="font-semibold">Semester Genap</h1>
                                                     <h1 class="font-semibold">
@@ -201,12 +203,12 @@
                             <h1>Belum ada kelas!</h1>
                         </div>
                     @endif
-                    <div class="w-full flex justify-between px-5 py-1 items-end ">
+                    <div class="w-full flex justify-between px-5 py-1 items-end gap-1">
                         <a href=""
                             class="btn rounded-circle text-black bg-transparent border-none hover:bg-transparent"><i
                                 class="fa-solid fa-up-right-from-square text-xl"></i></a>
                         {{ $data->paginate(3)->links('components.pagination') }}
-                        <div class="dropdown dropdown-left dropdown-end relative z-10">
+                        <div class="dropdown dropdown-left dropdown-end relative z-10 w-20">
                             <label id="add-btn" tabindex="0"
                                 class="btn rounded-circle text-white text-xl absolute bottom-0 right-0 z-10"><i
                                     class="fa-solid fa-plus"></i></label>

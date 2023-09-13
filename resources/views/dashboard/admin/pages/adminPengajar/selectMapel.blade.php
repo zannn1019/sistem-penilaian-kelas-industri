@@ -18,20 +18,22 @@
                             <li>Mata Pelajaran</li>
                         </ul>
                     </div>
-                    <h1 class="text-3xl font-semibold">Kelas Industri - {{ $info_kelas->sekolah->nama }}</h1>
-                    <h1 class="text-5xl font-semibold">
+                    <h1 class="text-3xl font-semibold max-sm:text-sm"><span class="max-sm:hidden"> Kelas Industri - </span>
+                        {{ $info_kelas->sekolah->nama }}</h1>
+                    <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
                 </div>
                 <a href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
                     class="self-end text-xs flex gap-1 w-52 justify-center items-center bg-darkblue-500 text-white p-4 py-3 rounded-3xl">
                     <i class="fa-solid fa-users"></i>
-                    <span>Lihat data siswa</span>
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <span class="max-sm:hidden">Lihat data siswa</span>
+                    <i class="fa-solid fa-chevron-right max-sm:hidden"></i>
+                    <span class="hidden max-sm:inline-block">Siswa</span>
                 </a>
             </div>
         </header>
         <div
-            class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 gap-5 p-5 max-sm:p-0 h-full max-md:grid-cols-1 ">
+            class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-1 gap-5 h-full  p-5 max-sm:p-0 ">
             @foreach ($info_pengajar->mapel()->paginate(8) as $mapel)
                 <div class="box w-full h-56 p-2">
                     <a href="{{ route('admin-show-tugas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'mapel' => $mapel->id]) }}"
@@ -43,9 +45,9 @@
                                         class="fa-solid fa-arrow-right text-white"></i></span>
                             </div>
                         </div>
-                        <div class="w-full h-full grid grid-cols-2 gap-4 justify-between items-center text-black">
-                            <img src="{{ asset('img/mapel.png') }}" alt="" class="w-full">
-                            <div class="w-full flex flex-col gap-1">
+                        <div class="w-full h-full grid grid-cols-2 gap-4 max-h-full text-black ">
+                            <img src="{{ asset('img/mapel.png') }}" alt="" class="w-44">
+                            <div class="w-full flex flex-col gap-1 justify-center">
                                 <div class="w-full text-white flex items-center gap-1">
                                     <svg width="22" height="22" viewBox="0 0 12 12" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" class="bg-bluesea-500 p-1 rounded-md">

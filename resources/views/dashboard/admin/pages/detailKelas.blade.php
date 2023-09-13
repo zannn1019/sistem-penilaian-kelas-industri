@@ -1,9 +1,9 @@
 @extends('dashboard.layouts.main')
 @section('content')
-    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative "id="content">
+    <div class="w-full h-full text-black p-5 max-sm:p-0 flex flex-col gap-2 overflow-y-auto relative "id="content">
         <header class="w-full flex gap-3 items-center text-2xl">
             <a href="{{ route('sekolah.show', ['sekolah' => $data->sekolah->id]) }}"
-                class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+                class="fa-solid fa-chevron-left max-md:text-lg text-black max-sm:p-5"></a>
             <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
@@ -26,7 +26,7 @@
                 gap-2 justify-center items-center">
                 <i class="fa-solid fa-pen"></i> <span class="max-md:hidden">Edit Kelas</span></a>
         </div>
-        <div class="w-full h-[75%] py-2 flex gap-1 max-sm:flex-col-reverse pl-10">
+        <div class="w-full h-[75%] py-2 flex gap-1 max-sm:flex-col-reverse pl-10 max-sm:p-4 max-sm:h-full">
             @if ($data->siswa->count())
                 <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
                     <table class="table table-zebra border-2 border-darkblue-500 text-center" dir="ltr">

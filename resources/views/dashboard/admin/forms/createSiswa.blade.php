@@ -19,7 +19,8 @@
             </div>
         </header>
         <div class="w-full h-full flex justify-center items-center">
-            <form action="{{ route('siswa.store') }}" method="POST" class="w-4/6 flex flex-col gap-2" data-theme="light">
+            <form action="{{ route('siswa.store') }}" method="POST" class="w-4/6 max-sm:w-full flex flex-col gap-2"
+                data-theme="light">
                 @csrf
                 <input type="hidden" name="id_sekolah" value="{{ $data->sekolah->id }}">
                 <input type="hidden" name="id_kelas" value="{{ $data->id }}">

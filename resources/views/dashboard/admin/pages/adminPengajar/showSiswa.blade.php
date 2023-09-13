@@ -17,8 +17,9 @@
                             <li>Daftar Siswa</li>
                         </ul>
                     </div>
-                    <h1 class="text-3xl font-semibold">Kelas Industri - {{ $info_kelas->sekolah->nama }}</h1>
-                    <h1 class="text-5xl font-semibold">
+                    <h1 class="text-3xl font-semibold max-sm:text-sm"><span class="max-sm:hidden">Kelas Industri -</span>
+                        {{ $info_kelas->sekolah->nama }}</h1>
+                    <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
                 </div>
                 <div class="self-end text-sm flex gap-1 uppercase justify-center items-center font-semibold">
@@ -28,7 +29,7 @@
                 </div>
             </div>
         </header>
-        <div class="w-full h-[75%] py-2 flex gap-1 max-sm:flex-col-reverse pl-10">
+        <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 max-sm:flex-col-reverse pl-10">
             @if ($info_kelas->siswa->count())
                 <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
                     <table class="table table-zebra border-2 border-darkblue-500 text-center" dir="ltr">
@@ -61,7 +62,7 @@
                 </div>
             @endif
             <a href="{{ route('siswa.create', ['kelas' => $info_kelas->id]) }}"
-                class="btn btn-circle self-end max-sm:self-start sticky"><i
+                class="btn btn-circle self-end max-sm:self-end sticky"><i
                     class="fa-solid fa-plus text-white text-2xl "></i></a>
         </div>
     </div>

@@ -11,7 +11,7 @@
 @endmobile
 
 @section('content')
-    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto">
+    <div class="w-full h-full text-black p-2 flex flex-col gap-2 overflow-y-auto">
         <div class="w-full h-24 grid grid-cols-2 max-md:grid-cols-1 grid-rows-1">
             <div class="w-full border-2 p-2 h-full rounded-3xl shadow-xl flex flex-col justify-center items-center">
                 <h1 class="font-semibold">Instansi Terkait</h1>
@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-full h-full flex gap-5 max-md:flex-col">
+        <div class="w-full h-full max-h-full flex gap-5 max-md:flex-col">
             <div
                 class="w-8/12 max-md:w-full max-sm:h-max max-sm:max-h-96 flex flex-col h-full shadow-2xl bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-2xl">
                 <div class="w-full h-3/6 flex items-center justify-center">
@@ -143,19 +143,19 @@
                 <i class="fa-solid fa-up-right-from-square"></i>
             </a>
             <img src="{{ asset('storage/pengajar/ahmad-fauza.jpg') }}" alt=""
-                class="aspect-square w-24 rounded-circle" id="foto_pengajar">
-            <h1 class="text-black font-semibold leading-3" id="nama_pengajar">Ahmad Fauzan</h1>
-            <span class="text-gray-400">Pengajar</span>
+                class="aspect-square w-20 rounded-circle" id="foto_pengajar">
+            <span class="text-black font-semibold leading-3 text-lg" id="nama_pengajar">Ahmad Fauzan</span>
+            <span class="text-gray-400 text-xs py-0.5">Pengajar</span>
             <table>
                 <tr class="border border-black">
-                    <th class="border border-black p-2 text-xs">SEKOLAH</th>
-                    <th class="border border-black p-2 text-xs">KELAS</th>
-                    <th class="border border-black p-2 text-xs">SISWA</th>
+                    <th class="border border-black p-0.5 px-2 text-xs">SEKOLAH</th>
+                    <th class="border border-black p-0.5 px-2 text-xs">KELAS</th>
+                    <th class="border border-black p-0.5 px-2 text-xs">SISWA</th>
                 </tr>
                 <tr>
-                    <td class="py-2 text-lg font-semibold" id="jumlah_sekolah">10</td>
-                    <td class="py-2 text-lg font-semibold" id="jumlah_kelas">10</td>
-                    <td class="py-2 text-lg font-semibold" id="jumlah_siswa">10</td>
+                    <td class="py-1 text-lg font-semibold" id="jumlah_sekolah">10</td>
+                    <td class="py-1 text-lg font-semibold" id="jumlah_kelas">10</td>
+                    <td class="py-1 text-lg font-semibold" id="jumlah_siswa">10</td>
                 </tr>
             </table>
         </div>
@@ -187,6 +187,8 @@
                 let id = $(this).data('id')
                 $(this).find('.indikator-pengajar').removeClass('hidden');
                 $(".indikator-pengajar").not($(this).find('.indikator-pengajar')).addClass('hidden');
+                $(this).addClass("bg-gray-200")
+                $(".info-pengajar").not($(this)).removeClass("bg-gray-200")
                 $("#profile-pengajar").addClass("bg-white border-l")
                 $.ajax({
                     type: "GET",

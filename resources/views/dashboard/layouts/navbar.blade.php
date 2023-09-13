@@ -1,6 +1,12 @@
 @if (auth()->user()->role == 'pengajar')
     <nav class="navbar h-20 flex p-5">
         <div class="navbar-start flex gap-2 max-sm:w-96">
+            <div
+                class="user max-sm:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
+                <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
             <div class="dropdown hidden max-sm:inline-block max-md:inline-block">
                 <label tabindex="0" class="btn btn-ghost btn-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -18,11 +24,12 @@
                     <li><a href="{{ route('kelas.index') }}"
                             class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
                     </li>
+                    <li>
+                        <label for="my_modal_7" class="hover:text-crimson">
+                            <span class="text-xs">LOG OUT</span></label>
+                    </li>
                 </ul>
             </div>
-            <label for="my_modal_7"
-                class="bg-white rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
-                <i class="fa-solid fa-door-open"></i> <span class="text-xs">LOG OUT</span></label>
             <input type="checkbox" id="my_modal_7" class="modal-toggle" />
             <div class="modal">
                 <div
@@ -41,10 +48,10 @@
                 </div>
                 <label class="modal-backdrop" for="my_modal_7"></label>
             </div>
-            <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
+            {{-- <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
                 <i class="fa-solid fa-bell"></i>
                 <div class="w-3 h-3 bg-red-500 rounded-full absolute -top-0 -right-0"></div>
-            </button>
+            </button> --}}
         </div>
         <div class="navbar-center flex gap-5 font-semibold max-sm:text-xs max-sm:hidden max-md:hidden">
             <a href="{{ route('dashboard-pengajar') }}"
@@ -65,6 +72,12 @@
 @else
     <nav class="navbar h-20 flex p-5">
         <div class="navbar-start flex gap-2 max-sm:w-96">
+            <div
+                class="user max-sm:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
+                <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
             <div class="dropdown hidden max-sm:inline-block max-md:inline-block">
                 <label tabindex="0" class="btn btn-ghost btn-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -83,18 +96,25 @@
                     <li><a href="{{ route('pengajar.index') }}"
                             class="{{ $title == 'Pengajar' ? 'text-white' : '' }}">PENGAJAR</a>
                     </li>
+                    <li>
+                        <label for="my_modal_7" class="hover:text-crimson">
+                            <span class="text-xs">LOG OUT</span></label>
+                    </li>
                 </ul>
             </div>
             <label for="my_modal_7"
-                class="bg-white rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
-                <i class="fa-solid fa-door-open"></i> <span class="text-xs">LOG OUT</span></label>
+                class="bg-white max-sm:hidden rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
+                <i class="fa-solid fa-door-open"></i> <span class="text-xs">LOG OUT</span>
+            </label>
+
             <input type="checkbox" id="my_modal_7" class="modal-toggle" />
             <div class="modal">
                 <div
                     class="modal-box border border-gray-400 bg-darkblue-500 text-white flex flex-col gap-3 justify-center items-center">
                     <i
                         class="fa-solid fa-exclamation text-8xl border-2 px-12 py-2 rounded-6xl text-crimson border-crimson"></i>
-                    <h1 class="text-center">Apakah Anda yakin ingin logout? <br> <i class="font-thin">Click dimana saja
+                    <h1 class="text-center">Apakah Anda yakin ingin logout? <br> <i class="font-thin">Click dimana
+                            saja
                             untuk
                             menutup.</i></h1>
                     <div class="flex gap-5">
@@ -106,10 +126,10 @@
                 </div>
                 <label class="modal-backdrop" for="my_modal_7"></label>
             </div>
-            <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
+            {{-- <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
                 <i class="fa-solid fa-bell"></i>
                 <div class="w-3 h-3 bg-red-500 rounded-full absolute -top-0 -right-0"></div>
-            </button>
+            </button> --}}
         </div>
         <div class="navbar-center flex gap-5 font-semibold max-sm:text-xs max-sm:hidden max-md:hidden">
             <a href="{{ route('dashboard-admin') }}"

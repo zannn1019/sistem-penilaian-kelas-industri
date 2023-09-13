@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Pengajar;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,12 +15,34 @@ class AdminPengajarController extends Controller
 
     public function index(User $pengajar)
     {
+        $tugas = $pengajar->tugas()->with('kelas.siswa', 'nilai')->get();
+        $total_tugas = $tugas->pluck('kelas.siswa')->flatten()->count();
+        $total_ternilai = $tugas->pluck('nilai')->flatten()->count();
+        $status_tugas = collect([
+            "total_tugas" => $total_tugas,
+            "total_ternilai" => $total_ternilai,
+            'harian' => [
+                'total' => 0,
+                'ternilai' => 0
+            ],
+            'PTS' => [
+                'total' => 0,
+                'ternilai' => 0
+            ],
+            'PAS' => [
+                'total' => 0,
+                'ternilai' => 0
+            ],
+        ]);
+
         return view('dashboard.admin.pages.adminPengajar.dashboard', [
             'title' => "Dashboard Pengajar",
             'full' => true,
-            'info_pengajar' => $pengajar
+            'info_pengajar' => $pengajar,
+            'status_tugas' => $status_tugas
         ]);
     }
+
     public function kelas(User $pengajar)
     {
         return view('dashboard.admin.pages.adminPengajar.kelas', [
@@ -41,12 +64,12 @@ class AdminPengajarController extends Controller
     {
         $idMapel = $pengajar->mapel()->find($mapel->id)->id;
         $daftar_tugas = collect([
-            'tugas' => $pengajar->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
+            'tugas' => $pengajar->mapel()->where('id_mapel', $idMapel)->first()->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
                 $query->where('tipe', 'tugas')->orWhere("tipe", 'quiz');
-            })->where('id_pengajar', $idMapel)->get(),
-            'ujian' => $pengajar->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
-                $query->where('tipe', 'PTS')->orWhere("tipe", 'PAT');
-            })->where('id_pengajar', $idMapel)->get(),
+            })->get(),
+            'ujian' => $pengajar->mapel()->where('id_mapel', $idMapel)->first()->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
+                $query->where('tipe', 'PTS')->orWhere("tipe", 'PAS');
+            })->get(),
         ]);
         return view('dashboard.admin.pages.adminPengajar.selectTugas', [
             'title' => "Pilih Tugas",
@@ -60,7 +83,7 @@ class AdminPengajarController extends Controller
     public function showSiswa(User $pengajar, Kelas $kelas)
     {
         return view('dashboard.admin.pages.adminPengajar.showSiswa', [
-            'title' => "Pilih Mapel",
+            'title' => "Daftar Siswa",
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
@@ -69,11 +92,21 @@ class AdminPengajarController extends Controller
     public function showPengajar(User $pengajar, Kelas $kelas)
     {
         return view('dashboard.admin.pages.adminPengajar.showPengajar', [
-            'title' => "Pilih Mapel",
+            'title' => "Daftar Pengajar",
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
             'data_pengajar' => $kelas->pengajar()
+        ]);
+    }
+    public function nilaiSiswaPerKelas(User $pengajar, Kelas $kelas, Tugas $tugas)
+    {
+        return view('dashboard.admin.pages.adminPengajar.nilaiSiswaPerKelas', [
+            'title' => "Nilai Siswa",
+            'full' => true,
+            'info_pengajar' => $pengajar,
+            'info_kelas' => $kelas,
+            'data_tugas' => $tugas
         ]);
     }
 }

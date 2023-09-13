@@ -12,9 +12,13 @@ class Tugas extends Model
     protected $guarded = [
         'id'
     ];
-    // public function nilai()
-    // {
-    //     return $this->hasMany(Nilai::class);
-    // }
-
+    // protected $with  = ['kelas', 'nilai'];
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
+    }
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'id_tugas');
+    }
 }

@@ -9,6 +9,7 @@
     <title> {{ Str::title(auth()->user()->role) }} - {{ $title }}</title>
     <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
     @vite('resources/css/app.css')
     @yield('head')
 </head>
@@ -37,9 +38,9 @@
             <span>{{ Session::get('error') }}!</span>
         </div>
     @endif
-    <div class="container-fluid w-full h-full p-5 max-sm:p-0 max-h-full">
+    <div class="container-fluid w-screen h-screen p-5 max-sm:p-0">
         <div
-            class="container w-full h-full bg-white bg-opacity-30 max-sm:rounded-none rounded-box max-sm:px-2 flex max-sm:flex-col-reverse">
+            class="container-fluid max-sm:pb-5 w-full h-full bg-white bg-opacity-30 max-sm:rounded-none rounded-box max-sm:px-2 flex max-sm:flex-col-reverse">
             @include('dashboard.layouts.sidebar')
             @if ($full == true)
                 <div class="content w-full h-full flex flex-col">
@@ -59,28 +60,37 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
+        integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     <script>
-        $(".alert").velocity({
-            properties: {
-                opacity: 1,
-                translateX: -20,
-            },
-            option: {
-                duration: 800
-            }
-        })
-        setTimeout(() => {
+        $(document).ready(function() {
+            $(this).find("#bubble-median").draggable()
+            $("#bubble-median").dblclick(function() {
+                $(this).find('.dropdown').toggleClass('dropdown-open')
+                console.log('tes')
+            })
             $(".alert").velocity({
                 properties: {
-                    opacity: 0,
-                    translateX: -0,
+                    opacity: 1,
+                    translateX: -20,
                 },
                 option: {
                     duration: 800
                 }
             })
-        }, 3000);
+            setTimeout(() => {
+                $(".alert").velocity({
+                    properties: {
+                        opacity: 0,
+                        translateX: -0,
+                    },
+                    option: {
+                        duration: 800
+                    }
+                })
+            }, 3000);
+        });
     </script>
     @yield('script')
 </body>

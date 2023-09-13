@@ -16,7 +16,7 @@
                             <li>Kelas Pengajar</li>
                         </ul>
                     </div>
-                    <h1 class="text-3xl font-semibold">Kelas Pengajar <span
+                    <h1 class="text-3xl font-semibold max-sm:text-sm">Kelas Pengajar <span
                             class="text-sm">({{ $info_pengajar->kelas()->count() }})</span>
                     </h1>
                 </div>

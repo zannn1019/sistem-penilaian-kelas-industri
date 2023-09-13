@@ -12,7 +12,7 @@ class Siswa extends Model
         'id'
     ];
     protected $table = 'siswa';
-
+    // protected $with = ['nilai'];
     // public function sekolah()
     // {
     //     return $this->belongsTo(Sekolah::class, 'id_sekolah');
@@ -20,5 +20,9 @@ class Siswa extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
+    }
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'id_siswa');
     }
 }

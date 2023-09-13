@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
+    <div class="w-full h-full max-sm:h-auto text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full h-14 flex gap-3 items-center text-2xl justify-between">
             <div class="flex justify-center items-center gap-2">
                 <a href="{{ route('pengajar.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
@@ -40,8 +40,8 @@
                     </div>
                 </div>
                 <hr class="border-white">
-                <div class="w-full flex flex-col gap-2 text-white ">
-                    <div class="p-2 text-xs">
+                <div class="w-full flex flex-col text-white ">
+                    <div class="p-1 text-xs">
                         <label for="username">Status</label>
                         <select id="" name="status"
                             class="profile-input w-full border px-3 py-1 rounded-box flex items-center border-white text-white bg-darkblue-500"
@@ -51,33 +51,39 @@
                             </option>
                         </select>
                     </div>
-                    <div class="p-2 text-xs">
+                    <div class="p-1 text-xs">
                         <label for="username">Username</label>
                         <input type="text" name="username" id=""
                             class="profile-input w-full border px-3 py-1 rounded-box flex items-center border-white bg-transparent"
                             disabled value="{{ $data_pengajar->username }}">
                     </div>
-                    <div class="p-2 text-xs">
+                    <div class="p-1 text-xs">
                         <label for="email">Email</label>
                         <input type="text" name="email" id=""
                             class="profile-input w-full border px-3 py-1 rounded-box flex items-center border-white bg-transparent"
                             disabled value="{{ $data_pengajar->email }}">
                     </div>
-                    <div class="p-2 text-xs">
+                    <div class="p-1 text-xs">
                         <label for="no_telp">Nomor Telepon</label>
                         <input type="text" name="no_telp" id=""
                             class="profile-input w-full border px-3 py-1 rounded-box flex items-center border-white bg-transparent"
                             disabled value="{{ $data_pengajar->no_telp }}">
+                    </div>
+                    <div class="pt-5 border-none">
+                        <a href="{{ route('admin-dashboard-pengajar', ['pengajar' => $data_pengajar]) }}"
+                            class="btn max-sm:w-full border-none bg-bluesea-500 text-white hover:bg-bluesea-600 rounded-6xl">Buka
+                            Dashboard Pengajar
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="w-full h-full px-5 flex flex-col gap-2">
                 <h1 class="font-semibold text-xl">PROFIL PENGAJAR</h1>
                 <h1
-                    class="font-semibold text-5xl max-sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-tosca-500 via-blue-500 to-bluesea-500">
+                    class="font-semibold text-4xl max-sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-tosca-500 via-blue-500 to-bluesea-500">
                     {{ $data_pengajar->nama }}
                 </h1>
-                <div class="w-full p-10 max-sm:p-5 flex flex-col shadow-custom rounded-6xl gap-5 h-full">
+                <div class="w-full p-5 flex flex-col shadow-custom rounded-6xl gap-5 h-full">
                     <div class="w-full grid grid-cols-2 max-sm:grid-cols-1 border-collapse gap-0.5">
                         <span><b>Nama</b></span>
                         <input type="text" name="nama" id=""
@@ -133,7 +139,7 @@
                                 class="w-full overflow-hidden rounded-3xl bg-bluesky-100 relative flex justify-center items-center gap-2 h-24">
                                 <img src="{{ asset('img/tugas.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
-                                <h1 class="text-4xl font-semibold ">0</h1>
+                                <h1 class="text-4xl font-semibold ">{{ $data_pengajar->tugas()->count() }}</h1>
                                 <span class="font-semibold">Tugas</span>
                             </div>
                             <div
@@ -146,18 +152,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full flex justify-end p-5">
-                    <input type="submit" value="Simpan Perubahan" id="edit-submit" class="btn btn-info text-white"
-                        disabled>
+                <div class="w-full flex justify-end items-center flex-nowrap gap-1">
+                    <input type="submit" value="Simpan Perubahan" id="edit-submit"
+                        class="btn max-sm:w-full  btn-info text-white " disabled>
                 </div>
             </div>
         </form>
-        <div class="w-full px-8 py-10">
-            <a href="{{ route('admin-dashboard-pengajar', ['pengajar' => $data_pengajar]) }}"
-                class="w-full bg-bluesea-500 p-5 rounded-full text-white font-semibold shadow-2xl ">Buka
-                Dashboard
-                Pengajar</a>
-        </div>
+
     </div>
     <dialog id="mapel_modal" class="modal">
         <form action="{{ route('pengajar.store', ['tipe' => 'mapel']) }}" method="POST"
@@ -284,7 +285,7 @@
                     $("#edit-gambar").addClass('hover:brightness-50');
                     $("#input-photo").removeClass('hidden');
                     $(".profile-input").removeAttr('disabled');
-                    $(".profile-input.profile-input-2").addClass('border');
+                    $(".profile-input.profile-input-2").addClass('outline outline-1');
                     $("#edit-submit").removeAttr('disabled')
                     $("#mapel-add").removeClass('hidden')
                     $(".remove-btn").removeClass("hidden")
@@ -293,7 +294,7 @@
                     $("#input-photo").addClass('hidden');
                     $(".profile-input").attr('disabled', 'true');
                     $("#edit-submit").attr('disabled', 'true')
-                    $(".profile-input.profile-input-2").removeClass('border');
+                    $(".profile-input.profile-input-2").removeClass('outline outline-1');
                     $("#mapel-add").addClass('hidden')
                     $(".remove-btn").addClass("hidden")
                 }

@@ -90,6 +90,8 @@
                 </div>
             @endforeach
         </div>
-        {{ $data_pengajar->paginate(8)->links('components.pagination') }}
+        <div class="p-5">
+            {{ $data_pengajar->paginate(8)->links('components.pagination') }}
+        </div>
     </div>
 @endsection

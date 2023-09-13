@@ -61,9 +61,6 @@
             <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
                 <i class="fa-solid fa-user"></i>
             </a>
-            <a href="" class="">
-                <i class="fa-solid fa-message"></i>
-            </a>
         </div>
     </div>
 @else
@@ -100,8 +97,8 @@
         </div>
     </div>
 
-    <div
-        class="max-md:flex z-50 hidden w-full fixed h-20 bottom-0 left-0 items-center justify-between p-5 pointer-events-none">
+    <div class="max-md:flex z-50 hidden w-full fixed h-20 bottom-0 left-0 items-center justify-between p-5 pointer-events-none select-none"
+        id="bubble-median">
         <div class="dropdown dropdown-top flex flex-col pointer-events-auto">
             <div tabindex="0"
                 class="bg-darkblue-500 py-2 px-1 rounded-circle w-16 h-16 flex items-center justify-center shadow-lg cursor-pointer">
@@ -125,15 +122,6 @@
                     <i class="fa-solid fa-clock-rotate-left"></i>
                 </a>
             </div>
-        </div>
-        <div
-            class="user text-white bg-bluesea-500 py-2 px-4 rounded-box shadow-xl text-2xl flex flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
-            <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
-                <i class="fa-solid fa-user"></i>
-            </a>
-            <a href="" class="">
-                <i class="fa-solid fa-message"></i>
-            </a>
         </div>
     </div>
 @endif

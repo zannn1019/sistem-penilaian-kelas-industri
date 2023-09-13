@@ -13,7 +13,7 @@ class Sekolah extends Model
         'id'
     ];
     protected $table = 'sekolah';
-    protected $with = ['kelas', 'siswa'];
+    // protected $with = ['kelas', 'siswa'];
     public function pengajar()
     {
         return $this->belongsToMany(User::class, 'pengajar_sekolah', 'id_sekolah', 'id_user');

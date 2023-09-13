@@ -12,7 +12,7 @@ class Mapel extends Model
         'id'
     ];
     protected $table = 'mapel';
-    protected $with = ['tugas'];
+    // protected $with = ['tugas'];
     public function pengajar()
     {
         return $this->belongsToMany(User::class, 'pengajar_mapel', 'id_mapel', 'id_user');

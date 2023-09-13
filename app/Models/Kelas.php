@@ -11,7 +11,7 @@ class Kelas extends Model
     protected $guarded = [
         'id'
     ];
-    protected $with = ['siswa'];
+    // protected $with = ['siswa'];
 
     public function pengajar()
     {

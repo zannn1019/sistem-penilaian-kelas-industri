@@ -13,7 +13,7 @@ class Pengajar extends Model
     ];
     protected $table = 'pengajar';
 
-    protected $with = ['sekolah', 'kelas'];
+    // protected $with = ['sekolah', 'kelas'];
 
     // public function user()
     // {
