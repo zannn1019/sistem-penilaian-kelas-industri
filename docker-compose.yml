@@ -1,0 +1,63 @@
+version: '3.7'
+services:
+    app:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        image: gdd/laravel
+        container_name: myapp
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: myapp
+            SERVICE_TAGS: dev
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - mynet
+    nginx:
+        container_name: lara-nginx
+        image: nginx:alpine
+        working_dir: /var/www/html
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www/html
+            - ./nginx:/etc/nginx/conf.d
+        networks:
+            - mynet
+
+    db:
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'penilaian'
+            # So you don't have to use root, but you can if you like
+            MYSQL_USER: 'user'
+            # You can use whatever password you like
+            MYSQL_PASSWORD: 'password'
+            # Password for root access
+            MYSQL_ROOT_PASSWORD: 'password'
+        ports:
+            # <Port exposed> : <MySQL Port running inside container>
+            - '3306:3306'
+        expose:
+            # Opens port 3306 on the container
+            - '3306'
+        # Where our data will be persisted
+        volumes:
+            - mysqldata:/var/lib/mysql
+
+#Docker Networks
+networks:
+  mynet:
+    driver: bridge
+
+#Volumes
+volumes:
+  mysqldata:
+    driver: local
