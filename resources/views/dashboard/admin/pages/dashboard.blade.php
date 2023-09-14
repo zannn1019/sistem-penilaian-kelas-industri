@@ -68,7 +68,7 @@
                                     <div class="w-full flex justify-between">
                                         <span class="text-2xs"><i
                                                 class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            {{ $pengajar->sekolah()->groupBy('id_sekolah')->count() }} sekolah</span>
+                                            {{ $pengajar->jumlah_sekolah }} sekolah</span>
                                         <span class="text-2xs"><i
                                                 class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
                                             {{ $pengajar->kelas()->count() }} kelas</span>

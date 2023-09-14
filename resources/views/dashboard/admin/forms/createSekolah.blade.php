@@ -159,7 +159,6 @@
                                 $('#kecamatan').append(
                                     `<option value="${kecamatan.nama}"data-id='${kecamatan.id}'>${kecamatan.nama}</option>`
                                 );
-                                console.log(kecamatan.id)
                             });
                         });
                 }

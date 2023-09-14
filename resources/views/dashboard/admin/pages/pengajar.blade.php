@@ -61,7 +61,7 @@
                     <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
                         <div>
                             <h1 class="text-xs">Sekolah</h1>
-                            <span class="font-semibold">{{ $pengajar->sekolah()->groupBy('id_sekolah')->count() }}</span>
+                            <span class="font-semibold">{{ $pengajar->jumlah_sekolah }}</span>
                         </div>
                         <div>
                             <h1 class="text-xs">Kelas</h1>

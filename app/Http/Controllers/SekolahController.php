@@ -78,7 +78,11 @@ class SekolahController extends Controller
         if ($request->get('data') == "kelas" || $request->get('data') == null) {
             $data = Kelas::where('id_sekolah', '=', $sekolah->id);
         } else {
-            $data = $sekolah->pengajar();
+            $data = $sekolah->pengajar()->withCount([
+                'sekolah as jumlah_sekolah' => function ($query) {
+                    $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                },
+            ])->distinct();
         }
         $pengajar = DB::table('pengajar_sekolah')
             ->select('id_user')
@@ -93,7 +97,6 @@ class SekolahController extends Controller
             'data' => $data,
             'jumlah_pengajar' => $pengajar,
             'data_kelas' => Kelas::where('id_sekolah', '=', $sekolah->id)->get(),
-            'data_pengajar' => User::where('role', '=', 'pengajar')->get()
         ]);
     }
 

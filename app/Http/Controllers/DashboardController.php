@@ -26,11 +26,16 @@ class DashboardController extends Controller
                 'kelas' => Kelas::all()
             ]);
         } else if (auth()->user()->role == "admin") {
+            $data_pengajar = User::where('role', 'pengajar')->withCount([
+                'sekolah as jumlah_sekolah' => function ($query) {
+                    $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                },
+            ]);
             return view('dashboard.admin.pages.dashboard', [
                 'title' => "Dashboard",
                 'full' => false,
                 'data_sekolah' => Sekolah::orderBy("id", "DESC")->get(),
-                'daftar_pengajar' => User::where("role", '=', 'pengajar')->latest()->get(),
+                'daftar_pengajar' => $data_pengajar->get(),
                 'mapel' => Mapel::all()->count(),
                 'kelas' => Kelas::all()->count(),
                 'siswa' => Siswa::all()->count()

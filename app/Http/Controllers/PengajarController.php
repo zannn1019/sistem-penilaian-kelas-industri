@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Mapel;
-use App\Models\Pengajar;
 use App\Models\User;
-use App\Models\PengajarMapel;
-use App\Models\PengajarSekolah;
-use App\Models\Sekolah;
-use Illuminate\Support\Str;
+use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PengajarController extends Controller
 {
@@ -21,17 +17,17 @@ class PengajarController extends Controller
         if ($request->ajax()) {
             if ($request->get('pengajar')) {
                 $id = $request->get('pengajar');
-                $user = User::find($id);
-                $jumlah_siswa = 0;
-                if ($user->count()) {
-                    foreach ($user->kelas()->get() as $kelas) {
-                        $jumlah_siswa += $kelas->siswa()->count();
+                $user = User::where('role', 'pengajar')->where('id', $id)->withCount([
+                    'sekolah as jumlah_sekolah' => function ($query) {
+                        $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
                     }
+                ])->first();
+                if ($user->count()) {
                     return response()->json([
                         'data' => $user,
-                        'jumlah_sekolah' => $user->sekolah()->groupBy('id_sekolah')->count(),
+                        'jumlah_sekolah' => $user->jumlah_sekolah,
                         'jumlah_kelas' => $user->kelas()->count(),
-                        'jumlah_siswa' => $jumlah_siswa
+                        'jumlah_siswa' => $user->kelas()->withCount('siswa')->pluck('siswa_count')->sum()
                     ]);
                 } else {
                     return response()->json(['error' => "Pengajar not found"]);
@@ -45,10 +41,16 @@ class PengajarController extends Controller
                 return response()->json(['error' => "Pengajar not found"]);
             }
         }
+
+        $data_pengajar = User::where('role', 'pengajar')->withCount([
+            'sekolah as jumlah_sekolah' => function ($query) {
+                $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+            },
+        ]);
         return view('dashboard.admin.pages.pengajar', [
             'title' => "Pengajar",
             'full' => false,
-            'data_pengajar' => User::where('role', '=', 'pengajar')->latest(),
+            'data_pengajar' => $data_pengajar,
         ]);
     }
 
@@ -101,17 +103,19 @@ class PengajarController extends Controller
     public function show(User $pengajar)
     {
         $jumlah_tugas = 0;
-        $jumlah_kelas = $pengajar->kelas()->get();
-        $jumlah_siswa = 0;
-        foreach ($jumlah_kelas as $kelas) {
-            $jumlah_siswa += $kelas->siswa()->count();
-        }
-        $data_mapel = Mapel::all();
+        $jumlah_sekolah = User::where('role', 'pengajar')
+            ->where('id', $pengajar->id)
+            ->withCount([
+                'sekolah as jumlah_sekolah' => function ($query) {
+                    $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                },
+            ])->value('jumlah_sekolah');
         return view('dashboard.admin.pages.detailPengajar', [
             'title' => "Pengajar",
             'full' => true,
             'data_pengajar' => $pengajar,
-            'jumlah_siswa' => $jumlah_siswa,
+            'jumlah_sekolah' => $jumlah_sekolah,
+            'jumlah_siswa' => $pengajar->kelas()->withCount('siswa')->pluck('siswa_count')->flatten()->sum(),
             'jumlah_tugas' => $jumlah_tugas,
             'mapel_pengajar' => $pengajar->mapel()->get(),
         ]);

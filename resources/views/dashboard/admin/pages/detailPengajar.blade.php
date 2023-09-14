@@ -125,7 +125,7 @@
                                 <img src="{{ asset('img/sekolah.png') }}" class="object-fill absolute -bottom-1/2 left-0"
                                     alt="">
                                 <h1 class="text-4xl font-semibold ">
-                                    {{ $data_pengajar->sekolah()->groupBy('id_sekolah')->count() }}</h1>
+                                    {{ $jumlah_sekolah }}</h1>
                                 <span class="font-semibold">Sekolah</span>
                             </div>
                             <div

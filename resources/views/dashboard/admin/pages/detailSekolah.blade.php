@@ -67,9 +67,6 @@
                 <div class="w-full h-full flex flex-col gap-2 justify-between relative">
                     @if ($info_sekolah->kelas->count() > 0)
                         <div class="w-full grid grid-cols-3 max-md:grid-cols-1 p-2 max-sm:p-0 gap-2">
-                            @php
-                                $uniqueResults = [];
-                            @endphp
                             @foreach ($data->paginate(3) as $info)
                                 @php
                                     $data_warna = $warna->random();
@@ -110,10 +107,6 @@
                                     </div>
                                 @else
                                     @php
-                                        $existingResult = collect($uniqueResults)->firstWhere('id', $info->id);
-                                        if (!$existingResult) {
-                                            $uniqueResults[] = $info;
-                                        }
                                         if (Cache::has('is_online' . $info->id) && $info->status == 'aktif') {
                                             $is_online = true;
                                             $bg = 'bg-bluesea-100';
@@ -129,71 +122,66 @@
                                             }
                                         }
                                     @endphp
-                                    @if (!$existingResult)
-                                        <div
-                                            class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
-                                            <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
-                                                <label tabindex="0" class="cursor-pointer">
-                                                    <i class="fa-solid fa-ellipsis"></i>
-                                                </label>
-                                                <div tabindex="0"
-                                                    class="dropdown-content z-[1] menu shadow bg-white rounded-box w-20 flex flex-col">
-                                                    <a href="{{ route('pengajar.show', ['pengajar' => $info->id]) }}"
-                                                        class="p-2 hover:font-bold">Edit</a>
-                                                    <form action="{{ route('users.destroy', $info->id) }}" method="POST"
-                                                        class="p-2 hover:font-bold">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit">Hapus</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="avatar">
-                                                <div class="w-20 rounded-full">
-                                                    <img src="{{ asset('storage/pengajar/' . $info->foto) }}"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                            <h1 class="font-semibold truncate w-full px-2 text-center">
-                                                {{ $info->nama }}
-                                            </h1>
-                                            <span class="capitalize text-xs">
-                                                {!! $is_online == true ? 'Mengakses : ' . '<b>' . Cache::get('at_page' . $info->id) . '</b>' : $info->status !!}</span>
-                                            <div
-                                                class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
-                                                <div>
-                                                    <h1 class="text-xs">Sekolah</h1>
-                                                    <span
-                                                        class="font-semibold">{{ $info->sekolah()->groupBy('id_sekolah')->count() }}</span>
-                                                </div>
-                                                <div>
-                                                    <h1 class="text-xs">Kelas</h1>
-                                                    <span class="font-semibold">{{ $info->kelas()->count() }}</span>
-                                                </div>
-                                                <div>
-                                                    <h1 class="text-xs">Mapel</h1>
-                                                    <span class="font-semibold">{{ $info->mapel()->count() }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="w-full flex justify-evenly p-2">
+                                    <div
+                                        class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
+                                        <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
+                                            <label tabindex="0" class="cursor-pointer">
+                                                <i class="fa-solid fa-ellipsis"></i>
+                                            </label>
+                                            <div tabindex="0"
+                                                class="dropdown-content z-[1] menu shadow bg-white rounded-box w-20 flex flex-col">
                                                 <a href="{{ route('pengajar.show', ['pengajar' => $info->id]) }}"
-                                                    class="{{ $btn }} px-3 py-1 rounded-box text-white text-xs"><i
-                                                        class="fa-solid fa-user"></i> Profile</a>
-                                                <div class="dropdown bg-transparent" data-theme="light">
-                                                    <div tabindex="0"
-                                                        class="{{ $btn }} cursor-pointer px-3 py-1 rounded-box text-white text-xs">
-                                                        <i class="fa-solid fa-envelope"></i> Contact
-                                                    </div>
-                                                    <ul tabindex="0"
-                                                        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-44 ">
-                                                        <li><a href="https://wa.me/{{ $info->no_telp }}">Nomor Telepon</a>
-                                                        </li>
-                                                        <li><a href="mailto:{{ $info->email }}">Email</a></li>
-                                                    </ul>
-                                                </div>
+                                                    class="p-2 hover:font-bold">Edit</a>
+                                                <form action="{{ route('users.destroy', $info->id) }}" method="POST"
+                                                    class="p-2 hover:font-bold">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit">Hapus</button>
+                                                </form>
                                             </div>
                                         </div>
-                                    @endif
+                                        <div class="avatar">
+                                            <div class="w-20 rounded-full">
+                                                <img src="{{ asset('storage/pengajar/' . $info->foto) }}" alt="">
+                                            </div>
+                                        </div>
+                                        <h1 class="font-semibold truncate w-full px-2 text-center">
+                                            {{ $info->nama }}
+                                        </h1>
+                                        <span class="capitalize text-xs">
+                                            {!! $is_online == true ? 'Mengakses : ' . '<b>' . Cache::get('at_page' . $info->id) . '</b>' : $info->status !!}</span>
+                                        <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
+                                            <div>
+                                                <h1 class="text-xs">Sekolah</h1>
+                                                <span class="font-semibold">{{ $info->jumlah_sekolah }}</span>
+                                            </div>
+                                            <div>
+                                                <h1 class="text-xs">Kelas</h1>
+                                                <span class="font-semibold">{{ $info->kelas()->count() }}</span>
+                                            </div>
+                                            <div>
+                                                <h1 class="text-xs">Mapel</h1>
+                                                <span class="font-semibold">{{ $info->mapel()->count() }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full flex justify-evenly p-2">
+                                            <a href="{{ route('pengajar.show', ['pengajar' => $info->id]) }}"
+                                                class="{{ $btn }} px-3 py-1 rounded-box text-white text-xs"><i
+                                                    class="fa-solid fa-user"></i> Profile</a>
+                                            <div class="dropdown bg-transparent" data-theme="light">
+                                                <div tabindex="0"
+                                                    class="{{ $btn }} cursor-pointer px-3 py-1 rounded-box text-white text-xs">
+                                                    <i class="fa-solid fa-envelope"></i> Contact
+                                                </div>
+                                                <ul tabindex="0"
+                                                    class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-44 ">
+                                                    <li><a href="https://wa.me/{{ $info->no_telp }}">Nomor Telepon</a>
+                                                    </li>
+                                                    <li><a href="mailto:{{ $info->email }}">Email</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             @endforeach
                         </div>

@@ -22,15 +22,15 @@ class AdminPengajarController extends Controller
             "total_tugas" => $total_tugas,
             "total_ternilai" => $total_ternilai,
             'harian' => [
-                'total' => 0,
+                'total' => $pengajar->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->count(),
                 'ternilai' => 0
             ],
             'PTS' => [
-                'total' => 0,
+                'total' => $pengajar->tugas()->tipe(['tipe' => ['PTS']])->count(),
                 'ternilai' => 0
             ],
             'PAS' => [
-                'total' => 0,
+                'total' => $pengajar->tugas()->tipe(['tipe' => ['PAS']])->count(),
                 'ternilai' => 0
             ],
         ]);
@@ -53,11 +53,13 @@ class AdminPengajarController extends Controller
     }
     public function showMapel(User $pengajar, Kelas $kelas)
     {
+        $daftar_tugas = $pengajar->tugas()->where('id_kelas', $kelas->id);
         return view('dashboard.admin.pages.adminPengajar.selectMapel', [
             'title' => "Pilih Mapel",
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
+            'daftar_tugas' => $daftar_tugas
         ]);
     }
     public function showTugas(User $pengajar, Kelas $kelas, Mapel $mapel)

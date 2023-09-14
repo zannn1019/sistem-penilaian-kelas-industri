@@ -73,7 +73,7 @@
     <nav class="navbar h-20 flex p-5">
         <div class="navbar-start flex gap-2 max-sm:w-96">
             <div
-                class="user max-sm:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
+                class="user max-md:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
                 <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
                     <i class="fa-solid fa-user"></i>
                 </a>
@@ -103,7 +103,7 @@
                 </ul>
             </div>
             <label for="my_modal_7"
-                class="bg-white max-sm:hidden rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
+                class="bg-white max-md:hidden rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
                 <i class="fa-solid fa-door-open"></i> <span class="text-xs">LOG OUT</span>
             </label>
 

@@ -47,7 +47,6 @@ class SiswaController extends Controller
             'tahun_ajar' => ['required'],
             'semester' => ['required']
         ]);
-        // dd($validated_data);
         Siswa::create($validated_data);
         return redirect()->route('kelas.show', ['kela' => $request->id_kelas])->with('success', 'Siswa berhasil ditambahkan!');
     }

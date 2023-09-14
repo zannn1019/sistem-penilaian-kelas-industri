@@ -68,7 +68,6 @@
             $(this).find("#bubble-median").draggable()
             $("#bubble-median").dblclick(function() {
                 $(this).find('.dropdown').toggleClass('dropdown-open')
-                console.log('tes')
             })
             $(".alert").velocity({
                 properties: {
