@@ -32,7 +32,7 @@
         <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 max-sm:flex-col-reverse pl-10">
             @if ($info_kelas->siswa->count())
                 <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
-                    <table class="table table-zebra border-2 border-darkblue-500 text-center" dir="ltr">
+                    <table class="table border-2 border-darkblue-500 text-center" dir="ltr">
                         <thead>
                             <tr class="bg-darkblue-500 text-white">
                                 <th>NO</th>
@@ -44,7 +44,8 @@
                         </thead>
                         <tbody>
                             @foreach ($info_kelas->siswa->all() as $siswa)
-                                <tr>
+                                <tr class="clickable-row hover:bg-gray-200 even:bg-gray-100"
+                                    data-link="{{ route('admin-detail-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'siswa' => $siswa->id]) }}">
                                     <td class="border-r-2 border-darkblue-500">{{ $loop->iteration }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nis }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nama }}</td>
@@ -71,18 +72,8 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            $("#indicator").text($("#nama_kelas").val().length)
-            $("#nama_kelas").keyup(function() {
-                $("#indicator").text($(this).val().length)
-            })
-            $("#nama_kelas").keydown(function() {
-                $("#indicator").text($(this).val().length)
-            })
-
-            $("#close-btn").click(function(e) {
-                e.preventDefault()
-                kelasModal.close()
-                $("#bg-blur").addClass('hidden')
+            $(".clickable-row").click(function() {
+                window.location.href = $(this).data('link');
             })
         });
     </script>

@@ -11,7 +11,7 @@ class Kelas extends Model
     protected $guarded = [
         'id'
     ];
-    // protected $with = ['siswa'];
+    // protected $with = ['tugas'];
 
     public function pengajar()
     {
@@ -24,5 +24,9 @@ class Kelas extends Model
     public function siswa()
     {
         return $this->hasMany(Siswa::class, 'id_kelas');
+    }
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class, 'id_kelas');
     }
 }

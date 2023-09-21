@@ -16,10 +16,6 @@
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT NILAI</h1>
             </a>
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
-                <i class="fa-solid fa-gear"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">PENGATURAN</h1>
-            </a>
         </div>
         <div class="user text-white p-5 text-2xl flex flex-col justify-center items-center gap-3 max-sm:flex-row">
             <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
@@ -50,10 +46,6 @@
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                 </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-gear"></i>
-                </a>
             </div>
         </div>
         <div
@@ -78,11 +70,6 @@
                 class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'FAQ' ? 'bg-white text-black' : '' }}">
                 <i class="fa-regular fa-message"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">FAQ</h1>
-            </a>
-            <a href=""
-                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Pengaturan' ? 'bg-white text-black' : '' }}">
-                <i class="fa-solid fa-gear"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">PENGATURAN</h1>
             </a>
             <a href=""
                 class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
@@ -112,10 +99,6 @@
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
                     <i class="fa-regular fa-message"></i>
-                </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">

@@ -12,9 +12,9 @@ class Nilai extends Model
         'id'
     ];
     protected $table = 'nilai';
-    // protected $with = ['tugas'];
-    // public function tugas()
-    // {
-    //     return $this->belongsTo(Tugas::class, 'id_tugas');
-    // }
+    protected $with = ['tugas'];
+    public function tugas()
+    {
+        return $this->belongsTo(Tugas::class, 'id_tugas');
+    }
 }

@@ -4,7 +4,6 @@
 
 * {
     font-family: "Montserrat";
-    /* outline: 1px solid red; */
 }
 
 input:focus {
@@ -34,18 +33,6 @@ input:focus {
     cursor: pointer;
     position: relative;
 }
-
-/* .clickable-row:hover::after {
-    left: 0;
-    position: absolute;
-    display: inline-block;
-    content: "";
-    background: #42aef1;
-    width: 10px;
-    height: 100%;
-    border-radius: 0 10px 10px 0;
-} */
-
 ::-webkit-scrollbar {
     width: 20px;
 }
@@ -201,4 +188,46 @@ input:focus {
         -webkit-appearance: none;
         margin: 0;
     }
+}
+
+.progress-primary::-webkit-progress-value {
+    background: linear-gradient(
+        90deg,
+        rgba(30, 235, 204, 1) 0%,
+        rgba(19, 154, 237, 1) 100%
+    );
+}
+
+.progress-nilai::before {
+    border-radius: 1rem;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    content: "";
+    background: white;
+    opacity: 0;
+    z-index: 1000;
+    animation: loading infinite 3s ease-in;
+    z-index: 1;
+    animation-delay: 2s;
+    left: 0;
+    top: 0;
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.table-custom th,
+.table-custom td {
+    outline: 1px solid black;
 }

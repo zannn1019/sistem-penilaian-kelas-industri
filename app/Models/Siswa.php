@@ -12,11 +12,10 @@ class Siswa extends Model
         'id'
     ];
     protected $table = 'siswa';
-    // protected $with = ['nilai'];
-    // public function sekolah()
-    // {
-    //     return $this->belongsTo(Sekolah::class, 'id_sekolah');
-    // }
+    public function sekolah()
+    {
+        return $this->belongsTo(Sekolah::class, 'id_sekolah');
+    }
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);

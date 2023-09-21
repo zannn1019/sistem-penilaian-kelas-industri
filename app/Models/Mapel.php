@@ -28,4 +28,14 @@ class Mapel extends Model
             'id'
         );
     }
+    public function nilai()
+    {
+        return $this->hasManyThrough(
+            Nilai::class,
+            PengajarMapel::class,
+            'id_mapel',
+            'id',
+            'id'
+        );
+    }
 }

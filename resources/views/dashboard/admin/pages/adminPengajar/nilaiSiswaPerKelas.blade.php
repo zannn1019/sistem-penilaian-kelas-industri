@@ -37,7 +37,8 @@
             id="tabel-nilai">
             @if ($info_kelas->siswa->count())
                 <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
-                    <table class="table table-zebra border-2 border-darkblue-500 text-center table-pin-rows table-pin-cols"
+                    <table
+                        class="table table-zebra max-sm:table-sm border-2 border-darkblue-500 text-center table-pin-rows table-pin-cols"
                         dir="ltr">
                         <thead>
                             <tr class="text-white bg-darkblue-500">
@@ -50,11 +51,11 @@
                         <tbody>
                             @foreach ($info_kelas->siswa->all() as $siswa)
                                 <tr>
-                                    <th class="border-r-2 border-darkblue-500 bg-white ">
+                                    <th class="border-r-2 border-darkblue-500 bg-white truncate">
                                         {{ $siswa->nama }}
                                     </th>
                                     <td class="border-r-2 border-darkblue-500 waktu-tanggal">
-                                        {{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->updated_at ?? '' }}
+                                        {{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->updated_at ?? '-' }}
                                     </td>
                                     <td class="border-r-2 border-darkblue-500">{{ $data_tugas->tipe }}</td>
                                     <td class="border-r-2 border-darkblue-500 input-nilai cursor-pointer relative"

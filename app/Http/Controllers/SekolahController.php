@@ -149,4 +149,16 @@ class SekolahController extends Controller
         $sekolah->destroy($sekolah->id);
         return back();
     }
+
+    public function maximize(Sekolah $sekolah)
+    {
+        $semuaJurusan = $sekolah->kelas->pluck('jurusan')->all();
+        $jurusanUnik = array_unique($semuaJurusan);
+        return view('dashboard.admin.pages.sekolahMaximize', [
+            'title' => "Sekolah",
+            'full' => true,
+            'info_sekolah' => $sekolah,
+            'daftar_jurusan' => $jurusanUnik
+        ]);
+    }
 }

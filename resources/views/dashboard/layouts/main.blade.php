@@ -38,7 +38,7 @@
             <span>{{ Session::get('error') }}!</span>
         </div>
     @endif
-    <div class="container-fluid w-screen h-screen p-5 max-sm:p-0">
+    <div class="container-fluid w-screen h-screen p-5 max-sm:p-0 a">
         <div
             class="container-fluid max-sm:pb-5 w-full h-full bg-white bg-opacity-30 max-sm:rounded-none rounded-box max-sm:px-2 flex max-sm:flex-col-reverse">
             @include('dashboard.layouts.sidebar')

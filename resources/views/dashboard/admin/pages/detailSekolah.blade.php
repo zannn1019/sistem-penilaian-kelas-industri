@@ -192,7 +192,7 @@
                         </div>
                     @endif
                     <div class="w-full flex justify-between px-5 py-1 items-end gap-1">
-                        <a href=""
+                        <a href="{{ route('sekolah.maximize', ['sekolah' => $info_sekolah->id]) }}"
                             class="btn rounded-circle text-black bg-transparent border-none hover:bg-transparent"><i
                                 class="fa-solid fa-up-right-from-square text-xl"></i></a>
                         {{ $data->paginate(3)->links('components.pagination') }}

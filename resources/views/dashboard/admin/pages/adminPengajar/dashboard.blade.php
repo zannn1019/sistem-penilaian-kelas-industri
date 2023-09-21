@@ -20,7 +20,7 @@
             </div>
             @include('dashboard.admin.pages.adminPengajar.components.switch')
         </header>
-        <div class="w-full flex max-sm:flex-col max-md:flex-col gap-5">
+        <div class="w-full flex max-md:flex-col gap-5">
             <div
                 class="w-6/12 h-full max-sm:w-full max-md:w-full bg-gradient-to-tl relative from-bluesky-500 from-10% to-darkblue-500 to-90% rounded-box grid grid-cols-2 max-sm:grid-cols-1">
                 <div class="statistik p-5 flex flex-col gap-1 max-sm:w-full">
@@ -68,10 +68,11 @@
                 <img src="{{ asset('img/stats_tugas.png') }}" alt="" class="object-fit max-sm:hidden"
                     draggable="false">
             </div>
-            <div class="w-6/12 max-sm:w-full max-md:w-full h-full overflow-hidden">
+            <div class="w-6/12 max-md:w-full h-full overflow-hidden">
                 <div
                     class="box-kelas bg-bluesky-500 w-10/12 h-full rounded-box shadow-xl relative p-10 text-white max-sm:w-full">
-                    <img src="{{ asset('img/book.png') }}" alt="" class="absolute -top-20 -right-32 max-sm:hidden">
+                    <img src="{{ asset('img/book.png') }}" alt=""
+                        class="absolute -top-20 -right-32 max-sm:hidden max-md:w-96 max-md:-top-1/3">
                     <h1 class="text-8xl ">{{ $info_pengajar->kelas()->count() }}</h1>
                     <h1 class="text-2xl">Kelas <br> Industri</h1>
                     <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
@@ -84,7 +85,7 @@
             </div>
         </div>
         @if ($info_pengajar->kelas()->get()->count() > 0)
-            <div class="w-full h-1/3 grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-1 text-black gap-5">
+            <div class="w-full h-1/3 grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2 text-black gap-5">
                 @foreach ($info_pengajar->kelas()->get()->count() > 3
             ? $info_pengajar->kelas()->get()->random(3)
             : $info_pengajar->kelas()->get() as $kelas)
@@ -103,8 +104,10 @@
                                         class="w-full h-full">
                                 </div>
                             </div>
-                            <div class="w-full h-full grid grid-cols-2 gap-2 justify-between items-center">
-                                <img src="{{ asset('img/data_kelas.png') }}" alt="" class="w-full">
+                            <div
+                                class="w-full h-full grid grid-cols-2 gap-2 justify-between items-center max-md:items-start overflow-hidden">
+                                <img src="{{ asset('img/data_kelas.png') }}" alt=""
+                                    class="w-full max-md:w-52 object-cover">
                                 <div class="info flex flex-col text-xs gap-2">
                                     <span class="font-bold">Semester Genap</span>
                                     <span><i class="fa-solid fa-chalkboard"></i>

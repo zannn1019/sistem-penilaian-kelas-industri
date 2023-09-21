@@ -14,7 +14,7 @@ class Tugas extends Model
     protected $guarded = [
         'id'
     ];
-    // protected $with  = ['kelas', 'nilai'];
+    protected $with  = ['pengajar'];
     public function scopeTipe($query, array $filter)
     {
         $query->when($filter['tipe'] ?? false, function ($query, $filter) {
@@ -33,5 +33,9 @@ class Tugas extends Model
     public function nilai()
     {
         return $this->hasMany(Nilai::class, 'id_tugas');
+    }
+    public function pengajar()
+    {
+        return $this->belongsTo(PengajarMapel::class, 'id_pengajar');
     }
 }
