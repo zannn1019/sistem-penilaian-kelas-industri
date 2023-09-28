@@ -92,6 +92,7 @@ class TugasController extends Controller
             Tugas::create($validatedData);
             return back()->with('success', 'Tugas berhasil di tambahkan!');
         }
+        return back()->with('error', 'Tugas gagal di tambahkan!');
     }
 
     /**

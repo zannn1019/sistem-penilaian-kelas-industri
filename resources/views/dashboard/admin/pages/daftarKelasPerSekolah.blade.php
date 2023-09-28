@@ -5,7 +5,8 @@
 @section('content')
     <div class="w-full h-full p-5 text-black flex flex-col">
         <header class="w-full flex gap-3 items-center text-2xl">
-            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black max-sm:p-5"></a>
+            <a href="{{ route('sekolah.show', ['sekolah' => $info_sekolah->id]) }}"
+                class="fa-solid fa-chevron-left max-md:text-lg text-black max-sm:p-5"></a>
             <div class="text-sm max-sm:hidden breadcrumbs">
                 <ul>
                     <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
@@ -30,22 +31,12 @@
                         <div class="tingkat h-full flex flex-col gap-1 justify-center pr-3">
                             <span class="text-xs leading-3">Tingkat Kelas</span>
                             <div class="w-full h-full flex gap-1">
-                                <a href=""
-                                    class="py-2.5 px-4 border-darkblue-100 border-2 rounded-lg font-bold flex justify-center items-center">
-                                    <h1 class="text-xl">10</h1>
-                                </a>
-                                <a href=""
-                                    class="py-2.5 px-4 border-darkblue-100 border-2 rounded-lg font-bold flex justify-center items-center">
-                                    <h1 class="text-xl">11</h1>
-                                </a>
-                                <a href=""
-                                    class="py-2.5 px-4 border-darkblue-100 border-2 rounded-lg font-bold flex justify-center items-center">
-                                    <h1 class="text-xl">12</h1>
-                                </a>
-                                <a href=""
-                                    class="py-2.5 px-4 border-darkblue-100 border-2 rounded-lg font-bold flex justify-center items-center">
-                                    <h1 class="text-xl">13</h1>
-                                </a>
+                                @for ($tingkat = 10; $tingkat <= 13; $tingkat++)
+                                    <a href="?tingkat={{ request('tingkat') == $tingkat ? 'all' : $tingkat }}&jurusan={{ request('jurusan') ?? 'all' }}&ajaran={{ request('ajaran') ?? 'all' }}&semester={{ request('semester') ?? 'all' }}"
+                                        class="py-2.5 px-4 border-darkblue-100 border-2 rounded-lg font-bold flex justify-center items-center {{ $tingkat == request('tingkat') ? 'bg-white border-white text-black' : '' }}">
+                                        <h1 class="text-xl">{{ $tingkat }}</h1>
+                                    </a>
+                                @endfor
                             </div>
                         </div>
                         <div
@@ -59,11 +50,14 @@
                                         fill="white" fill-rule="nonzero" />
                                 </svg>
                                 <select
-                                    class="border-2 max-w-[10rem] border-darkblue-100 rounded-lg h-8 text-xs pl-2 pr-16 bg-transparent text-white hover:border-gray-400 focus:outline-none appearance-none"
-                                    data-theme="dark">
-                                    <option class="text-black" selected>Pilih Jurusan</option>
+                                    class="border-2 max-w-[12rem] border-darkblue-100 rounded-lg h-8 text-xs pl-2 pr-16 bg-transparent text-white hover:border-gray-400 focus:outline-none appearance-none"
+                                    data-theme="dark" id="filter-jurusan">
+                                    <option class="text-black" value="all">Semua Jurusan</option>
                                     @foreach ($daftar_jurusan as $jurusan)
-                                        <option class="text-black">{{ $jurusan }}</option>
+                                        <option class="text-black" value="{{ $jurusan['slug'] }}"
+                                            {{ request('jurusan') == $jurusan['slug'] ? 'selected' : '' }}>
+                                            {{ $jurusan['nama_jurusan'] }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -79,25 +73,32 @@
                                 </svg>
                                 <select
                                     class="border-2 border-darkblue-100 rounded-lg h-8 text-xs pl-2 pr-16 bg-transparent text-white hover:border-gray-400 focus:outline-none appearance-none"
-                                    data-theme="dark">
-                                    <option class="text-black" selected>Tahun Ajaran</option>
-                                    <option class="text-black">2023/2024</option>
+                                    data-theme="dark" id="filter-tahun">
+                                    <option class="text-black" value="all">Semua Ajaran</option>
+                                    @foreach ($tahun_ajaran as $tahun)
+                                        <option class="text-black" value="{{ $tahun }}"
+                                            {{ request('ajaran') == $tahun ? 'selected' : '' }}>
+                                            {{ $tahun }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="jurusan border-l border-darkblue-200 px-5 h-full flex flex-col gap-1 justify-start">
                             <span class="text-xs leading-3">Semester</span>
-                            <a href="" class="px-10 py-1 border-darkblue-100 text-2xs rounded-md border-2">GANJIL</a>
-                            <a href="" class="px-10 py-1 border-darkblue-100 text-2xs rounded-md border-2">GENAP</a>
+                            <a href="?tingkat={{ request('tingkat') ?? 'all' }}&jurusan={{ request('jurusan') }}&ajaran={{ request('ajaran') ?? 'all' }}&semester={{ request('semester') == 'ganjil' ? 'all' : 'ganjil' }}"
+                                class="px-10 py-1 border-darkblue-100 text-2xs rounded-md border-2 {{ request('semester') == 'ganjil' ? 'bg-white text-black border-white' : '' }}">GANJIL</a>
+                            <a href="?tingkat={{ request('tingkat') ?? 'all' }}&jurusan={{ request('jurusan') }}&ajaran={{ request('ajaran') ?? 'all' }}&semester={{ request('semester') == 'genap' ? 'all' : 'genap' }}"
+                                class="px-10 py-1 border-darkblue-100 text-2xs rounded-md border-2 {{ request('semester') == 'genap' ? 'bg-white text-black border-white' : '' }}">GENAP</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="w-full h-full flex">
-                @if ($info_sekolah->kelas->count() > 0)
+                @if ($daftar_kelas->count() > 0)
                     <div class="w-full h-96 overflow-auto scroll-arrow" dir="rtl">
                         <div class="grid grid-cols-3 max-md:grid-cols-1 p-2 max-sm:p-0 gap-2" dir="ltr">
-                            @foreach ($info_sekolah->kelas as $kelas)
+                            @foreach ($daftar_kelas->paginate(6)->withQueryString() as $kelas)
                                 @php
                                     $data_warna = $warna->random();
                                 @endphp
@@ -120,7 +121,7 @@
                                             <img src="{{ asset('img/data_kelas.png') }}" alt=""
                                                 class="w-36 max-sm:w-24">
                                             <div class="status flex flex-col gap-1 text-xs">
-                                                <h1 class="font-semibold">Semester Genap</h1>
+                                                <h1 class="font-semibold">Semester {{ $kelas->semester }}</h1>
                                                 <h1 class="font-semibold">
                                                     {{ $kelas->tingkat }}-{{ $kelas->jurusan }}-{{ $kelas->kelas }}
                                                 </h1>
@@ -130,19 +131,36 @@
                                     </a>
                                     <h1 class="text-black px-2 py-1 font-bold text-xs">
                                         {{ $kelas->tingkat . ' ' . $kelas->jurusan . ' ' . $kelas->kelas }}-
-                                        Semester Genap
-                                    </h1>
+                                        Semester {{ $kelas->semester }} </h1>
                                 </div>
                             @endforeach
+                        </div>
+                        <div class="w-full py-5" dir="ltr">
+                            {{ $daftar_kelas->paginate(6)->withQueryString()->links('components.pagination') }}
                         </div>
                     </div>
                 @else
                     <div class="w-full h-full flex flex-col font-semibold text-gray-300 justify-center items-center ">
                         <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
-                        <h1>Belum ada kelas!</h1>
+                        <h1>Data kelas tidak ditemukan!</h1>
                     </div>
                 @endif
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $("#filter-jurusan").change(function() {
+            let selectedJurusan = $(this).val()
+            window.location.href =
+                `?tingkat={{ request('tingkat') ?? 'all' }}&jurusan=${selectedJurusan}&ajaran={{ request('ajaran') ?? 'all' }}&semester={{ request('semester') ?? 'all' }}`;
+        })
+        $("#filter-tahun").change(function() {
+            let selectedTahun = $(this).val()
+            window.location.href =
+                `?tingkat={{ request('tingkat') ?? 'all' }}&jurusan={{ request('jurusan') }}&ajaran=${selectedTahun}&semester={{ request('semester') ?? 'all' }}`;
+        })
+    </script>
 @endsection

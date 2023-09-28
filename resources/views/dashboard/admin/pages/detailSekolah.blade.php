@@ -72,16 +72,16 @@
                                     $data_warna = $warna->random();
                                 @endphp
                                 @if (Request::get('data') == 'kelas' || Request::get('data') == null)
-                                    <div class="box w-full h-56 p-2">
+                                    <div class="box w-full h-56 p-2 flex flex-col">
                                         <a href="{{ route('kelas.show', ['kela' => $info->id]) }}"
                                             class="w-full flex h-full bg-{{ $data_warna }}-100 rounded-box p-5 shadow-lg flex-col items-center">
                                             <div class="w-full flex justify-between h-2/6">
                                                 <div class="info">
-                                                    <h1 class="text-black text-xs font-semibold">
+                                                    <h1 class="text-black text-xs font-bold">
                                                         {{ $info->sekolah->nama }}
                                                     </h1>
                                                     <h1
-                                                        class="text-{{ $data_warna }}-500 font-bold text-2xl max-sm:text-lg">
+                                                        class="text-{{ $data_warna }}-500 font-bold text-2xl max-sm:text-lg truncate max-w-[13rem]">
                                                         {{ $info->nama_kelas }}
                                                     </h1>
                                                 </div>
@@ -90,9 +90,9 @@
                                             </div>
                                             <div class="flex w-full text-black text-sm items-center justify-evenly gap-5">
                                                 <img src="{{ asset('img/data_kelas.png') }}" alt=""
-                                                    class="w-36 max-sm:w-24">
+                                                    class="w-28 max-sm:w-24">
                                                 <div class="status flex flex-col gap-1 text-xs">
-                                                    <h1 class="font-semibold">Semester Genap</h1>
+                                                    <h1 class="font-bold">Semester {{ $info->semester }}</h1>
                                                     <h1 class="font-semibold">
                                                         {{ $info->tingkat }}-{{ $info->jurusan }}-{{ $info->kelas }}
                                                     </h1>
@@ -101,8 +101,8 @@
                                             </div>
                                         </a>
                                         <h1 class="text-black px-2 py-1 font-bold text-xs">
-                                            {{ $info->tingkat . ' ' . $info->jurusan . ' ' . $info->kelas }}-
-                                            Semester Genap
+                                            {{ $info->tingkat . ' ' . $info->jurusan . ' ' . $info->kelas }} -
+                                            Semester {{ $info->semester }}
                                         </h1>
                                     </div>
                                 @else
@@ -123,7 +123,7 @@
                                         }
                                     @endphp
                                     <div
-                                        class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
+                                        class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative ">
                                         <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
                                             <label tabindex="0" class="cursor-pointer">
                                                 <i class="fa-solid fa-ellipsis"></i>
@@ -136,7 +136,7 @@
                                                     class="p-2 hover:font-bold">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit">Hapus</button>
+                                                    <button type="submit">Arsip</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -192,7 +192,7 @@
                         </div>
                     @endif
                     <div class="w-full flex justify-between px-5 py-1 items-end gap-1">
-                        <a href="{{ route('sekolah.maximize', ['sekolah' => $info_sekolah->id]) }}"
+                        <a href="{{ route('sekolah.maximize', ['sekolah' => $info_sekolah->id, 'data' => Request::get('data') ?? 'kelas']) }}"
                             class="btn rounded-circle text-black bg-transparent border-none hover:bg-transparent"><i
                                 class="fa-solid fa-up-right-from-square text-xl"></i></a>
                         {{ $data->paginate(3)->links('components.pagination') }}
@@ -237,6 +237,29 @@
                 <input type="text" placeholder="Kelas"
                     class="input flex-grow input-bordered border-black  uppercase placeholder:capitalize" name="kelas"
                     maxlength="1" />
+                <div class="w-full flex gap-5">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ date('Y') . '/' . date('Y') + 1 }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" selected>Ganjil</option>
+                            <option value="2">Genap</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full col-span-2 text-xs flex items-center gap-2">
+                    <input type="checkbox" class="checkbox checkbox-sm" id="checkbox-input" />
+                    <label for="">Ubah tahun ajaran dan semester</label>
+                </div>
             </div>
             <div class="modal-action w-full flex justify-between items-center">
                 <button class="bg-gray-100 rounded-6xl py-1 px-5" id="close-kelas-modal">Batal</button>
@@ -251,7 +274,7 @@
             <h3 class="font-semibold text-3xl">Menambahkan Pengajar</h3>
             @csrf
             <input type="hidden" name="id_sekolah" value="{{ $info_sekolah->id }}">
-            <select name="id_kelas" id="" class="input input-bordered">
+            <select name="id_kelas" id="select_kelas" class="input input-bordered">
                 <option value="" selected>Pilih kelas</option>
                 @foreach ($data_kelas as $kelas)
                     <option value="{{ $kelas->id }}">
@@ -261,7 +284,7 @@
             </select>
             <div class="input-autocomplete relative w-full">
                 <input type="text" class="input input-bordered border-black w-full" id="input-autocomplete"
-                    placeholder="Masukkan nama pengajar!">
+                    placeholder="Masukkan nama pengajar!" disabled>
                 <input type="hidden" name="id_user" id="pengajar_value">
                 <div id="result"
                     class="hidden absolute z-20 w-full border border-black rounded-lg mt-1 bg-white max-h-40 overflow-auto">
@@ -293,6 +316,16 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $("#checkbox-input").change(function() {
+                if ($(this).is(":checked")) {
+                    $("#tahun_ajar").removeAttr('disabled');
+                    $("#semester").removeAttr('disabled');
+                } else {
+                    $("#tahun_ajar").attr('disabled', true);
+                    $("#semester").attr('disabled', true);
+                }
+            })
+
             function isValidLetter(key) {
                 return /^[a-zA-Z]$/.test(key);
             }
@@ -345,6 +378,13 @@
                     $("#input-autocomplete").addClass("border-error bg-red-100")
                 }
             })
+            $("#select_kelas").change(function() {
+                if ($(this).val() != "") {
+                    $("#input-autocomplete").removeAttr("disabled")
+                } else {
+                    $("#input-autocomplete").attr("disabled", true)
+                }
+            })
 
             let debounceTimer
             $("#input-autocomplete").keyup(function(e) {
@@ -384,8 +424,8 @@
                                     } else {
                                         $("#result").append(
                                             `
-                                            <div><h1>Pengajar tidak ada</h1></div>
-                                            `
+                                        <div><h1>Pengajar tidak ada</h1></div>
+                                        `
                                         )
                                     }
                                 }

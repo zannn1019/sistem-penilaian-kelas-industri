@@ -24,8 +24,6 @@ class SiswaFactory extends Factory
             'nis' => fake()->nik(),
             'nama' => fake()->name(),
             'no_telp' => fake()->phoneNumber(),
-            'tahun_ajar' => date('Y') . '/' . date('Y') + 1,
-            'semester' => 'ganjil'
         ];
     }
 }

@@ -46,13 +46,22 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
+        $tahun_ajaran = $request->tahun_ajar == null ? date("Y") . '/' . date("Y") + 1 : $request->tahun_ajar;
+        $semester = $request->semester == null ? '1' : $request->semester;
+        $request['tahun_ajar'] = $tahun_ajaran;
+        $request['semester'] = $semester;
         $validated_data = $request->validate([
             'id_sekolah' => ['required'],
             'tingkat' => ['required'],
             'jurusan' => ['required'],
             'kelas' => ['required'],
-            'nama_kelas' => ['required']
+            'nama_kelas' => ['required'],
+            'tahun_ajar' => ['required', 'regex:/^\d{4}\/\d{4}$/'],
+            'semester' => ['required']
+        ], [
+            'tahun_ajar.regex:/^\d{4}\/\d{4}$/' => 'Format tahun harus dalam format "yyyy/yyyy", contoh: 2023/2024.',
         ]);
+
         Kelas::create($validated_data);
         return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()])->with('success', 'Data kelas berhasil ditambahkan!');
     }
@@ -90,12 +99,20 @@ class KelasController extends Controller
      */
     public function update(Request $request, Kelas $kela)
     {
+        $tahun_ajaran = isset($request->tahun_ajar) ? $request->tahun_ajar : $kela->tahun_ajar;
+        $semester = isset($request->semester)  ? $request->semester : $kela->semester;
+        $request['tahun_ajar'] = $tahun_ajaran;
+        $request['semester'] = $semester;
         $validated_data = $request->validate([
             'id_sekolah' => ['required'],
             'tingkat' => ['required'],
             'jurusan' => ['required'],
             'kelas' => ['required'],
-            'nama_kelas' => ['required']
+            'nama_kelas' => ['required'],
+            'tahun_ajar' => ['required', 'regex:/^\d{4}\/\d{4}$/'],
+            'semester' => ['required']
+        ], [
+            'tahun_ajar.regex' => 'Format tahun harus dalam format "yyyy/yyyy", contoh: 2023/2024',
         ]);
         $kela->update($validated_data);
         return back()->with('success', 'Data kelas berhasil di ubah!');

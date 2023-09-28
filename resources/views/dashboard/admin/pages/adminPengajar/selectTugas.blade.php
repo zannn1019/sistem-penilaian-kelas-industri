@@ -1,7 +1,8 @@
 @extends('dashboard.layouts.main')
 @section('content')
     <div class="w-full h-full p-5 flex flex-col gap-2 ">
-        <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
+        <header
+            class="w-full h-1/4 max-sm:h-auto flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
                 <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
@@ -17,7 +18,7 @@
                             <li><a
                                     href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}">Mata
                                     Pelajaran</a></li>
-                            <li>{{ $info_mapel->nama_mapel }}</li>
+                            <li>{{ $info_mapel->mapel->nama_mapel }}</li>
                         </ul>
                     </div>
                     <h1 class="text-3xl font-semibold max-sm:text-sm"><span class="max-sm:hidden">Kelas Industri -</span>
@@ -27,7 +28,7 @@
                 </div>
             </div>
         </header>
-        <div class="flex min-h-[80%] max-sm:h-full relative">
+        <div class="flex h-full max-sm:h-full relative">
             <div class="self-end sticky bottom-0 py-5 flex flex-col gap-2 max-sm:fixed max-sm:right-5 max-sm:bottom-2">
                 <div class="relative w-12 rounded-circle aspect-square flex items-end">
                     <details class="dropdown dropdown-top">
@@ -57,8 +58,8 @@
                             <button class="w-full border-b p-2 border-black hover:font-semibold"
                                 onclick="quiz.showModal()">Tambah
                                 Kuis</button>
-                            <button class="w-full p-2 border-black hover:font-semibold"
-                                onclick="ujian.showModal()">Ujian</button>
+                            <button
+                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Ujian</button>
                         </div>
                     </details>
                 </div>
@@ -118,7 +119,7 @@
                                     <div
                                         class="w-full h-full grid grid-cols-2 gap-4 justify-between items-center text-black">
                                         <img src="{{ asset('img/_' . $tugas->tipe . '.png') }}" alt=""
-                                            class="h-full object-cover">
+                                            class="min-h-12 max-h-40">
                                         <div class=" w-full h-full flex justify-center items-center">
                                             <div
                                                 class="flex justify-center flex-col items-center overflow-hidden w-28 aspect-square bg-bluesea-500 rounded-circle">
@@ -153,7 +154,7 @@
                 class="flex flex-col gap-2 justify-center items-center">
                 @csrf
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $info_pengajar->mapel()->find($info_mapel->id)->id }}" name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
                 <input type="hidden" value="tugas" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
@@ -171,8 +172,7 @@
                 class="flex flex-col gap-2 justify-center items-center">
                 @csrf
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $info_pengajar->mapel()->find($info_mapel->id)->id }}"
-                    name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
                 <input type="hidden" value="quiz" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
@@ -196,8 +196,7 @@
                 @csrf
                 <input type="hidden" value="ujian" name="tipe" id="is-ujian">
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $info_pengajar->mapel()->find($info_mapel->id)->id }}"
-                    name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
                 <input disabled type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul Ujian" required>
                 <select name="tipe" id="" class="input input-bordered w-full" disabled>

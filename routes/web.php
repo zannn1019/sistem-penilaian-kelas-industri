@@ -46,7 +46,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
         Route::resource('/sekolah', SekolahController::class)->names('sekolah');
-        Route::get('/sekolah/{sekolah}/maximize', [SekolahController::class, 'maximize'])->name('sekolah.maximize');
+        Route::get('/sekolah/{sekolah}/{data}', [SekolahController::class, 'maximize'])->name('sekolah.maximize');
         Route::resource('/kelas', KelasController::class)->names('kelas');
         Route::resource('/pengajar', PengajarController::class)->names('pengajar');
         Route::resource('/siswa', SiswaController::class)->names('siswa');

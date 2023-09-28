@@ -3,20 +3,20 @@
     <div class="w-full h-full p-3 flex flex-col">
         <header class="w-full flex justify-between  gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                <a href="{{ route('kelas.show', ['kela' => $info_siswa->kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs border-b border-black">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
                         <ul>
-                            <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
-                            <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
-                                    Pengajar</a>
-                            </li>
-                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
-                                    Pengajar</a></li>
+                            <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
                             <li><a
-                                    href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}">Daftar
-                                    Siswa</a></li>
+                                    href="{{ route('sekolah.show', ['sekolah' => $info_siswa->sekolah->id]) }}">{{ $info_siswa->sekolah->nama }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('kelas.show', ['kela' => $info_siswa->kelas->id]) }}">
+                                    {{ $info_siswa->kelas->nama_kelas . ' ( ' . $info_siswa->kelas->tingkat . ' ' . $info_siswa->kelas->jurusan . ' ' . $info_siswa->kelas->kelas . ' )' }}
+                                </a>
+                            </li>
                             <li>{{ $info_siswa->nama }}</li>
                         </ul>
                     </div>
@@ -43,7 +43,7 @@
                     <i class="fa-solid fa-chalkboard text-xl"></i>
                     <span class="font-semibold">Kelas</span>
                     <span
-                        class="border-l px-2 text-xs">{{ $info_kelas->tingkat }}-{{ $info_kelas->jurusan }}-{{ $info_kelas->kelas }}</span>
+                        class="border-l px-2 text-xs">{{ $info_siswa->kelas->tingkat }}-{{ $info_siswa->kelas->jurusan }}-{{ $info_siswa->kelas->kelas }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <i class="fa-solid fa-user text-xl"></i>
@@ -166,15 +166,15 @@
                                             class="collapse-title grid grid-cols-3 text-center text-sm w-full place-content-center min-h-0 p-3">
                                             <h1>{{ $mapel->nama_mapel }}</h1>
                                             <h1>75</h1>
-                                            <h1>{{ $mapel->tugas->avg(function ($tugas) {
-                                                return $tugas->nilai->avg('nilai');
-                                            }) }}
+                                            <h1>{{ $mapel->tugas->avg(function ($tugas) use ($info_siswa) {
+                                                return $tugas->nilai->where('id_siswa', $info_siswa->id)->avg('nilai');
+                                            }) ?? 'Belum ada nilai' }}
                                             </h1>
                                         </div>
                                         <div
                                             class="collapse-content flex flex-col justify-center items-center pb-0 px-0 border-t border-black w-full bg-darkblue-200">
-                                            @if ($mapel->tugas->where('id_kelas', $info_kelas->id)->count())
-                                                @foreach ($mapel->tugas->where('id_kelas', $info_kelas->id) as $tugas)
+                                            @if ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id)->count())
+                                                @foreach ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id) as $tugas)
                                                     <div class="p-2 grid grid-cols-3 text-center text-sm w-full ">
                                                         <h1
                                                             class="{{ $tugas->nilai->value('nilai') == null || $tugas->nilai->value('nilai') <= 75 ? 'text-red-500 font-bold' : '' }}">

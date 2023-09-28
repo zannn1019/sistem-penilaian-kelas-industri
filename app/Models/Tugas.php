@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Model;
 
-use function PHPUnit\Framework\isNull;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tugas extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [
         'id'
     ];
+    protected $dates = ['deleted_at'];
     protected $with  = ['pengajar'];
     public function scopeTipe($query, array $filter)
     {

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\User;
 use App\Models\Mapel;
+use App\Models\PengajarMapel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,7 +36,8 @@ class PengajarController extends Controller
                 }
             }
             $query = $request->get('query');
-            $pengajar = User::where('role', '=', 'pengajar')->where("nama", 'LIKE', $query . '%')->get();
+            $pengajar = User::where('role', '=', 'pengajar')->where("nama", 'LIKE', $query . '%')->where('status', 'aktif')->with('mapel')->get();
+            return response()->json($pengajar);
             if ($pengajar->count()) {
                 return response()->json($pengajar);
             } else {

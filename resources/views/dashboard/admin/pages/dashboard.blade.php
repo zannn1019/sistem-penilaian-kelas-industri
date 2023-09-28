@@ -11,94 +11,102 @@
 @endmobile
 
 @section('content')
-    <div class="w-full h-full text-black p-2 flex flex-col gap-2 overflow-y-auto">
-        <div class="w-full h-24 grid grid-cols-2 max-md:grid-cols-1 grid-rows-1">
-            <div class="w-full border-2 p-2 h-full rounded-3xl shadow-xl flex flex-col justify-center items-center">
-                <h1 class="font-semibold">Instansi Terkait</h1>
-                <div class="w-full h-full flex justify-center items-center">
-                    @foreach ($data_sekolah as $sekolah)
-                        @if ($loop->iteration > $jumlah)
-                            @if ($loop->last)
-                                <div
-                                    class="w-10 bg-bluesea-200 shadow-lg border border-bluesea-400 aspect-square object-contain -mr-3 rounded-circle flex justify-center items-center">
-                                    {{ $loop->count - $jumlah }}+
-                                </div>
-                            @endif
-                        @else
-                            <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" alt=""
-                                class="w-10 aspect-square object-contain -mr-3 rounded-circle">
-                        @endif
-                    @endforeach
-                    <a href="{{ route('sekolah.create') }}"
-                        class="w-10 bg-gray-200 rounded-circle aspect-square shadow-box border-2 border-darkblue-100 flex justify-center items-center"><i
-                            class="fa-solid fa-plus"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="w-full h-full max-h-full flex gap-5 max-md:flex-col">
-            <div
-                class="w-8/12 max-md:w-full max-sm:h-max max-sm:max-h-96 flex flex-col h-full shadow-2xl bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-2xl">
-                <div class="w-full h-3/6 flex items-center justify-center">
-                    <div class="w-auto text-center py-10">
-                        <h1 class="bg-tosca-500 px-5 py-1 rounded-2xl max-sm:text-xs">{{ date('d M Y') }}</h1>
-                        <h1 class="text-8xl text-white max-sm:text-2xl">{{ $daftar_pengajar->count() }}</h1>
-                        <span class="text-white text-xl max-sm:text-sm">Pengajar</span>
-                    </div>
-                    <img src="{{ asset('img/meet.png') }}" alt=""
-                        class="h-full max-md:h-36 object-cover max-sm:h-24">
-                </div>
-                <div
-                    class="w-full h-3/6 rounded-2xl bg-gray-100 shadow-inner grid grid-cols-2 max-sm:grid-cols-1 overflow-hidden">
-                    <div class="h-auto flex flex-col gap-1 overflow-y-auto bg-white shadow-box">
-                        <div class="p-2">
-                            <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-2">
-                                <input type="text" class="bg-transparent p-2 w-full">
-                                <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
-                            </div>
+    <div class="w-full min-h-full h-full text-black p-2 flex flex-col gap-2 overflow-y-auto">
+        <div class="w-full h-full grid grid-cols-12 max-md:grid-cols-1 gap-2 grid-rows-1 max-md:grid-rows-none">
+            <div class="w-full grid grid-rows-6 h-full rounded-2xl col-span-8 max-md:col-span-full">
+                <div class="w-full mb-1 row-span-1">
+                    <div class="w-full border-2 p-2 h-full rounded-3xl shadow-xl flex flex-col justify-center items-center">
+                        <h1 class="font-semibold">Instansi Terkait</h1>
+                        <div class="w-full h-full flex justify-center items-center">
+                            @foreach ($data_sekolah as $sekolah)
+                                @if ($loop->iteration > $jumlah)
+                                    @if ($loop->last)
+                                        <div
+                                            class="w-10 bg-bluesea-200 shadow-lg border border-bluesea-400 aspect-square object-contain -mr-3 rounded-circle flex justify-center items-center">
+                                            {{ $loop->count - $jumlah }}+
+                                        </div>
+                                    @endif
+                                @else
+                                    <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" alt=""
+                                        class="w-10 aspect-square object-contain -mr-3 rounded-circle">
+                                @endif
+                            @endforeach
+                            <a href="{{ route('sekolah.create') }}"
+                                class="w-10 bg-gray-200 rounded-circle aspect-square shadow-box border-2 border-darkblue-100 flex justify-center items-center"><i
+                                    class="fa-solid fa-plus"></i></a>
                         </div>
-                        @foreach ($daftar_pengajar as $pengajar)
-                            <div data-id="{{ $pengajar->id }}"
-                                class="info-pengajar w-full flex gap-2 cursor-pointer hover:bg-gray-200 text-sm pr-2 {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
-                                <div class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
-                                </div>
-                                <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
-                                    class="w-11 rounded-circle aspect-square ml-2 py-1">
-                                <div class="info w-full text-xs flex flex-col gap-1 py-2">
-                                    <h1>{{ $pengajar->nama }}</h1>
-                                    <div class="w-full flex justify-between">
-                                        <span class="text-2xs"><i
-                                                class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            {{ $pengajar->jumlah_sekolah }} sekolah</span>
-                                        <span class="text-2xs"><i
-                                                class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            {{ $pengajar->kelas()->count() }} kelas</span>
-                                        <span class="text-2xs"><i
-                                                class="fa-solid fa-id-card bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                            {{ $pengajar->nik }}</span>
+                    </div>
+                </div>
+                <div class="w-full h-full grid grid-rows-2  row-span-5">
+                    <div
+                        class="w-full flex items-center justify-center bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-t-2xl">
+                        <div class="w-auto text-center py-10">
+                            <h1 class="bg-tosca-500 px-5 py-1 rounded-2xl max-sm:text-xs">{{ date('d M Y') }}</h1>
+                            <h1 class="text-8xl text-white max-sm:text-2xl">{{ $daftar_pengajar->count() }}</h1>
+                            <span class="text-white text-xl max-sm:text-sm">Pengajar</span>
+                        </div>
+                        <img src="{{ asset('img/meet.png') }}" alt=""
+                            class="h-full max-md:h-36 object-cover max-sm:h-24">
+                    </div>
+                    <div
+                        class="h-full flex flex-col w-full  bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-b-2xl">
+                        <div
+                            class="h-full w-full rounded-2xl bg-gray-100 grid grid-cols-2 max-sm:grid-cols-1 overflow-hidden shadow-inner border-2">
+                            <div class="h-full flex flex-col gap-1 overflow-y-auto bg-white shadow-box">
+                                <div class="p-2">
+                                    <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-2">
+                                        <input type="text" class="bg-transparent p-2 w-full">
+                                        <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
                                     </div>
                                 </div>
-                                <div class="h-full flex justify-center items-center text-xl hidden indikator-pengajar">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
+                                @foreach ($daftar_pengajar as $pengajar)
+                                    <div data-id="{{ $pengajar->id }}"
+                                        class="info-pengajar w-full flex gap-2 cursor-pointer hover:bg-gray-200 text-sm pr-2 {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
+                                        <div
+                                            class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
+                                        </div>
+                                        <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
+                                            class="w-11 rounded-circle aspect-square ml-2 py-1">
+                                        <div class="info w-full text-xs flex flex-col gap-1 py-2">
+                                            <h1>{{ $pengajar->nama }}</h1>
+                                            <div class="w-full flex justify-between">
+                                                <span class="text-2xs"><i
+                                                        class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                    {{ $pengajar->jumlah_sekolah }} sekolah</span>
+                                                <span class="text-2xs"><i
+                                                        class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                    {{ $pengajar->kelas()->count() }} kelas</span>
+                                                <span class="text-2xs"><i
+                                                        class="fa-solid fa-id-card bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                    {{ $pengajar->nik }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="h-full justify-center items-center text-xl hidden indikator-pengajar">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 max-sm:hidden text-center "
-                        id="profile-pengajar">
-                        <h1>Lihat profil lengkap pengajar</h1>
-                        <a href="{{ route('pengajar.index') }}"
-                            class="btn bg-bluesky-500 border-none hover:bg-bluesky-600 outline-none text-white rounded-6xl shadow-custom px-5 text-sm">
-                            Detail
-                        </a>
+                            <div class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 max-sm:hidden text-center "
+                                id="profile-pengajar">
+                                <h1>Lihat profil lengkap pengajar</h1>
+                                <a href="{{ route('pengajar.index') }}"
+                                    class="btn bg-bluesky-500 border-none hover:bg-bluesky-600 outline-none text-white rounded-6xl shadow-custom px-5 text-sm">
+                                    Detail
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="w-4/12 max-md:w-full grid grid-cols-2 grid-rows-2 h-full gap-2">
+            <div class="w-full max-md:w-full grid grid-cols-2 grid-rows-2 h-full gap-2 col-span-4 max-md:col-span-full ">
                 <div
                     class="w-full h-full bg-tosca-100 flex justify-evenly items-center flex-col shadow-custom rounded-xl relative overflow-hidden">
                     <img src="{{ asset('img/sekolah_tosca.png') }}" alt="" class="p-1">
-                    <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Instansi Sekolah
-                    </h1>
+                    <div class="w-full px-5 bg-white z-10 shadow-custom-2">
+                        <h1 class="text-xl text-center p-2 w-full">Instansi Sekolah
+                        </h1>
+                    </div>
                     <div
                         class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $data_sekolah->count() }}</h1>
@@ -106,9 +114,11 @@
                 </div>
                 <div
                     class="w-full h-full bg-tosca-100 flex justify-evenly items-center flex-col shadow-custom rounded-xl relative overflow-hidden">
-                    <img src="{{ asset('img/sekolah_tosca.png') }}" alt="" class="p-1">
-                    <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Mata Pelajaran
-                    </h1>
+                    <img src="{{ asset('img/mapel_.png') }}" alt="" class="p-1">
+                    <div class="w-full px-5 bg-white z-10 shadow-custom-2">
+                        <h1 class="text-xl text-center p-2 w-full">Mata Pelajaran
+                        </h1>
+                    </div>
                     <div
                         class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $mapel }}</h1>
@@ -116,9 +126,11 @@
                 </div>
                 <div
                     class="w-full h-full bg-tosca-100 flex justify-evenly items-center flex-col shadow-custom rounded-xl relative overflow-hidden">
-                    <img src="{{ asset('img/sekolah_tosca.png') }}" alt="" class="p-1">
-                    <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Kelas Industri
-                    </h1>
+                    <img src="{{ asset('img/kelas_.png') }}" alt="" class="p-1">
+                    <div class="w-full px-5 bg-white z-10 shadow-custom-2">
+                        <h1 class="text-xl text-center p-2 w-full">Kelas Industri
+                        </h1>
+                    </div>
                     <div
                         class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $kelas }}</h1>
@@ -126,9 +138,11 @@
                 </div>
                 <div
                     class="w-full h-full bg-tosca-100 flex justify-evenly items-center flex-col shadow-custom rounded-xl relative overflow-hidden">
-                    <img src="{{ asset('img/sekolah_tosca.png') }}" alt="" class="p-1">
-                    <h1 class="text-xl w-full text-center bg-white z-10 p-2 shadow-custom-2">Siswa/Siswi
-                    </h1>
+                    <img src="{{ asset('img/siswa_.png') }}" alt="" class="p-1">
+                    <div class="w-full px-5 bg-white z-10 shadow-custom-2">
+                        <h1 class="text-xl text-center p-2 w-full">Siswa/Siswi
+                        </h1>
+                    </div>
                     <div
                         class="w-16 h-16 text-3xl font-semibold border border-tosca-500 rounded-circle flex justify-center items-center bg-white absolute z-0">
                         <h1>{{ $siswa }}</h1>
@@ -186,6 +200,7 @@
             $(".info-pengajar").click(function() {
                 let id = $(this).data('id')
                 $(this).find('.indikator-pengajar').removeClass('hidden');
+                $(this).find('.indikator-pengajar').addClass('flex');
                 $(".indikator-pengajar").not($(this).find('.indikator-pengajar')).addClass('hidden');
                 $(this).addClass("bg-gray-200")
                 $(".info-pengajar").not($(this)).removeClass("bg-gray-200")

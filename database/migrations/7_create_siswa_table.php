@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('nis')->unique();
             $table->string('nama');
             $table->string('no_telp');
-            $table->string('tahun_ajar');
-            $table->enum('semester', ['ganjil', 'genap']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

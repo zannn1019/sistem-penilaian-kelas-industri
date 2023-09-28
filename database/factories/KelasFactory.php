@@ -23,6 +23,8 @@ class KelasFactory extends Factory
             'tingkat' => collect(['10', '11', '12', '13'])->random(1)->first(),
             'jurusan' => fake()->jobTitle(),
             'kelas' => fake()->regexify('[A-Za-z0-9]{1}'),
+            'tahun_ajar' => date('Y') . '/' . date('Y') + 1,
+            'semester' => 1,
             'created_at' => date(now()),
             'updated_at' => date(now())
         ];

@@ -29,7 +29,7 @@
                                 class="p-2 hover:font-bold">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Hapus</button>
+                                <button type="submit">Arsip</button>
                             </form>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                         <div class="w-full flex gap-2 justify-between items-center">
                             <div class="sub-info text-xs flex flex-col gap-1">
                                 <span><i class="fa-solid fa-chalkboard-user"></i>
-                                    {{ $sekolah->pengajar()->groupBy('id_user')->count() }}
+                                    {{ $sekolah->pengajar()->distinct('id_user')->count() }}
                                     Pengajar</span>
                                 <span><i class="fa-solid fa-graduation-cap"></i>
                                     {{ $sekolah->kelas()->get()->groupBy('jurusan')->count() }}

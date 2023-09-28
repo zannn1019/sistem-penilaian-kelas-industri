@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mapel extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, Searchable;
     protected $guarded = [
         'id'
     ];
     protected $table = 'mapel';
-    // protected $with = ['tugas'];
+    protected $dates = ['deleted_at'];
+    protected $with = ['pengajar'];
+
     public function pengajar()
     {
         return $this->belongsToMany(User::class, 'pengajar_mapel', 'id_mapel', 'id_user');
@@ -37,5 +41,11 @@ class Mapel extends Model
             'id',
             'id'
         );
+    }
+    public function toSearchableArray()
+    {
+        return [
+            'nama_mapel' => $this->nama_mapel
+        ];
     }
 }

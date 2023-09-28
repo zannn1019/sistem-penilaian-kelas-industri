@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('no_telp');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

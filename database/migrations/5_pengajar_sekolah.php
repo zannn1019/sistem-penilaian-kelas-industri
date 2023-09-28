@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('id_sekolah')->nullable()->constrained('sekolah');
             $table->foreignId('id_kelas')->nullable()->constrained('kelas');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

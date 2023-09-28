@@ -26,10 +26,10 @@
                 gap-2 justify-center items-center">
                 <i class="fa-solid fa-pen"></i> <span class="max-md:hidden">Edit Kelas</span></a>
         </div>
-        <div class="w-full h-[75%] py-2 flex gap-1 max-sm:flex-col-reverse pl-10 max-sm:p-4 max-sm:h-full">
+        <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 max-sm:flex-col pl-10">
             @if ($data->siswa->count())
-                <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
-                    <table class="table table-zebra border-2 border-darkblue-500 text-center" dir="ltr">
+                <div class="overflow-x-auto w-full h-full scroll-arrow max-sm:p-5" dir="rtl" data-theme="light">
+                    <table class="table border-2 border-darkblue-500 text-center max-sm:table-xs" dir="ltr">
                         <thead>
                             <tr class="bg-darkblue-500 text-white">
                                 <th>NO</th>
@@ -41,12 +41,13 @@
                         </thead>
                         <tbody>
                             @foreach ($data->siswa->all() as $siswa)
-                                <tr>
+                                <tr class="clickable-row hover:bg-gray-200 even:bg-gray-100"
+                                    data-link="{{ route('siswa.show', ['siswa' => $siswa->id]) }}">
                                     <td class="border-r-2 border-darkblue-500">{{ $loop->iteration }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nis }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nama }}</td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->tahun_ajar }}</td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->semester }}</td>
+                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->kelas->tahun_ajar }}</td>
+                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->kelas->semester }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -59,8 +60,9 @@
                 </div>
             @endif
             <a href="{{ route('siswa.create', ['kelas' => $data->id]) }}"
-                class="btn btn-circle self-end max-sm:self-start sticky"><i
-                    class="fa-solid fa-plus text-white text-2xl "></i></a>
+                class="btn btn-circle self-end max-sm:self-end sticky m-2">
+                <i class="fa-solid fa-plus text-white text-2xl "></i>
+            </a>
         </div>
     </div>
     <dialog id="kelasModal" class="modal backdrop-blur-lg">
@@ -90,6 +92,29 @@
                 <input type="text" placeholder="Kelas"
                     class="input flex-grow input-bordered border-black  uppercase placeholder:capitalize" name="kelas"
                     maxlength="1" value="{{ $data->kelas }}" />
+                <div class="w-full flex gap-5">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $data->tahun_ajar }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" {{ $data->semester == 'ganjil' ? 'selected' : '' }}>Ganjil</option>
+                            <option value="2" {{ $data->semester == 'genap' ? 'selected' : '' }}>Genap</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full col-span-2 text-xs flex items-center gap-2">
+                    <input type="checkbox" class="checkbox checkbox-sm" id="checkbox-input" />
+                    <label for="">Ubah tahun ajaran dan semester</label>
+                </div>
             </div>
             <div class="modal-action w-full flex justify-between items-center">
                 <button class="bg-gray-100 rounded-6xl py-1 px-5" id="close-btn">Batal</button>
@@ -102,6 +127,18 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $(".clickable-row").click(function() {
+                window.location.href = $(this).data('link');
+            })
+            $("#checkbox-input").change(function() {
+                if ($(this).is(":checked")) {
+                    $("#tahun_ajar").removeAttr('disabled');
+                    $("#semester").removeAttr('disabled');
+                } else {
+                    $("#tahun_ajar").attr('disabled', true);
+                    $("#semester").attr('disabled', true);
+                }
+            })
             $("#indicator").text($("#nama_kelas").val().length)
             $("#nama_kelas").keyup(function() {
                 $("#indicator").text($(this).val().length)

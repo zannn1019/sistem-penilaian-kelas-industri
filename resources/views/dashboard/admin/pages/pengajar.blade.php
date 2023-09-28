@@ -32,22 +32,6 @@
                 @endphp
                 <div
                     class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
-                    <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
-                        <label tabindex="0" class="cursor-pointer">
-                            <i class="fa-solid fa-ellipsis"></i>
-                        </label>
-                        <div tabindex="0"
-                            class="dropdown-content z-[1] menu shadow bg-white rounded-box w-20 flex flex-col">
-                            <a href="{{ route('pengajar.show', ['pengajar' => $pengajar->id]) }}"
-                                class="p-2 hover:font-bold">Edit</a>
-                            <form action="{{ route('users.destroy', $pengajar->id) }}" method="POST"
-                                class="p-2 hover:font-bold">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
                     <div class="avatar">
                         <div class="w-20 rounded-full">
                             <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt="">

@@ -13,8 +13,10 @@
                             <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
                                     Pengajar</a>
                             </li>
-                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
-                                    Pengajar</a></li>
+                            <li>
+                                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
+                                    Pengajar</a>
+                            </li>
                             <li>Mata Pelajaran</li>
                         </ul>
                     </div>
@@ -34,13 +36,13 @@
         </header>
         <div
             class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-1 gap-5 h-full  p-5 max-sm:p-0 ">
-            @foreach ($info_pengajar->mapel()->paginate(8) as $mapel)
+            @foreach ($data_mapel->paginate(8) as $mapel)
                 <div class="box w-full h-56 p-2">
                     <a href="{{ route('admin-show-tugas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'mapel' => $mapel->id]) }}"
                         class="w-full flex h-full bg-tosca-100 rounded-box p-5 shadow-lg flex-col">
                         <div class="w-full flex justify-between h-2/6">
                             <div class="flex justify-between items-center w-full">
-                                <h1 class="text-black text-2xl font-semibold">{{ $mapel->nama_mapel }}</h1>
+                                <h1 class="text-black text-2xl font-semibold">{{ $mapel->mapel->nama_mapel }}</h1>
                                 <span class="bg-black flex justify-center items-center p-2 px-2.5 rounded-circle"><i
                                         class="fa-solid fa-arrow-right text-white"></i></span>
                             </div>
@@ -84,7 +86,7 @@
                             </div>
                         </div>
                     </a>
-                    <h1 class="text-black p-1 font-semibold text-sm">Mata Pelajaran - {{ $mapel->nama_mapel }}</h1>
+                    <h1 class="text-black p-1 font-semibold text-sm">Mata Pelajaran - {{ $mapel->mapel->nama_mapel }}</h1>
                 </div>
             @endforeach
         </div>

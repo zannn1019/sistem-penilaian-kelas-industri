@@ -41,9 +41,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
         // \App\Models\User::factory(10)->create();
-        // \App\Models\Sekolah::factory(1)->create();
-        // \App\Models\Kelas::factory(1)->create();
-        // \App\Models\Siswa::factory(1)->create();
-        // \App\Models\Mapel::factory(1)->create();
+        \App\Models\Sekolah::factory(1)->create();
+        \App\Models\Kelas::factory(1)->create();
+        \App\Models\Siswa::factory(1)->create();
+        \App\Models\Mapel::factory(1)->create();
     }
 }

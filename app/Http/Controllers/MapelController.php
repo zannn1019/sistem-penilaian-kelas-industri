@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mapel;
 use Illuminate\Http\Request;
+use App\Models\PengajarMapel;
 
 class MapelController extends Controller
 {
@@ -16,13 +17,8 @@ class MapelController extends Controller
         if ($request->ajax()) {
             $query = $request->get('query');
             $pengajarId = $request->get('id');
-            $mapel = Mapel::where('nama_mapel', 'LIKE',  $query . "%")
-                ->whereNotIn('id', function ($query) use ($pengajarId) {
-                    $query->select('id_mapel')
-                        ->from('pengajar_mapel')
-                        ->where('id_user', $pengajarId);
-                })
-                ->get();
+            $mapelPengajar = PengajarMapel::where('id_user', $pengajarId)->pluck('id_mapel')->toArray();
+            $mapel = Mapel::search($query)->whereNotIn('id', $mapelPengajar)->get();
             if ($mapel->count()) {
                 return response()->json($mapel);
             } else {

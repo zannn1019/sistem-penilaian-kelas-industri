@@ -49,8 +49,8 @@
                                     <td class="border-r-2 border-darkblue-500">{{ $loop->iteration }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nis }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nama }}</td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->tahun_ajar }}</td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->semester }}</td>
+                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->kelas->tahun_ajar }}</td>
+                                    <td class="border-r-2 border-darkblue-500">{{ $siswa->kelas->semester }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

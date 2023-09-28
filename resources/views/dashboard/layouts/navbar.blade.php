@@ -48,10 +48,6 @@
                 </div>
                 <label class="modal-backdrop" for="my_modal_7"></label>
             </div>
-            {{-- <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
-                <i class="fa-solid fa-bell"></i>
-                <div class="w-3 h-3 bg-red-500 rounded-full absolute -top-0 -right-0"></div>
-            </button> --}}
         </div>
         <div class="navbar-center flex gap-5 font-semibold max-sm:text-xs max-sm:hidden max-md:hidden">
             <a href="{{ route('dashboard-pengajar') }}"
@@ -62,7 +58,7 @@
         <div class="navbar-end ">
             <div class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black">
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
+                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
                     placeholder="Type here to search...">
                 <button
                     class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>
@@ -126,10 +122,6 @@
                 </div>
                 <label class="modal-backdrop" for="my_modal_7"></label>
             </div>
-            {{-- <button class="rounded-full px-3 py-2 max-sm:px-2 max-sm:py-1 text-bluesea-500 bg-white relative">
-                <i class="fa-solid fa-bell"></i>
-                <div class="w-3 h-3 bg-red-500 rounded-full absolute -top-0 -right-0"></div>
-            </button> --}}
         </div>
         <div class="navbar-center flex gap-5 font-semibold max-sm:text-xs max-sm:hidden max-md:hidden">
             <a href="{{ route('dashboard-admin') }}"
@@ -141,7 +133,7 @@
         <div class="navbar-end ">
             <div class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black">
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic placeholder:font-thin"
+                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
                     placeholder="Type here to search...">
                 <button
                     class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>

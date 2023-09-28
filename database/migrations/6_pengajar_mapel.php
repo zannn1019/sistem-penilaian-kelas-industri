@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users');
             $table->foreignId('id_mapel')->nullable()->constrained('mapel');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

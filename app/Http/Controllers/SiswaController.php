@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
+use App\Models\Mapel;
+use App\Models\Nilai;
+use App\Models\PengajarMapel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use NumberToWords\NumberToWords;
 
 class SiswaController extends Controller
 {
@@ -13,7 +17,6 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -34,18 +37,12 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $tahun_ajaran = $request->tahun_ajar == null ? date("Y") . '/' . date("Y") + 1 : $request->tahun_ajar;
-        $semester = $request->semester == null ? '1' : $request->semester;
-        $request['tahun_ajar'] = $tahun_ajaran;
-        $request['semester'] = $semester;
         $validated_data = $request->validate([
             'id_sekolah' => ['required'],
             'id_kelas' => ['required'],
             'nis' => ['required', 'unique:siswa,nis'],
             'nama' => ['required'],
             'no_telp' => ['required'],
-            'tahun_ajar' => ['required'],
-            'semester' => ['required']
         ]);
         Siswa::create($validated_data);
         return redirect()->route('kelas.show', ['kela' => $request->id_kelas])->with('success', 'Siswa berhasil ditambahkan!');
@@ -56,7 +53,34 @@ class SiswaController extends Controller
      */
     public function show(Siswa $siswa)
     {
-        //
+        // ?? Mengambil kelas siswa
+        $kelas = Kelas::find($siswa->id_kelas);
+
+        // ?? Mengambil tugas siswa
+        $tugas = $kelas->tugas;
+
+        // ?? Mengambil total semua tugas
+        $total = $tugas->count();
+
+        // ?? Mengambil daftar mapel yang dipelajari
+        $mapelIds = PengajarMapel::whereIn('id_user', $kelas->pengajar->pluck('id')->toArray())
+            ->pluck('id_mapel')
+            ->toArray();
+
+        return view("dashboard.admin.pages.detailSiswa", [
+            'title' => "Detail Siswa",
+            'full' => true,
+            'info_siswa' => $siswa,
+            'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
+            'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
+            'tugas' => [
+                'total' => $total,
+                'ternilai' => $siswa->nilai()->count(),
+                'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
+                'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
+            ]
+        ]);
     }
 
     /**

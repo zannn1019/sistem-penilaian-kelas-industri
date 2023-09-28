@@ -41,6 +41,7 @@
                         }
                     }
                 @endphp
+
                 <div
                     class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
                     <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">

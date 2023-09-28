@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('kode_tugas');
             $table->string('nama');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

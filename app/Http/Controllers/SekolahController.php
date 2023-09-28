@@ -9,6 +9,7 @@ use App\Models\Pengajar;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PengajarSekolah;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 use function Laravel\Prompts\select;
@@ -146,19 +147,62 @@ class SekolahController extends Controller
      */
     public function destroy(Sekolah $sekolah)
     {
-        $sekolah->destroy($sekolah->id);
-        return back();
+        PengajarSekolah::where("id_sekolah", $sekolah->id)->delete();
+        $sekolah->siswa()->delete();
+        $sekolah->kelas()->delete();
+        $sekolah->delete();
     }
 
-    public function maximize(Sekolah $sekolah)
+    public function maximize(Sekolah $sekolah, $data, Request $request)
     {
-        $semuaJurusan = $sekolah->kelas->pluck('jurusan')->all();
-        $jurusanUnik = array_unique($semuaJurusan);
-        return view('dashboard.admin.pages.sekolahMaximize', [
+        if ($data == "pengajar") {
+            if ($request->query()) {
+                $pengajar = $sekolah->pengajar()->filter(['status' => $request->get('status'), 'sort' => $request->get('sort')])->withCount([
+                    'sekolah as jumlah_sekolah' => function ($query) {
+                        $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                    },
+                ])->distinct('id_user');
+            } else {
+                $pengajar = $sekolah->pengajar()->withCount([
+                    'sekolah as jumlah_sekolah' => function ($query) {
+                        $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                    },
+                ])->distinct('id_user');
+            }
+            return view('dashboard.admin.pages.daftarPengajarPerSekolah', [
+                'title' => "Sekolah",
+                'full' => true,
+                'info_sekolah' => $sekolah,
+                'daftar_pengajar' => $pengajar->paginate(8)->withQueryString()
+            ]);
+        }
+        if ($request->query()) {
+            $dataKelas = $sekolah->kelas()->filter(['tingkat' => $request->get('tingkat'), 'jurusan' => $request->get('jurusan'), 'ajaran' => $request->get('ajaran')]);
+        } else {
+            $dataKelas = $sekolah->kelas();
+        }
+
+        $semuaJurusan = $sekolah->kelas()->pluck('jurusan')->unique()->values()->all();
+        $jurusanUnik = collect($semuaJurusan)->map(function ($jurusan) {
+            return [
+                'nama_jurusan' => $jurusan,
+                'slug' => Str::slug($jurusan),
+            ];
+        })->toArray();
+
+        $semuaTahunAjaran = $sekolah->kelas()->pluck('tahun_ajar')->unique()->values()->all();
+        $semuaTahunAjaran = collect($semuaTahunAjaran)->map(function ($tahun_ajar) {
+            return $tahun_ajar;
+        })->toArray();
+
+
+        return view('dashboard.admin.pages.daftarKelasPerSekolah', [
             'title' => "Sekolah",
             'full' => true,
             'info_sekolah' => $sekolah,
-            'daftar_jurusan' => $jurusanUnik
+            'daftar_kelas' => $dataKelas,
+            'daftar_jurusan' => $jurusanUnik,
+            'tahun_ajaran' => $semuaTahunAjaran
         ]);
     }
 }

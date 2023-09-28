@@ -10,8 +10,6 @@ use App\Models\PengajarMapel;
 use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use NumberToWords\NumberToWords;
 
 class AdminPengajarController extends Controller
@@ -20,7 +18,6 @@ class AdminPengajarController extends Controller
 
     public function index(User $pengajar)
     {
-        // dd($pengajar->tugas());
         $tugas = $pengajar->tugas()->with('kelas.siswa', 'nilai')->get();
         $total_tugas = $tugas->pluck('kelas.siswa')->flatten()->count();
         $total_ternilai = $tugas->pluck('nilai')->flatten()->count();
@@ -59,31 +56,21 @@ class AdminPengajarController extends Controller
     }
     public function showMapel(User $pengajar, Kelas $kelas)
     {
-        $daftar_tugas = $pengajar->tugas()->where('id_kelas', $kelas->id)->get();
-        // $mapel = PengajarMapel::select('*')
-        //     ->where('pengajar_mapel.id_user', '=', $pengajar->id)
-        //     ->join("tugas", 'pengajar_mapel.id', '=', 'tugas.id_pengajar')
-        //     ->get();
-        // dd($mapel);
-        // return response()->json();
+        $mapel = PengajarMapel::where('id_user', $pengajar->id);
+
         return view('dashboard.admin.pages.adminPengajar.selectMapel', [
             'title' => "Pilih Mapel",
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
-            // 'daftar_tugas' => $mapel
+            'data_mapel' => $mapel
         ]);
     }
-    public function showTugas(User $pengajar, Kelas $kelas, Mapel $mapel)
+    public function showTugas(User $pengajar, Kelas $kelas, PengajarMapel $mapel)
     {
-        $idMapel = $pengajar->mapel()->find($mapel->id)->id;
         $daftar_tugas = collect([
-            'tugas' => $pengajar->mapel()->where('id_mapel', $idMapel)->first()->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
-                $query->where('tipe', 'tugas')->orWhere("tipe", 'quiz');
-            })->get(),
-            'ujian' => $pengajar->mapel()->where('id_mapel', $idMapel)->first()->tugas()->where('id_kelas', $kelas->id)->where(function ($query) {
-                $query->where('tipe', 'PTS')->orWhere("tipe", 'PAS');
-            })->get(),
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['PTS', 'PAS']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.admin.pages.adminPengajar.selectTugas', [
             'title' => "Pilih Tugas",
@@ -91,7 +78,8 @@ class AdminPengajarController extends Controller
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
             'info_mapel' => $mapel,
-            'daftar_tugas' => $daftar_tugas
+            'daftar_tugas' => $daftar_tugas,
+            'pengajar_mapel' => $pengajar->mapel()->where('mapel.id', $mapel->id)->value('pengajar_mapel.id')
         ]);
     }
     public function showSiswa(User $pengajar, Kelas $kelas)
@@ -126,38 +114,31 @@ class AdminPengajarController extends Controller
 
     public function detailSiswa(User $pengajar, Kelas $kelas, Siswa $siswa)
     {
-        // dd($pengajar->mapel()->get());
-        // ?? Mengambil data nilai siswa
-        $nilai = Nilai::where('id_siswa', $siswa->id)->get();
-
         // ?? Mengambil tugas siswa
         $tugas = Kelas::find($siswa->id_kelas)->tugas;
 
         // ?? Mengambil total semua tugas
         $total = $tugas->count();
+
+        // ?? Mengambil daftar mapel yang dipelajari
+        $mapelIds = PengajarMapel::whereIn('id_user', $kelas->pengajar->pluck('id')->toArray())
+            ->pluck('id_mapel')
+            ->toArray();
+
         return view('dashboard.admin.pages.adminPengajar.detailSiswa', [
             'title' => 'Detail Siswa',
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas,
             'info_siswa' => $siswa,
-            'daftar_mapel' => $pengajar->mapel()->get(),
+            'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
             'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
             'tugas' => [
                 'total' => $total,
                 'ternilai' => $siswa->nilai()->count(),
-                'tugas' => [
-                    'total' => $tugas->whereIn('tipe', ['tugas'])->count(),
-                    'ternilai' => $nilai->whereIn('tipe', ['tugas'])->count()
-                ],
-                'kuis' => [
-                    'total' => $tugas->whereIn('tipe', ['quiz'])->count(),
-                    'ternilai' => $nilai->whereIn('tipe', ['quiz'])->count()
-                ],
-                'ujian' => [
-                    'total' => $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
-                    'ternilai' => $nilai->whereIn('tipe', ['PAS', 'PTS'])->count()
-                ],
+                'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
+                'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
             ]
         ]);
     }

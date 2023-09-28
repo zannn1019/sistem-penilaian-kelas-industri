@@ -61,9 +61,9 @@
                             <span class="text-xs text-tosca-500">PAS</span>
                         </div>
                     </div>
-                    <a href=""
+                    {{-- <a href=""
                         class="text-black bg-tosca-500 text-center p-2 rounded-tl-box rounded-br-box absolute -bottom-3 -right-3 px-7 shadow-xl">Lihat
-                        Detail Nilai <i class="fa-solid fa-chevron-right text-xs"></i></a>
+                        Detail Nilai <i class="fa-solid fa-chevron-right text-xs"></i></a> --}}
                 </div>
                 <img src="{{ asset('img/stats_tugas.png') }}" alt="" class="object-fit max-sm:hidden"
                     draggable="false">
@@ -78,9 +78,6 @@
                     <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
                         class="btn text-white rounded-6xl absolute right-3 bottom-2 px-5 capitalize">Detail <i
                             class="fa-solid fa-chevron-right text-xs"></i></a>
-                    <a href=""
-                        class="bg-darkblue-500 p-1 px-2 rounded-circle aspect-square text-sm absolute top-1 left-1 flex justify-center items-center"><i
-                            class="fa-solid fa-pen"></i></a>
                 </div>
             </div>
         </div>
@@ -109,7 +106,7 @@
                                 <img src="{{ asset('img/data_kelas.png') }}" alt=""
                                     class="w-full max-md:w-52 object-cover">
                                 <div class="info flex flex-col text-xs gap-2">
-                                    <span class="font-bold">Semester Genap</span>
+                                    <span class="font-bold">Semester {{ $kelas->semester }}</span>
                                     <span><i class="fa-solid fa-chalkboard"></i>
                                         {{ $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas }}</span>
                                     <span><i class="fa-solid fa-users"></i> {{ $kelas->siswa->count() }} Siswa</span>

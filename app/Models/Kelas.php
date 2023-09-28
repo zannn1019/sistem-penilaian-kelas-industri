@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kelas extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = [
         'id'
     ];
+    protected $dates = ['deleted_at'];
     // protected $with = ['tugas'];
 
     public function pengajar()
@@ -28,5 +31,36 @@ class Kelas extends Model
     public function tugas()
     {
         return $this->hasMany(Tugas::class, 'id_kelas');
+    }
+    public function scopeFilter($query, array $params)
+    {
+        if ($params['tingkat'] != 'all') {
+            $query->when(
+                $params['tingkat'] ?? null,
+                fn ($query, $tingkat) =>
+                $query->where('tingkat', $tingkat)
+            );
+        }
+        if ($params['jurusan'] != 'all') {
+            $semuaJurusan = $query->pluck('jurusan')->unique()->values()->all();
+            $jurusanUnik = collect($semuaJurusan)->mapWithKeys(function ($jurusan) {
+                return [
+                    Str::slug($jurusan) => $jurusan,
+                ];
+            })->toArray();
+            $query->when(
+                $params['jurusan'] ?? null,
+                fn ($query, $jurusan) =>
+                $query->where('jurusan', $jurusanUnik[$params['jurusan']])
+            );
+        }
+        if ($params['ajaran'] != 'all') {
+            $query->when(
+                $params['ajaran'] ?? null,
+                fn ($query, $ajaran) =>
+                $query->where('tahun_ajar', $ajaran)
+            );
+        }
+        return $query;
     }
 }

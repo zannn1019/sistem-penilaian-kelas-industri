@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('nilai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('user');
+            // $table->foreignId('id_user')->constrained('user');
             $table->foreignId('id_siswa')->constrained('siswa');
             $table->foreignId('id_tugas')->constrained('tugas');
             $table->integer('nilai');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
