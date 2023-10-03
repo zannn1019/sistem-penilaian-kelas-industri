@@ -69,12 +69,19 @@
                         class="fa-solid fa-plus"></i></button>
                 <dialog id="addKelas" class="modal" data-theme="light">
                     <div class="modal-box flex flex-col gap-2">
-                        <form action="" method="post" class="flex flex-col w-full gap-2 px-5">
+                        <form action="{{ route('pengajar.store', ['tipe' => 'sekolah']) }}" method="post"
+                            class="flex flex-col w-full gap-2 px-5">
+                            @csrf
                             <h3 class="font-semibold text-3xl w-full text-center">Tambahkan Kelas!</h3>
-                            <input type="text" class="input input-bordered border-black" placeholder="Pilih Sekolah">
-                            <input type="text" class="input input-bordered border-black" placeholder="Pilih Kelas">
+                            <input type="text" class="input input-bordered border-black" placeholder="Pilih Sekolah"
+                                id="search-sekolah" value="">
+                            <input type="hidden" value="" id="id_sekolah" name="id_sekolah">
+                            <input type="hidden" value="{{ $info_pengajar->id }}" name="id_user">
+                            <input type="hidden" value="" id="id_kelas" name="id_kelas">
+                            <input type="text" class="input input-bordered border-black" disabled
+                                placeholder="Pilih Kelas" id="search-kelas" data-id-sekolah="">
                             <div class="modal-action w-full flex justify-between">
-                                <button class="bg-gray-200 px-4 py-1 rounded-xl">Batal</button>
+                                <button class="bg-gray-200 px-4 py-1 rounded-xl" id="cancel-btn">Batal</button>
                                 <button class="bg-gray-200 px-4 py-1 rounded-xl">Tambah</button>
                             </div>
                         </form>
@@ -115,6 +122,10 @@
 @endsection
 @section('script')
     <script>
+        $("#cancel-btn").click(function(e) {
+            e.preventDefault()
+            addKelas.close()
+        })
         $("#filter .btn").click(function() {
             let filter = $("#filter");
             let filterOption = $("#filter-option");
@@ -128,6 +139,70 @@
             }, isOpen ? 250 : 500);
 
             filter.data('toggle', isOpen ? "closed" : "open");
+        });
+        $("#search-sekolah").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ route('sekolah.index') }}",
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        query: request.term
+                    },
+                    success: function(data) {
+                        let filteredData = data.map(function(item) {
+                            return {
+                                label: item.nama,
+                                value: item.id
+                            };
+                        });
+                        response(filteredData);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                let selectedId = ui.item.value;
+                let selectedNama = ui.item.label;
+                $('#search-sekolah').val(selectedNama);
+                $("#id_sekolah").val(selectedId)
+                $('#search-kelas').data('id-sekolah', selectedId);
+                $('#search-kelas').removeAttr('disabled');
+                return false;
+            }
+        });
+
+        $("#search-kelas").autocomplete({
+            source: function(request, response) {
+                let idSekolah = $('#search-kelas').data(
+                    'id-sekolah');
+                $.ajax({
+                    url: "{{ route('kelas.index') }}",
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        query: request.term,
+                        id_sekolah: idSekolah
+                    },
+                    success: function(data) {
+                        let filteredData = data.map(function(item) {
+                            return {
+                                label: item.nama_kelas + "-" + item.tingkat + " " + item
+                                    .jurusan + " " + item.kelas,
+                                value: item.id
+                            };
+                        });
+                        response(filteredData);
+                        console.log(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                let selectedId = ui.item.value;
+                let selectedNama = ui.item.label;
+                $('#search-kelas').val(selectedNama);
+                $("#id_kelas").val(selectedId)
+                return false;
+            }
         });
     </script>
 @endsection

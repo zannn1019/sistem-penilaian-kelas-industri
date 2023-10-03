@@ -58,6 +58,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
             Route::prefix('/pengajarDashboard/{pengajar}')->group(function () {
                 Route::get('/', 'index')->name('admin-dashboard-pengajar');
                 Route::get('/kelas', 'kelas')->name('admin-kelas-pengajar');
+                Route::get('/kelas/{kelas}/raport', 'raporKelas')->name('admin-raport-kelas-pengajar');
                 Route::get('/kelas/{kelas}', 'showMapel')->name('admin-show-mapel-pengajar');
                 Route::get('/kelas/{kelas}/siswa', 'showSiswa')->name('admin-show-siswa-pengajar');
                 Route::get('/kelas/{kelas}/pengajar', 'showPengajar')->name('admin-show-pengajar-pengajar');

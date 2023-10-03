@@ -12,6 +12,7 @@ use App\Models\PengajarSekolah;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
 
 class SekolahController extends Controller
@@ -20,8 +21,12 @@ class SekolahController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $data = Sekolah::search('a')->get();
+            return response()->json($data);
+        }
         return view('dashboard.admin.pages.sekolah', [
             'title' => "Sekolah",
             'full' => false,

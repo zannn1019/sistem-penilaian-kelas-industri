@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 
 class Sekolah extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
     protected $guarded =  [
         'id'
     ];
@@ -27,5 +28,11 @@ class Sekolah extends Model
     public function siswa()
     {
         return $this->hasMany(Siswa::class, 'id_sekolah');
+    }
+    public function toSearchableArray()
+    {
+        return [
+            'nama' => $this->nama
+        ];
     }
 }

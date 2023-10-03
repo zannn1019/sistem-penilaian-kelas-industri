@@ -51,7 +51,7 @@
                         <tbody>
                             @foreach ($info_kelas->siswa->all() as $siswa)
                                 <tr>
-                                    <th class="border-r-2 border-darkblue-500 bg-white truncate">
+                                    <th class="border-r-2 border-darkblue-500 bg-white truncate max-sm:max-w-[10rem]">
                                         {{ $siswa->nama }}
                                     </th>
                                     <td class="border-r-2 border-darkblue-500 waktu-tanggal">
@@ -64,7 +64,7 @@
                                             class="w-24 text-center pointer-events-auto bg-transparent focus:outline-none"
                                             placeholder="{{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->nilai ?? 'Belum Dinilai' }}"
                                             value="{{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->nilai ?? '' }}"
-                                            disabled>
+                                            disabled min="0" max="100">
                                     </td>
                                 </tr>
                             @endforeach
@@ -142,27 +142,31 @@
                     let nextTd = nextTr.find(".input-nilai");
 
                     if (currentInput.val() != '') {
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('nilai.store') }}",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id_siswa': currentTd.data('id'),
-                                'id_tugas': currentTd.data('tugas'),
-                                'nilai': $(this).val()
-                            },
-                            dataType: "json",
-                            success: function(response) {
-                                if (response.success) {
-                                    let tanggal = currentTr.find('.waktu-tanggal')
-                                    tanggal.text(response.time)
+                        if ($(this).val() <= 100 && $(this).val() >= 0) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('nilai.store') }}",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    'id_siswa': currentTd.data('id'),
+                                    'id_tugas': currentTd.data('tugas'),
+                                    'nilai': $(this).val()
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    if (response.success) {
+                                        let tanggal = currentTr.find('.waktu-tanggal')
+                                        tanggal.text(response.time)
+                                    }
+                                    if (response.success == 'data_store') {
+                                        let count = $("#jumlah-ternilai").text()
+                                        $("#jumlah-ternilai").text(parseInt(count) + 1)
+                                    }
                                 }
-                                if (response.success == 'data_store') {
-                                    let count = $("#jumlah-ternilai").text()
-                                    $("#jumlah-ternilai").text(parseInt(count) + 1)
-                                }
-                            }
-                        });
+                            });
+                        } else {
+                            currentTd.addClass("bg-red-300")
+                        }
                     }
 
                     if (nextInput.length > 0) {

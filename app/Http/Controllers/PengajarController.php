@@ -90,7 +90,6 @@ class PengajarController extends Controller
             $user = User::find($request->id_user);
             $id_sekolah = $request->id_sekolah;
             $id_kelas = $request->id_kelas;
-
             if (!$user->sekolah()->wherePivot('id_sekolah', $id_sekolah)->wherePivot('id_kelas', $id_kelas)->exists()) {
                 $user->sekolah()->attach($id_sekolah, ['id_kelas' => $id_kelas]);
                 return back()->with("success", 'Pengajar berhasil ditambahkan!');

@@ -146,7 +146,6 @@
             </div>
         </div>
     </div>
-
     <dialog id="tugas" class="modal" data-theme="light">
         <div class="modal-box">
             <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul tugas!</h3>
@@ -154,7 +153,7 @@
                 class="flex flex-col gap-2 justify-center items-center">
                 @csrf
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
                 <input type="hidden" value="tugas" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
@@ -172,7 +171,7 @@
                 class="flex flex-col gap-2 justify-center items-center">
                 @csrf
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
                 <input type="hidden" value="quiz" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
@@ -196,7 +195,7 @@
                 @csrf
                 <input type="hidden" value="ujian" name="tipe" id="is-ujian">
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel }}" name="id_pengajar">
+                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
                 <input disabled type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul Ujian" required>
                 <select name="tipe" id="" class="input input-bordered w-full" disabled>

@@ -14,8 +14,13 @@ class KelasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        //?Request ajax
+        if ($request->ajax()) {
+            $data = Kelas::search($request->get('query'))->where('id_sekolah', $request->get('id_sekolah'))->get();
+            return response()->json($data);
+        }
         if (auth()->user()->role == "pengajar") {
             //?Jika pengguna memiliki role 'pengajar'
             $data_kelas = Kelas::where('pengajar_id', auth()->user()->id)->get();

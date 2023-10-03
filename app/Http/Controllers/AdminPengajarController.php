@@ -7,10 +7,12 @@ use App\Models\Mapel;
 use App\Models\Nilai;
 use App\Models\Pengajar;
 use App\Models\PengajarMapel;
+use App\Models\PengajarSekolah;
 use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
 use NumberToWords\NumberToWords;
+use PhpParser\Node\Expr\FuncCall;
 
 class AdminPengajarController extends Controller
 {
@@ -18,25 +20,42 @@ class AdminPengajarController extends Controller
 
     public function index(User $pengajar)
     {
+
         $tugas = $pengajar->tugas()->with('kelas.siswa', 'nilai')->get();
         $total_tugas = $tugas->pluck('kelas.siswa')->flatten()->count();
         $total_ternilai = $tugas->pluck('nilai')->flatten()->count();
-        $status_tugas = collect([
+        $status_tugas = [
             "total_tugas" => $total_tugas,
             "total_ternilai" => $total_ternilai,
             'harian' => [
-                'total' => $pengajar->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->count(),
-                'ternilai' => 0
+                'total' => 0,
+                'ternilai' => 0,
             ],
             'PTS' => [
-                'total' => $pengajar->tugas()->tipe(['tipe' => ['PTS']])->count(),
-                'ternilai' => 0
+                'total' => 0,
+                'ternilai' => 0,
             ],
             'PAS' => [
-                'total' => $pengajar->tugas()->tipe(['tipe' => ['PAS']])->count(),
-                'ternilai' => 0
+                'total' => 0,
+                'ternilai' => 0,
             ],
-        ]);
+        ];
+        $groupedTugas = $tugas->groupBy('tipe');
+        foreach ($groupedTugas as $tipe => $tugasByTipe) {
+            if ($tipe === 'tugas' || $tipe === 'quiz') {
+                $tipe = 'harian';
+            }
+            $totalTugasByTipe = $tugasByTipe->pluck('kelas.siswa')->flatten()->count();
+            $totalTernilaiByTipe = $tugasByTipe->pluck('nilai')->flatten()->count();
+            if (!isset($status_tugas[$tipe])) {
+                $status_tugas[$tipe] = [
+                    'total' => 0,
+                    'ternilai' => 0,
+                ];
+            }
+            $status_tugas[$tipe]['total'] += $totalTugasByTipe;
+            $status_tugas[$tipe]['ternilai'] += $totalTernilaiByTipe;
+        }
 
         return view('dashboard.admin.pages.adminPengajar.dashboard', [
             'title' => "Dashboard Pengajar",
@@ -79,7 +98,7 @@ class AdminPengajarController extends Controller
             'info_kelas' => $kelas,
             'info_mapel' => $mapel,
             'daftar_tugas' => $daftar_tugas,
-            'pengajar_mapel' => $pengajar->mapel()->where('mapel.id', $mapel->id)->value('pengajar_mapel.id')
+            'pengajar_mapel' => $mapel
         ]);
     }
     public function showSiswa(User $pengajar, Kelas $kelas)
@@ -140,6 +159,15 @@ class AdminPengajarController extends Controller
                 'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
                 'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
             ]
+        ]);
+    }
+    public function raporKelas(User $pengajar, Kelas $kelas)
+    {
+        return view('dashboard.admin.pages.adminPengajar.raporPerKelas', [
+            'title' => 'raport Kelas',
+            'full' => true,
+            'info_pengajar' => $pengajar,
+            'info_kelas' => $kelas
         ]);
     }
 }

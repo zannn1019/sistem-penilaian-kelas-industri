@@ -73,7 +73,7 @@
                     <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
                         <div>
                             <h1 class="text-xs">Sekolah</h1>
-                            <span class="font-semibold">{{ $pengajar->sekolah()->groupBy('id_sekolah')->count() }}</span>
+                            <span class="font-semibold">{{ $pengajar->sekolah()->distinct('id_sekolah')->count() }}</span>
                         </div>
                         <div>
                             <h1 class="text-xs">Kelas</h1>
@@ -102,28 +102,77 @@
                 </div>
             @endforeach
         </div>
+
         {{ $data_pengajar->paginate(8)->links('components.pagination') }}
-        <a href="{{ route('siswa.create', ['kelas' => $info_kelas->id]) }}"
-            class="btn btn-circle self-end max-sm:self-start sticky"><i
-                class="fa-solid fa-plus text-white text-2xl "></i></a>
+        <div class="relative w-12 self-end max-sm:self-start rounded-circle aspect-square flex items-end">
+            <details class="dropdown dropdown-top">
+                <summary
+                    class="dropdown-btn absolute bottom-0 bg-darkblue-500 z-[1] p-3 shadow-box btn rounded-circle text-white text-2xl flex justify-center items-center aspect-square"
+                    id="list-btn"><i class="fa-solid fa-plus"></i></summary>
+                <div
+                    class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 right-0 max-sm:-left-full w-72  flex flex-col text-black text-center justify-center items-center gap-2">
+                    <button class="w-full p-2 hover:font-semibold border-b border-black"
+                        onclick="addPengajar.showModal()">Tambah pengajar tersedia</button>
+                    <a href="{{ route('pengajar.create') }}" class="w-full p-2 hover:font-semibold">Tambah pengajar
+                        baru</a>
+                </div>
+            </details>
+        </div>
     </div>
+    <dialog id="addPengajar" class="modal text-black" data-theme="light">
+        <form method="POST" action="{{ route('pengajar.store', ['tipe' => 'sekolah']) }}"
+            class="modal-box flex flex-col gap-4">
+            @csrf
+            <h1 class="font-semibold text-2xl w-full text-center">Cari pengajar tersedia</h1>
+            <input type="text" id="searchPengajar" class="input input-bordered" placeholder="Cari pengajar">
+            <input type="hidden" name="id_user" id="id_user">
+            <input type="hidden" name="id_sekolah" id="id_sekolah" value="{{ $info_kelas->sekolah->id }}">
+            <input type="hidden" name="id_kelas" id="id_kelas" value="{{ $info_kelas->id }}">
+            <div class="w-full flex justify-between">
+                <button class="px-4 py-1 bg-gray-200 rounded-2xl" id="close-btn">Batal</button>
+                <button class="px-4 py-1 text-white bg-darkblue-500 rounded-2xl">Tambah</button>
+            </div>
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 @endsection
 
 @section('script')
     <script>
         $(document).ready(function() {
-            $("#indicator").text($("#nama_kelas").val().length)
-            $("#nama_kelas").keyup(function() {
-                $("#indicator").text($(this).val().length)
-            })
-            $("#nama_kelas").keydown(function() {
-                $("#indicator").text($(this).val().length)
-            })
-
+            $("#searchPengajar").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('pengajar.index') }}",
+                        type: 'GET',
+                        dataType: "json",
+                        data: {
+                            query: request.term,
+                        },
+                        success: function(data) {
+                            let filteredData = data.map(function(item) {
+                                return {
+                                    label: item.nama,
+                                    value: item.id
+                                };
+                            });
+                            response(filteredData);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    let selectedId = ui.item.value;
+                    let selectedNama = ui.item.label;
+                    $('#searchPengajar').val(selectedNama);
+                    $("#id_user").val(selectedId)
+                    return false;
+                }
+            });
             $("#close-btn").click(function(e) {
                 e.preventDefault()
-                kelasModal.close()
-                $("#bg-blur").addClass('hidden')
+                addPengajar.close()
             })
         });
     </script>

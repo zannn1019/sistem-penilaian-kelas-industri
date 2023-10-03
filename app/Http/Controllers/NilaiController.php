@@ -14,7 +14,7 @@ class NilaiController extends Controller
      */
     public function index(Request $request)
     {
-        // ?? Jika user request lewat XHTTP request / AJAX
+        // ?? Jika request lewat XHTTP request / AJAX
         if ($request->ajax()) {
             // ?? Mengambil data nilai dan data siswa
             $nilai = Nilai::where('id_siswa', $request->get('id_siswa'))->get();

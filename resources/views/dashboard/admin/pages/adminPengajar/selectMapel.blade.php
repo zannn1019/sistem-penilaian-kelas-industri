@@ -25,13 +25,6 @@
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
                 </div>
-                <a href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
-                    class="self-end text-xs flex gap-1 w-52 justify-center items-center bg-darkblue-500 text-white p-4 py-3 rounded-3xl">
-                    <i class="fa-solid fa-users"></i>
-                    <span class="max-sm:hidden">Lihat data siswa</span>
-                    <i class="fa-solid fa-chevron-right max-sm:hidden"></i>
-                    <span class="hidden max-sm:inline-block">Siswa</span>
-                </a>
             </div>
         </header>
         <div
@@ -89,6 +82,21 @@
                     <h1 class="text-black p-1 font-semibold text-sm">Mata Pelajaran - {{ $mapel->mapel->nama_mapel }}</h1>
                 </div>
             @endforeach
+        </div>
+        <div class="relative w-12 rounded-circle aspect-square flex items-end">
+            <details class="dropdown dropdown-top">
+                <summary
+                    class="dropdown-btn absolute bottom-0 bg-darkblue-500 z-[1] p-3 shadow-box btn rounded-circle text-white text-2xl flex justify-center items-center aspect-square"
+                    id="list-btn"><i class="fa-solid fa-bars-staggered"></i></summary>
+                <div
+                    class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 left-0 max-sm:-left-52 w-64  flex flex-col text-black text-center justify-center items-center gap-2">
+                    <a href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
+                        class="w-full border-b p-2 border-black hover:font-semibold">Daftar
+                        siswa</a>
+                    <a href="{{ route('admin-raport-kelas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
+                        class="w-full p-2 hover:font-semibold">Raport kelas</a>
+                </div>
+            </details>
         </div>
     </div>
 @endsection

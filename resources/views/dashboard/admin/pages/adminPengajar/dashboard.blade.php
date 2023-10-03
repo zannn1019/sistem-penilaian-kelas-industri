@@ -61,9 +61,6 @@
                             <span class="text-xs text-tosca-500">PAS</span>
                         </div>
                     </div>
-                    {{-- <a href=""
-                        class="text-black bg-tosca-500 text-center p-2 rounded-tl-box rounded-br-box absolute -bottom-3 -right-3 px-7 shadow-xl">Lihat
-                        Detail Nilai <i class="fa-solid fa-chevron-right text-xs"></i></a> --}}
                 </div>
                 <img src="{{ asset('img/stats_tugas.png') }}" alt="" class="object-fit max-sm:hidden"
                     draggable="false">

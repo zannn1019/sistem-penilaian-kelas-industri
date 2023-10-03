@@ -6,6 +6,48 @@
     font-family: "Montserrat";
 }
 
+/* Mengatur warna latar belakang dan warna teks untuk Autocomplete */
+.ui-autocomplete {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* Mengatur tampilan item dalam daftar Autocomplete */
+.ui-menu-item {
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* Mengatur warna latar belakang saat item dalam daftar Autocomplete dihover */
+.ui-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Mengatur teks item dalam daftar Autocomplete */
+.ui-menu-item-wrapper {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Mengatur gaya ketika item dalam daftar Autocomplete dipilih */
+.ui-state-active,
+.ui-widget-content .ui-state-active {
+    font-weight: bold;
+    color: black;
+    background: transparent;
+    border: none;
+}
+
+/* Mengatur gaya tombol clear di kotak input Autocomplete */
+.ui-autocomplete.ui-front .ui-helper-reset button {
+    background-color: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+}
+
 input:focus {
     outline: none !important;
 }

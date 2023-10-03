@@ -6,10 +6,11 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 
 class Kelas extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
     protected $guarded = [
         'id'
     ];
@@ -62,5 +63,14 @@ class Kelas extends Model
             );
         }
         return $query;
+    }
+    public function toSearchableArray()
+    {
+        return [
+            'nama_kelas' => $this->nama_kelas,
+            'tingkat' => $this->tingkat,
+            'jurusan' => $this->jurusan,
+            'kelas' => $this->kelas
+        ];
     }
 }
