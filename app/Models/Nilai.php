@@ -15,7 +15,11 @@ class Nilai extends Model
     ];
     protected $table = 'nilai';
     protected $dates = ['deleted_at'];
-    protected $with = ['tugas'];
+    protected $with = ['tugas', 'siswa'];
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'id_siswa');
+    }
     public function tugas()
     {
         return $this->belongsTo(Tugas::class, 'id_tugas');

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengajar')->constrained('pengajar_mapel');
             $table->foreignId('id_kelas')->constrained('kelas');
+            // $table->enum('tipe', ['tugas', 'quiz', 'asesmen_blok_a', 'asesmen_blok_b']);
             $table->enum('tipe', ['tugas', 'quiz', 'PTS', 'PAS']);
             $table->string('kode_tugas');
             $table->string('nama');

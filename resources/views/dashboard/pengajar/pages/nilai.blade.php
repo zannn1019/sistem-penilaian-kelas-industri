@@ -44,7 +44,7 @@
                     <option value="">1</option>
                 </select>
             </div>
-            @if (request('filter') == 'all')
+            @if ($data_nilai->count())
                 <div class="overflow-x-auto w-full relative pr-5">
                     <div class="w-[99%] z-10 justify-between absolute left-0.5 transition-all duration-300 pointer-events-none hidden max-sm:opacity-0 max-md:opacity-0"
                         id="indicator">
@@ -66,14 +66,16 @@
                             </tr>
                         </thead>
                         <tbody class="bg-bluesea-200 text-xs">
-                            @for ($i = 0; $i < 20; $i++)
-                                <tr class="clickable-row" data-link="{{ $i }}">
-                                    <td>{{ now() }}</td>
-                                    <td>Ahmad Fauzan </td>
-                                    <td>XII RPL A</td>
-                                    <td>Tugas</td>
+                            @foreach ($data_nilai as $nilai)
+                                <tr class="clickable-row" data-link="{{ $nilai->siswa->id }}">
+                                    <td>{{ $nilai->updated_at }}</td>
+                                    <td>{{ $nilai->siswa->nama }} </td>
+                                    <td>{{ $nilai->siswa->kelas->sekolah->nama }} -
+                                        {{ $nilai->siswa->kelas->tingkat }}-{{ $nilai->siswa->kelas->jurusan }}-{{ $nilai->siswa->kelas->kelas }}
+                                    </td>
+                                    <td>{{ $nilai->tugas->tipe }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -138,7 +140,7 @@
     <script>
         $(document).ready(function() {
             $(".clickable-row").click(function() {
-                window.location.href = "/pengajar/nilai/" + $(this).data('link')
+                window.location.href = "/pengajar/siswa/" + $(this).data('link')
             })
             $(".clickable-row").hover(function() {
                 $("#indicator").css('display', 'flex')

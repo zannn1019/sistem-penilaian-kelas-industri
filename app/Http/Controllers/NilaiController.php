@@ -37,6 +37,19 @@ class NilaiController extends Controller
                 'belum' => $belum
             ]]);
         }
+        if (auth()->user()->role == 'pengajar') {
+            $data_nilai = collect([]);
+            if ($request->hasAny(['filter', 'tgl'])) {
+                $data_nilai = Nilai::all();
+            }
+
+            return view('dashboard.pengajar.pages.nilai', [
+                'title' => "Nilai",
+                'full' => false,
+                'data_nilai' => $data_nilai
+            ]);
+        }
+        return redirect()->back();
     }
 
     /**

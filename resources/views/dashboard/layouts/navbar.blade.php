@@ -3,8 +3,10 @@
         <div class="navbar-start flex gap-2 max-sm:w-96">
             <div
                 class="user max-sm:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
-                <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
-                    <i class="fa-solid fa-user"></i>
+                <a href="{{ route('profile-pengajar') }}"
+                    class=" rounded-full shadow-lg aspect-square overflow-hidden w-10">
+                    <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}" class="w-full h-full object-cover"
+                        alt="">
                 </a>
             </div>
             <div class="dropdown hidden max-sm:inline-block max-md:inline-block">
@@ -19,9 +21,10 @@
                     class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-darkblue-500 rounded-box w-52 z-40">
                     <li><a href="{{ route('dashboard-pengajar') }}"
                             class="{{ $title == 'Dashboard' ? 'text-white' : '' }}">DASHBOARD</a></li>
-                    <li><a href="{{ route('nilai') }}" class="{{ $title == 'Nilai' ? 'text-white' : '' }}">NILAI</a>
+                    <li><a href="{{ route('nilai.index') }}"
+                            class="{{ $title == 'Nilai' ? 'text-white' : '' }}">NILAI</a>
                     </li>
-                    <li><a href="{{ route('kelas.index') }}"
+                    <li><a href="{{ route('kelas-pengajar') }}"
                             class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
                     </li>
                     <li>
@@ -30,6 +33,10 @@
                     </li>
                 </ul>
             </div>
+            <label for="my_modal_7"
+                class="bg-white max-md:hidden rounded-box cursor-pointer text-sm px-4 max-sm:px-2 max-sm:py-1 py-2 shadow-lg text-bluesea-500">
+                <i class="fa-solid fa-door-open"></i> <span class="text-xs">LOG OUT</span>
+            </label>
             <input type="checkbox" id="my_modal_7" class="modal-toggle" />
             <div class="modal">
                 <div
@@ -52,8 +59,8 @@
         <div class="navbar-center flex gap-5 font-semibold max-sm:text-xs max-sm:hidden max-md:hidden">
             <a href="{{ route('dashboard-pengajar') }}"
                 class="{{ $title == 'Dashboard' ? 'text-white' : '' }}">DASHBOARD</a>
-            <a href="{{ route('nilai') }}" class="{{ $title == 'Nilai' ? 'text-white' : '' }}">NILAI</a>
-            <a href="{{ route('kelas.index') }}" class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
+            <a href="{{ route('nilai.index') }}" class="{{ $title == 'Nilai' ? 'text-white' : '' }}">NILAI</a>
+            <a href="{{ route('kelas-pengajar') }}" class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
         </div>
         <div class="navbar-end ">
             <div class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black">
@@ -70,8 +77,10 @@
         <div class="navbar-start flex gap-2 max-sm:w-96">
             <div
                 class="user max-md:flex text-white rounded-box shadow-xl text-2xl hidden flex-col justify-center items-center gap-3 max-md:flex-row pointer-events-auto">
-                <a href="" class="bg-darkblue-500 px-3 py-2 rounded-full shadow-lg">
-                    <i class="fa-solid fa-user"></i>
+                <a href="{{ route('profile-admin') }}"
+                    class=" rounded-full shadow-lg aspect-square overflow-hidden w-10">
+                    <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}"
+                        class="w-full h-full object-cover" alt="">
                 </a>
             </div>
             <div class="dropdown hidden max-sm:inline-block max-md:inline-block">

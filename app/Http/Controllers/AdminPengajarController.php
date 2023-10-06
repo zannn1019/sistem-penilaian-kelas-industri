@@ -16,11 +16,9 @@ use PhpParser\Node\Expr\FuncCall;
 
 class AdminPengajarController extends Controller
 {
-    //
-
+    //? Index
     public function index(User $pengajar)
     {
-
         $tugas = $pengajar->tugas()->with('kelas.siswa', 'nilai')->get();
         $total_tugas = $tugas->pluck('kelas.siswa')->flatten()->count();
         $total_ternilai = $tugas->pluck('nilai')->flatten()->count();
@@ -65,6 +63,7 @@ class AdminPengajarController extends Controller
         ]);
     }
 
+    //? Daftar kelas untuk dashboard pengajar pada page admin
     public function kelas(User $pengajar)
     {
         return view('dashboard.admin.pages.adminPengajar.kelas', [
@@ -73,6 +72,8 @@ class AdminPengajarController extends Controller
             'info_pengajar' => $pengajar
         ]);
     }
+
+    //? Daftar mapel yang diajarkan oleh pengajar
     public function showMapel(User $pengajar, Kelas $kelas)
     {
         $mapel = PengajarMapel::where('id_user', $pengajar->id);
@@ -85,6 +86,8 @@ class AdminPengajarController extends Controller
             'data_mapel' => $mapel
         ]);
     }
+
+    //? Daftar tugas yang dibuat oleh pengajar
     public function showTugas(User $pengajar, Kelas $kelas, PengajarMapel $mapel)
     {
         $daftar_tugas = collect([
@@ -101,6 +104,8 @@ class AdminPengajarController extends Controller
             'pengajar_mapel' => $mapel
         ]);
     }
+
+    //? Daftar siswa per kelas
     public function showSiswa(User $pengajar, Kelas $kelas)
     {
         return view('dashboard.admin.pages.adminPengajar.showSiswa', [
@@ -110,6 +115,8 @@ class AdminPengajarController extends Controller
             'info_kelas' => $kelas,
         ]);
     }
+
+    //? Daftar pengajar yang mengajar pada kelas yang di pilih
     public function showPengajar(User $pengajar, Kelas $kelas)
     {
         return view('dashboard.admin.pages.adminPengajar.showPengajar', [
@@ -120,6 +127,8 @@ class AdminPengajarController extends Controller
             'data_pengajar' => $kelas->pengajar()
         ]);
     }
+
+    //? Daftar nilai siswa per tugas yang dibuat oleh pengajar
     public function nilaiSiswaPerKelas(User $pengajar, Kelas $kelas, Tugas $tugas)
     {
         return view('dashboard.admin.pages.adminPengajar.nilaiSiswaPerKelas', [
@@ -131,6 +140,7 @@ class AdminPengajarController extends Controller
         ]);
     }
 
+    //? Informasi identitas dan nilai siswa
     public function detailSiswa(User $pengajar, Kelas $kelas, Siswa $siswa)
     {
         // ?? Mengambil tugas siswa
@@ -161,6 +171,8 @@ class AdminPengajarController extends Controller
             ]
         ]);
     }
+
+    //? Daftar nilai siswa per mapel yang di ajarkan oleh pengajar
     public function raporKelas(User $pengajar, Kelas $kelas)
     {
         return view('dashboard.admin.pages.adminPengajar.raporPerKelas', [
@@ -168,6 +180,18 @@ class AdminPengajarController extends Controller
             'full' => true,
             'info_pengajar' => $pengajar,
             'info_kelas' => $kelas
+        ]);
+    }
+
+    //? Daftar nilai siswa per tugas yang dibuat oleh pengajar
+    public function showNilai(User $pengajar, Kelas $kelas, PengajarMapel $mapel)
+    {
+        return view('dashboard.admin.pages.adminPengajar.nilaiSiswaPerTugas', [
+            'title' => 'Nilai siswa',
+            'full' => true,
+            'info_pengajar' => $pengajar,
+            'info_kelas' => $kelas,
+            'info_mapel' => $mapel
         ]);
     }
 }

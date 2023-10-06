@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "itsgoingd/clockwork": "^5.1",
         "kwn/number-to-words": "^2.6",
+        "laravel-lang/lang": "~4.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/scout": "^10.3",

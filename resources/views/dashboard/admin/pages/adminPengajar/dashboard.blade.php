@@ -85,12 +85,12 @@
             : $info_pengajar->kelas()->get() as $kelas)
                     <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $kelas->id]) }}"
                         class="box p-2">
-                        <h1 class="font-bold">{{ $kelas->nama_kelas }}</h1>
+                        <h1 class="font-bold trunca">{{ $kelas->nama_kelas }}</h1>
                         <div class="box-content w-11/12 h-44 bg-blue-200 rounded-2xl flex flex-col gap-2 p-4 shadow-lg">
                             <div class="info-sekolah flex justify-between items-center w-full h-10">
                                 <div class="nama-kelas">
                                     <span class="text-xs font-semibold ">{{ $kelas->sekolah->nama }}</span>
-                                    <h1 class="font-bold leading-3 text-2xl text-bluesea-500">
+                                    <h1 class="font-bold leading-5 text-xl text-bluesea-500">
                                         {{ $kelas->nama_kelas }}</h1>
                                 </div>
                                 <div class="logo avatar h-full">

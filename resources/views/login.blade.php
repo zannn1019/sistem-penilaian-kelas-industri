@@ -36,6 +36,16 @@
                         <span>{{ Session::get('error') }}</span>
                     </div>
                 @endif
+                @if (Session::has('success'))
+                    <div class="alert bg-green-100 border border-success text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{{ Session::get('success') }}</span>
+                    </div>
+                @endif
                 @csrf
                 <div
                     class="login-input text-white p-0 input input-bordered focus:outline-none flex gap-2 bg-gray-200 rounded-3xl">
@@ -53,6 +63,7 @@
                     <input type="password" name="password" placeholder="Password" id="password"
                         class="bg-transparent w-full  focus:border-none text-black " required>
                 </div>
+                <a href="{{ route('forgot-password') }}" class="text-bluesea-500 hover:underline">Lupa password? </a>
                 <div class="submit-btn w-full flex justify-center items-center">
                     <input type="submit" value="Login" id="submit_btn"
                         class="btn text-white text-xl px-10 shadow-xl rounded-box pointer-events-none bg-gray-200 border-2 border-none hover:bg-bluesky-500">

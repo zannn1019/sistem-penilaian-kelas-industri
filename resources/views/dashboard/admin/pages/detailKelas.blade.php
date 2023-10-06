@@ -21,10 +21,20 @@
                 <h2 class="text-5xl max-md:text-lg font-semibold">
                     {{ $data->tingkat . ' ' . $data->jurusan . ' ' . $data->kelas }}</h2>
             </div>
-            <a onclick="kelasModal.showModal()"
-                class="p-2 cursor-pointer border border-black rounded-lg font-semibold flex
-                gap-2 justify-center items-center">
-                <i class="fa-solid fa-pen"></i> <span class="max-md:hidden">Edit Kelas</span></a>
+            <div class="dropdown dropdown-left justify-self-end self-end p-5" data-theme="light">
+                <label tabindex="0" class="text-4xl self-end justify-self-end bg-transparent cursor-pointer "><i
+                        class="fa-solid fa-ellipsis-vertical"></i></label>
+                <div tabindex="0" class="dropdown-content z-[1] p-2 shadow bg-gray-300 rounded-box w-52 flex flex-col">
+                    <a onclick="kelasModal.showModal()" class="w-full hover:font-semibold p-2 border-b border-black"> Edit
+                        Kelas</a>
+                    <form action="{{ route('kelas.destroy', $data->id) }}" method="POST" class="p-2 hover:font-bold">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Arsip</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
         <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 max-sm:flex-col pl-10">
             @if ($data->siswa->count())

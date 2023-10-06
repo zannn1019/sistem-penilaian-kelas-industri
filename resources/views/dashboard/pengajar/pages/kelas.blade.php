@@ -43,34 +43,35 @@
         </div>
         <div
             class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 gap-5 p-5 max-sm:p-0 h-full max-md:grid-cols-1 ">
-            @foreach ($data_kelas as $kelas)
+            @foreach ($info_pengajar->kelas()->paginate(8) as $kelas)
                 <div class="box w-full h-56 p-2">
-                    <a href="{{ route('kelas.show', ['kela' => $kelas->id]) }}"
+                    <a href="{{ route('select-mapel', ['kelas' => $kelas->id]) }}"
                         class="w-full flex h-full bg-blue-200 rounded-box p-5 shadow-lg flex-col">
                         <div class="w-full flex justify-between h-2/6">
                             <div class="info">
                                 <h1 class="text-black text-xs font-semibold">{{ $kelas->sekolah->nama }}</h1>
-                                <h1 class="text-bluesea-500 font-bold text-2xl">Kelas {{ $kelas->jurusan }}</h1>
+                                <h1 class="text-bluesea-500 font-bold text-2xl">{{ $kelas->nama_kelas }}</h1>
                             </div>
-                            <img src="{{ asset('img/' . $kelas->sekolah->logo) }}" alt="">
+                            <img src="{{ asset('storage/sekolah/' . $kelas->sekolah->logo) }}" alt="">
                         </div>
-                        <div class="flex w-full text-black text-sm items-center gap-5">
-                            <img src="{{ asset('img/' . $kelas->sticker) }}" alt="" class="w-36">
-                            <div class="status flex flex-col gap-3 text-xs">
-                                <h1 class="font-semibold">{{ $kelas->tingkat }}-{{ $kelas->jurusan }}</h1>
-                                <span class="font-semibold">{{ $kelas->siswa->count() }} Siswa</span>
+                        <div class="w-full h-full grid grid-cols-2 gap-2 justify-between items-center text-black">
+                            <img src="{{ asset('img/data_kelas.png') }}" alt=""
+                                class="w-32
+                        ">
+                            <div class="info flex flex-col text-xs gap-2">
+                                <span><i class="fa-solid fa-chalkboard"></i>
+                                    {{ $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas }}</span>
+                                <span><i class="fa-solid fa-users"></i> {{ $kelas->siswa->count() }} Siswa</span>
                             </div>
                         </div>
                     </a>
                     <h1 class="text-black px-2 py-1 font-bold text-xs">Kelas Industri - {{ $kelas->sekolah->nama }} -
-                        {{ $kelas->tingkat . ' ' . $kelas->jurusan }} </h1>
+                        {{ $kelas->tingkat . ' ' . $kelas->jurusan . ' ' . $kelas->kelas }} </h1>
                 </div>
             @endforeach
         </div>
-        <div class="w-full h-10 p-5 text-sm text-black flex justify-center items-center gap-2">
-            <a href="" class="font-semibold">Semester Ganjil</a>
-            <span>|</span>
-            <a href="" class="text-gray-400">Semester Genap</a>
+        <div class="w-full p-2">
+            {{ $info_pengajar->kelas()->paginate(8)->withQueryString()->links('components.pagination') }}
         </div>
     </div>
 @endsection

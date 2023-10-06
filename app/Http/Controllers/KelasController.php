@@ -23,11 +23,12 @@ class KelasController extends Controller
         }
         if (auth()->user()->role == "pengajar") {
             //?Jika pengguna memiliki role 'pengajar'
-            $data_kelas = Kelas::where('pengajar_id', auth()->user()->id)->get();
             return view('dashboard.pengajar.pages.kelas', [
                 'title' => "Kelas",
                 'full' => false,
-                'data_kelas' => $data_kelas
+                'data_kelas' => auth()->user()->kelas,
+                'info_pengajar' => auth()->user(),
+                'data_mapel' => auth()->user()->mapel
             ]);
         } else {
             //?Jika pengguna memiliki role 'admin'
@@ -77,10 +78,12 @@ class KelasController extends Controller
     public function show(Kelas $kela)
     {
         if (auth()->user()->role == "pengajar") {
-            return view('dashboard.pengajar.pages.pilih_tugas', [
+            return view('dashboard.pengajar.pages.selectMapel', [
                 'title' => 'Pilih Tugas',
                 'full' => true,
-                'kelas' => $kela
+                'info_kelas' => $kela,
+                'info_pengajar' => auth()->user(),
+                'data_mapel' => auth()->user()->mapel()
             ]);
         } else {
             return view('dashboard.admin.pages.detailKelas', [
@@ -128,7 +131,7 @@ class KelasController extends Controller
      */
     public function destroy(Kelas $kela)
     {
-        Siswa::where('id_kelas', '=', $kela->id)->delete();
-        $kela->destroy($kela->id);
+        $kela->delete();
+        return redirect()->route('sekolah.show', $kela->sekolah->id)->with('success', 'Data kelas berhasil diarsipkan');
     }
 }

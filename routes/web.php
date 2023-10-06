@@ -28,6 +28,12 @@ Route::get('/', function () {
     return view('welcome', ['title' => 'Sistem Penilaian Kelas Industri']);
 });
 
+
+Route::get('/forgotPassword', [UserController::class, 'forgotpass'])->middleware('guest')->name('forgot-password');
+Route::post('/forgot-password', [UserController::class, 'forgotpass_email'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [UserController::class, 'resetform'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [UserController::class, 'resetpass'])->middleware('guest')->name('password.update');
+
 Route::resource('/login', UserController::class)->middleware('guest')->name('index', 'login');
 Route::post('/login', [UserController::class, 'auth'])->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
@@ -36,14 +42,26 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth', 'user:pengajar'])->group(function () {
     Route::prefix('/pengajar')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-pengajar');
-        Route::get('/nilai', [DashboardController::class, 'nilai'])->name('nilai');
-        Route::resource('/kelas', KelasController::class)->names('kelas');
+        Route::get('/profile', [DashboardController::class, 'profile'])->name('profile-pengajar');
+        Route::get('/kelas', [DashboardController::class, 'kelas'])->name('kelas-pengajar');
+        Route::get('/kelas/{kelas}', [DashboardController::class, 'selectMapel'])->name('select-mapel');
+        Route::get('/kelas/{kelas}/mapel/{mapel}', [DashboardController::class, 'selectTugas'])->name('select-tugas');
+        Route::get('/kelas/{kelas}/tugas/{tugas}/nilai', [DashboardController::class, 'inputNilai'])->name('input-nilai');
+        Route::get('/kelas/{kelas}/siswa', [DashboardController::class, 'showSiswa'])->name('show-siswa');
+        Route::resource('/nilai', NilaiController::class)->names('nilai');
+        Route::resource('/tugas', TugasController::class)->names('tugas');
     });
 });
 
 //*Route Admin
 Route::middleware(['auth', 'user:admin'])->group(function () {
     Route::prefix('/admin')->group(function () {
+        Route::get('/profile', function () {
+            return view('dashboard.admin.pages.profile', [
+                'title' => "Profile",
+                'full' => true
+            ]);
+        })->name('profile-admin');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
         Route::resource('/sekolah', SekolahController::class)->names('sekolah');
         Route::get('/sekolah/{sekolah}/{data}', [SekolahController::class, 'maximize'])->name('sekolah.maximize');
@@ -52,8 +70,6 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         Route::resource('/siswa', SiswaController::class)->names('siswa');
         Route::resource('user', UserController::class)->names('users');
         Route::resource('/mapel', MapelController::class)->names('mapel');
-        Route::resource('/tugas', TugasController::class)->names('tugas');
-        Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::controller(AdminPengajarController::class)->group(function () {
             Route::prefix('/pengajarDashboard/{pengajar}')->group(function () {
                 Route::get('/', 'index')->name('admin-dashboard-pengajar');
@@ -63,6 +79,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 Route::get('/kelas/{kelas}/siswa', 'showSiswa')->name('admin-show-siswa-pengajar');
                 Route::get('/kelas/{kelas}/pengajar', 'showPengajar')->name('admin-show-pengajar-pengajar');
                 Route::get('/kelas/{kelas}/mapel/{mapel}', 'showTugas')->name('admin-show-tugas-pengajar');
+                Route::get('/kelas/{kelas}/mapel/{mapel}/nilai', 'showNilai')->name('admin-show-nilai-pengajar');
                 Route::get('/kelas/{kelas}/tugas/{tugas}', 'nilaiSiswaPerKelas')->name('admin-show-nilai-pertugas-pengajar');
                 Route::get('/kelas/{kelas}/siswa/{siswa}', 'detailSiswa')->name('admin-detail-siswa-pengajar');
             });

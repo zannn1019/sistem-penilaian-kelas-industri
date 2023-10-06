@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Nilai;
 use App\Models\Sekolah;
 use App\Models\Pengajar;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PengajarSekolah;
+use App\Models\Tugas;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -152,10 +154,13 @@ class SekolahController extends Controller
      */
     public function destroy(Sekolah $sekolah)
     {
-        PengajarSekolah::where("id_sekolah", $sekolah->id)->delete();
+        $pengajar = PengajarSekolah::where("id_sekolah", $sekolah->id);
+        $pengajar->delete();
+        Tugas::whereIn('id_pengajar', $pengajar->pluck('id')->toArray())->delete();
         $sekolah->siswa()->delete();
         $sekolah->kelas()->delete();
         $sekolah->delete();
+        return redirect()->route('sekolah.index')->with('success', "Data sekolah berhasil di arsipkan");
     }
 
     public function maximize(Sekolah $sekolah, $data, Request $request)

@@ -7,6 +7,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            backgroundImage: {
+                bg: "url('/public/img/bg.jpg')",
+            },
             fontFamily: {
                 Montserrat: "Montserrat",
             },
@@ -62,16 +65,15 @@ module.exports = {
             },
             borderRadius: {
                 "6xl": " 2.625rem",
-                'circle' : '50%'
+                circle: "50%",
             },
             boxShadow: {
-                'box': "0px 4px 18px 0px rgba(0, 0, 0, 0.25)",
-                "custom" : "0px 0px 6px 1px rgba(0, 0, 0, 0.25)",
-                'custom-2' : '0px 0px 20px 10px rgba(255,255,255,1)'
-
+                box: "0px 4px 18px 0px rgba(0, 0, 0, 0.25)",
+                custom: "0px 0px 6px 1px rgba(0, 0, 0, 0.25)",
+                "custom-2": "0px 0px 20px 10px rgba(255,255,255,1)",
             },
-            screens:{
-                'md' : "1025px"
+            screens: {
+                md: "1025px",
             },
         },
     },

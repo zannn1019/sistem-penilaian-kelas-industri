@@ -28,7 +28,7 @@
                 </div>
             </div>
         </header>
-        <div class="flex h-full max-sm:h-full relative">
+        <div class="flex h-auto max-sm:h-full relative">
             <div class="self-end sticky bottom-0 py-5 flex flex-col gap-2 max-sm:fixed max-sm:right-5 max-sm:bottom-2">
                 <div class="relative w-12 rounded-circle aspect-square flex items-end">
                     <details class="dropdown dropdown-top">
@@ -38,28 +38,11 @@
                         <div
                             class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 left-0 max-sm:-left-52 w-64  flex flex-col text-black text-center justify-center items-center gap-2">
                             <a href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
-                                class="w-full border-b p-2 border-black hover:font-semibold">Daftar
-                                siswa</a>
+                                class="w-full border-b p-2 border-black hover:font-semibold">Daftar siswa</a>
+                            <a href="{{ route('admin-show-nilai-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}"
+                                class="w-full p-2 hover:font-semibold border-b border-black">Daftar nilai</a>
                             <a href="{{ route('admin-show-pengajar-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
                                 class="w-full p-2 hover:font-semibold">Daftar pengajar</a>
-                        </div>
-                    </details>
-                </div>
-                <div class="relative w-12 rounded-circle aspect-square flex items-end z-10">
-                    <details class="dropdown dropdown-top">
-                        <summary
-                            class="dropdown-btn absolute bottom-0 bg-darkblue-500 z-[1] p-3 shadow-box btn rounded-circle text-white text-2xl flex justify-center items-center aspect-square"
-                            id="add-btn"><i class="fa-solid fa-plus"></i></summary>
-                        <div
-                            class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 left-0 max-sm:-left-52 w-64 aspect-video flex flex-col text-black justify-center items-center gap-2">
-                            <button class="w-full border-b p-2 border-black hover:font-semibold"
-                                onclick="tugas.showModal()">Tambah
-                                Tugas</button>
-                            <button class="w-full border-b p-2 border-black hover:font-semibold"
-                                onclick="quiz.showModal()">Tambah
-                                Kuis</button>
-                            <button
-                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Ujian</button>
                         </div>
                     </details>
                 </div>
@@ -146,90 +129,4 @@
             </div>
         </div>
     </div>
-    <dialog id="tugas" class="modal" data-theme="light">
-        <div class="modal-box">
-            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul tugas!</h3>
-            <form action="{{ route('tugas.store') }}" method="POST"
-                class="flex flex-col gap-2 justify-center items-center">
-                @csrf
-                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
-                <input type="hidden" value="tugas" name="tipe">
-                <input type="text" name="nama" class="input input-bordered text-black w-full"
-                    placeholder="Judul tugas" required>
-                <input type="submit" value="Tambah" class="btn self-end">
-            </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-    <dialog id="quiz" class="modal" data-theme="light">
-        <div class="modal-box">
-            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul kuis!</h3>
-            <form action="{{ route('tugas.store') }}" method="POST"
-                class="flex flex-col gap-2 justify-center items-center">
-                @csrf
-                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
-                <input type="hidden" value="quiz" name="tipe">
-                <input type="text" name="nama" class="input input-bordered text-black w-full"
-                    placeholder="Judul tugas" required>
-                <input type="submit" value="Tambah" class="btn self-end">
-            </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-    <dialog id="ujian" class="modal" data-theme="light">
-        <div class="modal-box text-black">
-            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul ujian!</h3>
-            <form action="{{ route('tugas.store') }}" method="POST"
-                class="flex flex-col gap-2 justify-center items-center" id="form-ujian">
-                <div class="flex w-full items-center p-2 text-xs gap-2">
-                    <input type="checkbox" checked="checked" class="checkbox w-6 h-5" name="otomatis"
-                        id="ujian-otomatis" />
-                    <span>Tambahkan ujian secara otomatis</span>
-                </div>
-                @csrf
-                <input type="hidden" value="ujian" name="tipe" id="is-ujian">
-                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
-                <input disabled type="text" name="nama" class="input input-bordered text-black w-full"
-                    placeholder="Judul Ujian" required>
-                <select name="tipe" id="" class="input input-bordered w-full" disabled>
-                    <option value="" selected>Pilih Ujian</option>
-                    <option value="PTS">PTS</option>
-                    <option value="PAS">PAS</option>
-                </select>
-                <input type="submit" value="Tambah" class="btn self-end">
-            </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-@endsection
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $("#add-btn").click(function() {
-                $(this).toggleClass("rotate-45");
-            });
-            $(".dropdown-btn").click(function() {
-                $('.dropdown-btn').not($(this)).parent().removeAttr('open')
-                $('.dropdown-btn').not($(this)).removeClass("rotate-45")
-            })
-            $("#ujian-otomatis").click(function() {
-                if ($(this).is(":checked")) {
-                    $("#form-ujian").find("input[type='text'],select").attr(
-                        "disabled", true)
-                } else {
-                    $("#form-ujian").find("input[type='text'],select").removeAttr(
-                        "disabled")
-                }
-            })
-        });
-    </script>
 @endsection

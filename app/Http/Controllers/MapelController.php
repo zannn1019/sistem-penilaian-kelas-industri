@@ -14,6 +14,13 @@ class MapelController extends Controller
      */
     public function index(Request $request)
     {
+        $mapel = Mapel::query();
+
+        if ($request->has('filter')) {
+            $filter = $request->input('filter');
+            $mapel->filter(['filter' => $filter]);
+        }
+
         if ($request->ajax()) {
             $query = $request->get('query');
             $pengajarId = $request->get('id');
@@ -27,7 +34,8 @@ class MapelController extends Controller
         }
         return view('dashboard.admin.pages.mapel', [
             'title' => 'Mapel',
-            'full' => true
+            'full' => true,
+            'daftar_mapel' => $mapel->get()
         ]);
     }
 
@@ -44,7 +52,11 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated_data = $request->validate([
+            'nama_mapel' => ['required', 'min:1', 'max:75', 'unique:mapel,nama_mapel']
+        ]);
+        Mapel::create($validated_data);
+        return redirect()->back()->with('success', 'Mata pelajaran berhasil di tambahkan');
     }
 
     /**
@@ -52,7 +64,11 @@ class MapelController extends Controller
      */
     public function show(Mapel $mapel)
     {
-        //
+        return view('dashboard.admin.pages.daftarPengajarMapel', [
+            'title' => "Mapel",
+            'full' => true,
+            'info_mapel' => $mapel
+        ]);
     }
 
     /**
@@ -68,7 +84,13 @@ class MapelController extends Controller
      */
     public function update(Request $request, Mapel $mapel)
     {
-        //
+        $validated_data = $request->validate([
+            'nama_mapel' => ['required', 'min:1', 'max:75', 'unique:mapel,nama_mapel']
+        ]);
+
+        $mapel->update($validated_data);
+        session()->forget('errors');
+        return redirect()->back()->with('success', 'Mata pelajaran berhasil diubah');
     }
 
     /**
@@ -76,6 +98,8 @@ class MapelController extends Controller
      */
     public function destroy(Mapel $mapel)
     {
-        //
+        PengajarMapel::where('id_mapel', $mapel->id)->delete();
+        $mapel->delete();
+        return redirect()->route('mapel.index')->with('success', 'Mata pelajaran berhasil diarsipkan');
     }
 }

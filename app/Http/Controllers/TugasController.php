@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
+use App\Models\Mapel;
 use App\Models\User;
 use App\Models\Tugas;
 use App\Models\Pengajar;
@@ -51,9 +53,21 @@ class TugasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Mapel $mapel, Kelas $kelas)
     {
-        //
+        $daftar_tugas = collect([
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['PTS', 'PAS']])->where('id_kelas', $kelas->id)->get(),
+        ]);
+        return view('dashboard.pengajar.pages.selectTugas', [
+            'title' => "Pilih Tugas",
+            'full' => true,
+            'info_pengajar' => auth()->user(),
+            'info_kelas' => $kelas,
+            'info_mapel' => $mapel,
+            'daftar_tugas' => $daftar_tugas,
+            'pengajar_mapel' => $mapel
+        ]);
     }
 
     /**
@@ -69,30 +83,33 @@ class TugasController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->otomatis == 'on') {
-            $ujian = collect([
-                "PTS" => $this->createUjian($request, "PTS"),
-                "PAS" => $this->createUjian($request, "PAS"),
-            ]);
-            if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PTS')->count()) {
-                Tugas::create($ujian["PTS"]);
+        if (auth()->user()->role == 'pengajar') {
+            if ($request->otomatis == 'on') {
+                $ujian = collect([
+                    "PTS" => $this->createUjian($request, "PTS"),
+                    "PAS" => $this->createUjian($request, "PAS"),
+                ]);
+                if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PTS')->count()) {
+                    Tugas::create($ujian["PTS"]);
+                }
+                if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PAS')->count()) {
+                    Tugas::create($ujian["PAS"]);
+                }
+                return back()->with('success', 'Tugas berhasil di tambahkan!');
+            } else {
+                $validatedData = $request->validate([
+                    'id_kelas' => ['required'],
+                    'id_pengajar' => ['required'],
+                    'tipe' => ['required'],
+                    'nama' => ['required', 'unique:tugas,nama']
+                ]);
+                $validatedData['kode_tugas'] = $this->getKodeTugas($validatedData['tipe']);
+                Tugas::create($validatedData);
+                return back()->with('success', 'Tugas berhasil di tambahkan!');
             }
-            if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PAS')->count()) {
-                Tugas::create($ujian["PAS"]);
-            }
-            return back()->with('success', 'Tugas berhasil di tambahkan!');
-        } else {
-            $validatedData = $request->validate([
-                'id_kelas' => ['required'],
-                'id_pengajar' => ['required'],
-                'tipe' => ['required'],
-                'nama' => ['required']
-            ]);
-            $validatedData['kode_tugas'] = $this->getKodeTugas($validatedData['tipe']);
-            Tugas::create($validatedData);
-            return back()->with('success', 'Tugas berhasil di tambahkan!');
+            return back()->with('error', 'Tugas gagal di tambahkan!');
         }
-        return back()->with('error', 'Tugas gagal di tambahkan!');
+        return redirect()->back();
     }
 
     /**

@@ -4,28 +4,16 @@
     <div class="w-full h-full max-sm:h-auto text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full h-14 flex gap-3 items-center text-2xl justify-between">
             <div class="flex justify-center items-center gap-2">
-                <a href="{{ route('pengajar.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+                <a href="{{ route('dashboard-pengajar') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="text-sm max-sm:hidden breadcrumbs">
                     <ul>
-                        <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
                         <li>Profil Pengajar</li>
                     </ul>
                 </div>
             </div>
-            <div class="h-full">
-                <div class="button r" id="button-3">
-                    <input type="checkbox" class="checkbox-custom" id="edit-btn" />
-                    <div class="knobs"></div>
-                    <div class="layer"></div>
-                </div>
-            </div>
         </header>
-        <form method="POST" enctype="multipart/form-data"
-            action="{{ route('users.update', ['user' => $data_pengajar->id]) }}"
-            class="w-full h-full flex max-md:flex-col max-md:px-1 px-10 max-md:gap-5" id="form-edit" data-theme="light">
+        <div class="w-full h-full flex max-md:flex-col max-md:px-1 px-10 max-md:gap-5" data-theme="light">
             <div class="profile-info flex flex-col max-md:w-full gap-2 p-5 w-60 bg-darkblue-500 rounded-6xl shadow-box">
-                @csrf
-                @method('PATCH')
                 <div class="profile-picture flex justify-center items-center relative">
                     <div id="edit-gambar"
                         class="input-logo bg-gray-100 w-52 max-md:w-53 aspect-square border border-black rounded-circle flex justify-center items-center relative">
@@ -68,12 +56,6 @@
                         <input type="text" name="no_telp" id=""
                             class="profile-input w-full border px-3 py-1 rounded-box flex items-center border-white bg-transparent"
                             disabled value="{{ $data_pengajar->no_telp }}">
-                    </div>
-                    <div class="pt-5 border-none">
-                        <a href="{{ route('admin-dashboard-pengajar', ['pengajar' => $data_pengajar]) }}"
-                            class="btn max-sm:w-full border-none bg-bluesea-500 text-white hover:bg-bluesea-600 rounded-6xl">Buka
-                            Dashboard Pengajar
-                        </a>
                     </div>
                 </div>
             </div>
@@ -152,153 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full flex justify-end items-center flex-nowrap gap-1">
-                    <input type="submit" value="Simpan Perubahan" id="edit-submit"
-                        class="btn max-sm:w-full  btn-info text-white " disabled>
-                </div>
             </div>
-        </form>
-
+        </div>
     </div>
-    <dialog id="mapel_modal" class="modal">
-        <form action="{{ route('pengajar.store', ['tipe' => 'mapel']) }}" method="POST"
-            class="modal-box overflow-y-visible flex flex-col gap-1" data-theme="light" id="form_mapel">
-            @csrf
-            <input type="hidden" name="id_user" value="{{ $data_pengajar->id }}">
-            <h3 class="font-bold text-lg">Tambah Mapel</h3>
-            <p class="pt-4">Nama mapel</p>
-            <div class="input-autocomplete relative w-full">
-                <input type="hidden" name="id_mapel" value="" id="id_mapel">
-                <input type="text" class="input input-bordered border-black w-full" id="input-autocomplete">
-                <div id="result"
-                    class="hidden absolute z-20 w-full border border-black rounded-lg mt-1 bg-white max-h-40 overflow-auto">
-                </div>
-            </div>
-            <div id="input-list" class="flex gap-1 flex-wrap">
-            </div>
-            <div class="modal-action">
-                <button class="btn" id="close-btn">Close</button>
-                <button class="btn" type="submit">Tambah</button>
-            </div>
-        </form>
-    </dialog>
-@endsection
-
-@section('script')
-    <script>
-        $(document).ready(function() {
-            function isValidLetter(key) {
-                return /^[a-zA-Z]$/.test(key);
-            }
-            $(".remove-btn").click(function(e) {
-                e.preventDefault()
-                let id = $(this).data('id')
-                let btn = $(this)
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('pengajar.destroy', ['pengajar' => $data_pengajar]) }}",
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        'tipe': 'mapel',
-                        'id_mapel': id
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success) {
-                            btn.parent().remove()
-                        }
-                    }
-                });
-            })
-            let debounceTimer;
-
-            $("#input-autocomplete").keyup(function(e) {
-                clearTimeout(debounceTimer);
-                let inputVal = $(this).val();
-
-                if (inputVal !== "") {
-                    if (isValidLetter(e.key)) {
-                        debounceTimer = setTimeout(function() {
-                            $("#result").removeClass("hidden");
-                            $("#result").empty();
-                            let query = inputVal;
-                            let id = "{{ $data_pengajar->id }}"
-                            $.ajax({
-                                type: "GET",
-                                url: "{{ route('mapel.index') }}",
-                                data: {
-                                    'query': query,
-                                    'id': id
-                                },
-                                dataType: "json",
-                                success: function(response) {
-                                    if (response.error == null) {
-                                        $.each(response, function(i, val) {
-                                            let option =
-                                                `<div class="result-items cursor-pointer hover:bg-gray-100 p-2 rounded-lg text-xs" data-id='${val.id}'>${val.nama_mapel}</div>`
-                                            $("#result").append(option);
-                                        });
-                                    } else {
-                                        let option =
-                                            `<div class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg text-xs" id="tambah_mapel" >Tambahkan mapel "${query}"</div>`
-                                        $("#result").append(option);
-                                    }
-                                }
-                            });
-                        }, 300);
-                    }
-                } else {
-                    $("#result").addClass("hidden");
-                }
-            });
-
-            let id = [];
-            $("#result").on("click", ".result-items ", function() {
-                $("#result").addClass("hidden")
-                $("#input-autocomplete").val('')
-                if (jQuery.inArray($(this).data('id'), id) == '-1') {
-                    id.push($(this).data('id'))
-                    $("#input-list").append(
-                        `
-                    <div class="badge badge-outline flex gap-2 text-xs">
-                        ${$(this).text()}
-                        <button class="remove-btn" data-id=""><i class="fa-solid fa-x"></i></button>
-                    </div>
-                    `
-                    )
-                }
-                $("#id_mapel").val(id)
-            });
-            $("#result").on("click", "#tambah_mapel", function() {
-                window.location.href = "{{ route('mapel.index') }}"
-            });
-            $("#close-btn").click(function(e) {
-                e.preventDefault()
-                mapel_modal.close()
-            })
-            $("#input-photo").on("change", function(e) {
-                const file = URL.createObjectURL(e.target.files[0]);
-                $("#photo-preview").attr("src", file);
-            });
-            $("#edit-btn").click(function() {
-                if ($(this).is(':checked')) {
-                    $("#edit-gambar").addClass('hover:brightness-50');
-                    $("#input-photo").removeClass('hidden');
-                    $(".profile-input").removeAttr('disabled');
-                    $(".profile-input.profile-input-2").addClass('outline outline-1');
-                    $("#edit-submit").removeAttr('disabled')
-                    $("#mapel-add").removeClass('hidden')
-                    $(".remove-btn").removeClass("hidden")
-                } else {
-                    $("#edit-gambar").removeClass('hover:brightness-50');
-                    $("#input-photo").addClass('hidden');
-                    $(".profile-input").attr('disabled', 'true');
-                    $("#edit-submit").attr('disabled', 'true')
-                    $(".profile-input.profile-input-2").removeClass('outline outline-1');
-                    $("#mapel-add").addClass('hidden')
-                    $(".remove-btn").addClass("hidden")
-                }
-            })
-        })
-    </script>
 @endsection

@@ -48,4 +48,27 @@ class Mapel extends Model
             'nama_mapel' => $this->nama_mapel
         ];
     }
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when(
+            $filters['filter'] == 'a-z' ?? false,
+            fn ($query) =>
+            $query->orderBy('nama_mapel', 'ASC')
+        );
+        $query->when(
+            $filters['filter'] == 'edited' ?? false,
+            fn ($query) =>
+            $query->orderBy('updated_at', 'DESC')
+        );
+        $query->when(
+            $filters['filter'] == 'newest' ?? false,
+            fn ($query) =>
+            $query->orderBy('created_at', 'DESC')
+        );
+        $query->when(
+            $filters['filter'] == 'oldest' ?? false,
+            fn ($query) =>
+            $query->orderBy('created_at', 'ASC')
+        );
+    }
 }
