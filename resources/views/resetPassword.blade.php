@@ -50,14 +50,14 @@
             <label class="label py-0">
                 <span class="label-text">Password</span>
             </label>
-            <input required type="text" placeholder="Masukkan password baru"
+            <input required type="password" placeholder="Masukkan password baru"
                 class="input input-bordered input-info w-full max-w-xs" name="password" />
         </div>
         <div class="form-control w-full max-w-xs">
             <label class="label py-0">
                 <span class="label-text">Konfirmasi Password</span>
             </label>
-            <input required type="text" placeholder="Konfrimasi password baru"
+            <input required type="password" placeholder="Konfrimasi password baru"
                 class="input input-bordered input-info w-full max-w-xs" name="password_confirmation" />
         </div>
         <button type="submit" class="btn btn-info w-full max-w-xs text-white">LANJUTKAN</button>
