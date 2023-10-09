@@ -48,6 +48,8 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
         Route::get('/kelas/{kelas}/mapel/{mapel}', [DashboardController::class, 'selectTugas'])->name('select-tugas');
         Route::get('/kelas/{kelas}/tugas/{tugas}/nilai', [DashboardController::class, 'inputNilai'])->name('input-nilai');
         Route::get('/kelas/{kelas}/siswa', [DashboardController::class, 'showSiswa'])->name('show-siswa');
+        Route::get('/kelas/{kelas}/nilai', [DashboardController::class, 'showNilaiPerKelas'])->name('show-nilai-perkelas');
+        Route::get('/kelas/{kelas}/siswa/{siswa}', [DashboardController::class, 'detailSiswa'])->name('detail-siswa');
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/tugas', TugasController::class)->names('tugas');
     });
@@ -70,6 +72,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         Route::resource('/siswa', SiswaController::class)->names('siswa');
         Route::resource('user', UserController::class)->names('users');
         Route::resource('/mapel', MapelController::class)->names('mapel');
+        Route::get('/nilai', [NilaiController::class, 'index'])->name('getNilai');
         Route::controller(AdminPengajarController::class)->group(function () {
             Route::prefix('/pengajarDashboard/{pengajar}')->group(function () {
                 Route::get('/', 'index')->name('admin-dashboard-pengajar');

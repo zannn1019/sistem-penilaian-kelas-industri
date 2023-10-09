@@ -4,8 +4,7 @@
     <div class="w-full h-full p-5 flex flex-col gap-2">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
-                    class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
+                <a href="{{ route('kelas-pengajar') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
                         <ul>
@@ -86,7 +85,8 @@
                     <a href="{{ route('show-siswa', ['kelas' => $info_kelas->id]) }}"
                         class="w-full border-b p-2 border-black hover:font-semibold">Daftar
                         siswa</a>
-                    <a href="" class="w-full p-2 hover:font-semibold">Raport kelas</a>
+                    <a href="{{ route('show-nilai-perkelas', ['kelas' => $info_kelas->id]) }}"
+                        class="w-full p-2 hover:font-semibold">Raport kelas</a>
                 </div>
             </details>
         </div>

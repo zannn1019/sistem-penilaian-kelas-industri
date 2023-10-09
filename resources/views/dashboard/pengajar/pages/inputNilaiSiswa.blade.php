@@ -3,20 +3,19 @@
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
+                <a href="{{ route('select-tugas', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
                         <ul>
-                            <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
-                            <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
-                                    Pengajar</a>
+                            <li><a href="{{ route('kelas-pengajar') }}">Kelas</a></li>
+                            <li><a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}">
+                                    {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</a>
                             </li>
-                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
-                                    Pengajar</a></li>
                             <li><a
-                                    href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}">Mata
-                                    Pelajaran</a></li>
+                                    href="{{ route('select-tugas', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}">
+                                    {{ $data_tugas->pengajar->mapel->nama_mapel }}</a>
+                            </li>
                             <li>{{ $data_tugas->nama }}</li>
                         </ul>
                     </div>

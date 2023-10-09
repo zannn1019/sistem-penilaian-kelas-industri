@@ -254,7 +254,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "{{ route('nilai.index') }}",
+                url: "{{ route('getNilai') }}",
                 data: {
                     'id_siswa': {{ $info_siswa->id }}
                 },

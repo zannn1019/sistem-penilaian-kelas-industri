@@ -6,20 +6,15 @@
     <div class="w-full h-full p-3 flex flex-col">
         <header class="w-full flex justify-between gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3 max-md:px-3 justify-center items-center">
-                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                <a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs border-b border-black">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
                         <ul>
-                            <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
-                            <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
-                                    Pengajar</a>
+                            <li><a href="{{ route('kelas-pengajar') }}">Kelas</a></li>
+                            <li><a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}">
+                                    {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</a>
                             </li>
-                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
-                                    Pengajar</a></li>
-                            <li><a
-                                    href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}">Daftar
-                                    Siswa</a></li>
                             <li>{{ $info_siswa->nama }}</li>
                         </ul>
                     </div>
@@ -42,7 +37,7 @@
                 </div>
             </div>
         </header>
-        <div class="w-full h-full px-7 max-sm:px-0 flex flex-col gap-2">
+        <div class="w-full h-full px-7 max-sm:px-0 flex flex-col">
             <div
                 class="w-full bg-darkblue-500 py-5 px-10 max-sm:px-5 rounded-3xl grid grid-cols-3 max-sm:grid-cols-1 text-white text-sm gap-2">
                 <div class="flex gap-2 items-center">
@@ -270,11 +265,11 @@
                                                                 class="flex-col w-60 flex justify-center items-center border-r border-black text-sm">
                                                                 <div class="w-full flex">
                                                                     <h1 class="w-20 border-r border-black py-2">
-                                                                        {{ $tugas->nilai->value('nilai') }}
+                                                                        {{ $tugas->nilai->value('nilai') ?? '-' }}
                                                                     </h1>
                                                                     <h1
                                                                         class="flex-grow w-full border-black py-2 capitalize">
-                                                                        {{ NumberToWords::transformNumber('id', $tugas->nilai->value('nilai')) }}
+                                                                        {{ $tugas->nilai->value('nilai') != null ? NumberToWords::transformNumber('id', $tugas->nilai->value('nilai')) : '-' }}
                                                                     </h1>
                                                                 </div>
                                                             </div>
@@ -390,7 +385,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "{{ route('getNilai') }}",
+                url: "{{ route('nilai.index') }}",
                 data: {
                     'id_siswa': {{ $info_siswa->id }}
                 },

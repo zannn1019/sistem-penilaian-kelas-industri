@@ -5,18 +5,16 @@
                 <img src="{{ asset('img/logo_white.png') }}" alt="" class="w-full" draggable="false">
             </a>
         </div>
-        <div class="page_link text-white flex flex-col gap-10 ">
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
-                <i class="fa-solid fa-box-archive"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">ARSIP KELAS</h1>
+        <div class="page_link text-white flex flex-col w-full gap-2">
+            <a href=""
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'FAQ' ? 'bg-white text-black' : '' }}">
+                <i class="fa-regular fa-message"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">FAQ</h1>
             </a>
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
-                <i class="fa-solid fa-print"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">CETAK RAPORT</h1>
-            </a>
-            <a href="" class="flex flex-col gap-2 text-center text-2xl justify-center items-center">
+            <a href=""
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT NILAI</h1>
+                <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT EDIT</h1>
             </a>
         </div>
         <div class="user text-white p-5 text-2xl flex flex-col justify-center items-center gap-3 max-sm:flex-row">
@@ -36,11 +34,7 @@
             <div tabindex="0" class="dropdown-content z-[1] menu w-full flex flex-col gap-3 mb-2 ">
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-box-archive"></i>
-                </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-print"></i>
+                    <i class="fa-regular fa-message"></i>
                 </a>
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">

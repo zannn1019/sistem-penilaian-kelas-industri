@@ -10,6 +10,7 @@ use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use NumberToWords\NumberToWords;
 
 class DashboardController extends Controller
 {
@@ -116,7 +117,49 @@ class DashboardController extends Controller
             'title' => "Daftar siswa",
             'full' => true,
             'info_pengajar' => auth()->user(),
+            'info_kelas' => $kelas,
+
+        ]);
+    }
+
+    public function showNilaiPerKelas(Kelas $kelas)
+    {
+        return view('dashboard.pengajar.pages.showNilaiPerkelas', [
+            'title' => "Raport kelas",
+            'full' => true,
+            'info_pengajar' => auth()->user(),
             'info_kelas' => $kelas
+        ]);
+    }
+
+    public function detailSiswa(Kelas $kelas, Siswa $siswa)
+    {
+        // ?? Mengambil tugas siswa
+        $tugas = Kelas::find($siswa->id_kelas)->tugas;
+
+        // ?? Mengambil total semua tugas
+        $total = $tugas->count();
+
+        // ?? Mengambil daftar mapel yang dipelajari
+        $mapelIds = PengajarMapel::whereIn('id_user', $kelas->pengajar->pluck('id')->toArray())
+            ->pluck('id_mapel')
+            ->toArray();
+
+        return view('dashboard.pengajar.pages.detailSiswa', [
+            'title' => 'Detail siswa',
+            'full' => true,
+            'info_pengajar' => auth()->user(),
+            'info_kelas' => $kelas,
+            'info_siswa' => $siswa,
+            'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
+            'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
+            'tugas' => [
+                'total' => $total,
+                'ternilai' => $siswa->nilai()->count(),
+                'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
+                'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
+            ]
         ]);
     }
 

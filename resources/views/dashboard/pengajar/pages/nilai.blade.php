@@ -67,7 +67,8 @@
                         </thead>
                         <tbody class="bg-bluesea-200 text-xs">
                             @foreach ($data_nilai as $nilai)
-                                <tr class="clickable-row" data-link="{{ $nilai->siswa->id }}">
+                                <tr class="clickable-row"
+                                    data-link="{{ route('detail-siswa', ['kelas' => $nilai->siswa->kelas->id, 'siswa' => $nilai->siswa->id]) }}">
                                     <td>{{ $nilai->updated_at }}</td>
                                     <td>{{ $nilai->siswa->nama }} </td>
                                     <td>{{ $nilai->siswa->kelas->sekolah->nama }} -
@@ -140,7 +141,7 @@
     <script>
         $(document).ready(function() {
             $(".clickable-row").click(function() {
-                window.location.href = "/pengajar/siswa/" + $(this).data('link')
+                window.location.href = $(this).data('link')
             })
             $(".clickable-row").hover(function() {
                 $("#indicator").css('display', 'flex')

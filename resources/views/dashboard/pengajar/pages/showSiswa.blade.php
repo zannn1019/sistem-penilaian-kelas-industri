@@ -3,7 +3,7 @@
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative "id="content">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                <a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
@@ -43,7 +43,7 @@
                         <tbody>
                             @foreach ($info_kelas->siswa->all() as $siswa)
                                 <tr class="clickable-row hover:bg-gray-200 even:bg-gray-100"
-                                    data-link="{{ route('admin-detail-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'siswa' => $siswa->id]) }}">
+                                    data-link="{{ route('detail-siswa', ['kelas' => $info_kelas->id, 'siswa' => $siswa->id]) }}">
                                     <td class="border-r-2 border-darkblue-500">{{ $loop->iteration }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nis }}</td>
                                     <td class="border-r-2 border-darkblue-500">{{ $siswa->nama }}</td>

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -27,7 +26,6 @@ class Tugas extends Model
             $query->where('id_kelas', $filter);
         });
     }
-
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'id_kelas');

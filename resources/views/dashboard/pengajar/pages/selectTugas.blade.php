@@ -4,7 +4,7 @@
         <header
             class="w-full h-1/4 max-sm:h-auto flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
+                <a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
@@ -30,9 +30,10 @@
                             id="list-btn"><i class="fa-solid fa-bars-staggered"></i></summary>
                         <div
                             class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 left-0 max-sm:-left-52 w-64  flex flex-col text-black text-center justify-center items-center gap-2">
-                            <a href="" class="w-full border-b p-2 border-black hover:font-semibold">Daftar siswa</a>
-                            <a href="" class="w-full p-2 hover:font-semibold border-b border-black">Daftar nilai</a>
-                            <a href="" class="w-full p-2 hover:font-semibold">Daftar pengajar</a>
+                            <a href="{{ route('show-siswa', ['kelas' => $info_kelas->id]) }}"
+                                class="w-full border-b p-2 border-black hover:font-semibold">Daftar siswa</a>
+                            <a href="{{ route('show-nilai-perkelas', ['kelas' => $info_kelas->id]) }}"
+                                class="w-full p-2 hover:font-semibold">Daftar nilai</a>
                         </div>
                     </details>
                 </div>
@@ -88,7 +89,8 @@
                                             <div
                                                 class="flex justify-center flex-col items-center overflow-hidden w-28 aspect-square bg-tosca-500 rounded-circle">
                                                 <div class="w-full flex items-end justify-center">
-                                                    <span class="font-semibold text-3xl">{{ $ujian->nilai->count() }}</span>
+                                                    <span
+                                                        class="font-semibold text-3xl">{{ $ujian->nilai->count() }}</span>
                                                     <span class="text-sm">/{{ $ujian->kelas->siswa->count() }}</span>
                                                 </div>
                                                 <span>Ternilai</span>

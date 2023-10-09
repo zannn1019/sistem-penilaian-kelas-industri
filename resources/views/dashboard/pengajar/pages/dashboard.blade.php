@@ -96,7 +96,7 @@
             </div>
         @else
             <div class="w-full flex justify-center items-center flex-col">
-                <img src="{{ asset('img/404_kelas.png') }}" alt="">
+                <img src="{{ asset('img/404_kelas.png') }}" class="w-60" alt="">
                 <h1>Tidak ada data kelas!</h1>
             </div>
         @endif

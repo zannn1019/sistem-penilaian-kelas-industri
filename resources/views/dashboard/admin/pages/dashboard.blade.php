@@ -59,35 +59,38 @@
                                         <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
                                     </div>
                                 </div>
-                                @foreach ($daftar_pengajar as $pengajar)
-                                    <div data-id="{{ $pengajar->id }}"
-                                        class="info-pengajar w-full flex gap-2 cursor-pointer hover:bg-gray-200 text-sm pr-2 {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
-                                        <div
-                                            class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
-                                        </div>
-                                        <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
-                                            class="w-11 rounded-circle aspect-square ml-2 py-1">
-                                        <div class="info w-full text-xs flex flex-col gap-1 py-2">
-                                            <h1>{{ $pengajar->nama }}</h1>
-                                            <div class="w-full flex justify-between">
-                                                <span class="text-2xs"><i
-                                                        class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                                    {{ $pengajar->jumlah_sekolah }} sekolah</span>
-                                                <span class="text-2xs"><i
-                                                        class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                                    {{ $pengajar->kelas()->count() }} kelas</span>
-                                                <span class="text-2xs"><i
-                                                        class="fa-solid fa-id-card bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
-                                                    {{ $pengajar->nik }}</span>
+                                <div class="w-full h-full max-sm:max-h-40">
+                                    @foreach ($daftar_pengajar as $pengajar)
+                                        <div data-id="{{ $pengajar->id }}"
+                                            class="info-pengajar w-full flex gap-2 cursor-pointer hover:bg-gray-200 text-sm pr-2 {{ $loop->iteration == $loop->last ? '' : 'border-b' }}">
+                                            <div
+                                                class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
+                                            </div>
+                                            <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
+                                                class="w-11 rounded-circle aspect-square ml-2 py-1">
+                                            <div class="info w-full text-xs flex flex-col gap-1 py-2">
+                                                <h1>{{ $pengajar->nama }}</h1>
+                                                <div class="w-full flex justify-between">
+                                                    <span class="text-2xs"><i
+                                                            class="fa-solid fa-school-flag bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                        {{ $pengajar->jumlah_sekolah }} sekolah</span>
+                                                    <span class="text-2xs"><i
+                                                            class="fa-solid fa-chalkboard-user bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                        {{ $pengajar->kelas()->count() }} kelas</span>
+                                                    <span class="text-2xs"><i
+                                                            class="fa-solid fa-id-card bg-darkblue-100 p-0.5 rounded-lg aspect-square"></i>
+                                                        {{ $pengajar->nik }}</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="h-full justify-center items-center text-xl hidden indikator-pengajar">
+                                                <i class="fa-solid fa-chevron-right"></i>
                                             </div>
                                         </div>
-                                        <div class="h-full justify-center items-center text-xl hidden indikator-pengajar">
-                                            <i class="fa-solid fa-chevron-right"></i>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 max-sm:hidden text-center "
+                            <div class="w-full h-full p-2 flex flex-col justify-center items-center gap-3 text-center "
                                 id="profile-pengajar">
                                 <h1>Lihat profil lengkap pengajar</h1>
                                 <a href="{{ route('pengajar.index') }}"
