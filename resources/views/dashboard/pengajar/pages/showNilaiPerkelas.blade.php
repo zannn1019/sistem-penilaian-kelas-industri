@@ -29,7 +29,7 @@
                 </div>
             </div>
         </header>
-        <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 flex-col pl-5">
+        <div class="w-full h-[70%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 flex-col pl-5">
             @if ($info_kelas->siswa->count())
                 <div class="w-full flex gap-2 pb-3 items-center justify-between">
                     <div class="flex gap-2">
