@@ -3,24 +3,17 @@
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative "id="content">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('admin-show-tugas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}"
+                <a href="{{ route('tugas.index', ['kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
                         <ul>
-                            <li><a href="{{ route('pengajar.index') }}">Pengajar</a></li>
-                            <li><a href="{{ route('pengajar.show', ['pengajar' => $info_pengajar->id]) }}">Profil
-                                    Pengajar</a>
-                            </li>
-                            <li><a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}">Kelas
-                                    Pengajar</a></li>
+                            <li><a href="{{ route('kelas-pengajar') }}">Kelas</a></li>
+                            <li><a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}">Mata Pelajaran</a></li>
                             <li><a
-                                    href="{{ route('admin-show-mapel-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}">Mata
-                                    Pelajaran</a></li>
-                            <li><a
-                                    href="{{ route('admin-show-tugas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}">{{ $info_mapel->mapel->nama_mapel }}</a>
+                                    href="{{ route('tugas.index', ['kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}">{{ $info_mapel->nama_mapel }}</a>
                             </li>
-                            <li>Daftar nilai siswa</li>
+                            <li>Daftar nilai</li>
                         </ul>
                     </div>
                     <h1 class="text-3xl font-semibold max-sm:text-sm"><span class="max-sm:hidden">Kelas Industri -</span>
@@ -62,7 +55,7 @@
                                 <tr class="bg-darkblue-500 text-white">
                                     <th>NO</th>
                                     <th>Nama Siswa</th>
-                                    @foreach ($info_mapel->tugas as $tugas)
+                                    @foreach ($info_mapel->tugas->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester) as $tugas)
                                         <th>{{ $tugas->nama }}</th>
                                     @endforeach
                                 </tr>
@@ -73,10 +66,10 @@
                                         data-link="{{ route('admin-detail-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'siswa' => $siswa->id]) }}">
                                         <td class="border-r-2 border-darkblue-500">{{ $loop->iteration }}</td>
                                         <td class="border-r-2 border-darkblue-500">{{ $siswa->nama }}</td>
-                                        @foreach ($info_mapel->tugas as $tugas)
+                                        @foreach ($info_mapel->tugas->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester) as $tugas)
                                             <td class="border-r-2 border-darkblue-500"
-                                                data-avg="{{ $tugas->nilai->where('id_siswa', $siswa->id)->where('id_tugas', $tugas->id)->value('nilai') ?? 'belum_dinilai' }}">
-                                                {{ $tugas->nilai->where('id_siswa', $siswa->id)->where('id_tugas', $tugas->id)->value('nilai') ?? 'Belum dinilai' }}
+                                                data-avg="{{ $tugas->nilai->where('id_siswa', $siswa->id)->where('id_tugas', $tugas->id)->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->value('nilai') ?? 'belum_dinilai' }}">
+                                                {{ $tugas->nilai->where('id_siswa', $siswa->id)->where('id_tugas', $tugas->id)->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->value('nilai') ?? 'Belum dinilai' }}
                                             </td>
                                         @endforeach
                                     </tr>

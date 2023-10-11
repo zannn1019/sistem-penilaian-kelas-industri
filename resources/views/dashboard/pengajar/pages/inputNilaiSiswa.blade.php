@@ -3,7 +3,7 @@
     <div class="w-full h-full text-black p-5 flex flex-col gap-2 overflow-y-auto relative">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3">
-                <a href="{{ route('select-tugas', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}"
+                <a href="{{ route('tugas.index', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
@@ -13,7 +13,7 @@
                                     {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</a>
                             </li>
                             <li><a
-                                    href="{{ route('select-tugas', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}">
+                                    href="{{ route('tugas.index', ['kelas' => $info_kelas->id, 'mapel' => $data_tugas->pengajar->mapel->id]) }}">
                                     {{ $data_tugas->pengajar->mapel->nama_mapel }}</a>
                             </li>
                             <li>{{ $data_tugas->nama }}</li>
@@ -23,6 +23,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-lg">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
             <div class="d-flex gap-1 w-40 text-sm self-end p-2 font-semibold">
@@ -56,7 +58,8 @@
                                     <td class="border-r-2 border-darkblue-500 waktu-tanggal">
                                         {{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->updated_at ?? '-' }}
                                     </td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $data_tugas->tipe }}</td>
+                                    <td class="border-r-2 border-darkblue-500">
+                                        {{ implode(' ', array_map('ucfirst', explode('_', $data_tugas->tipe))) }}</td>
                                     <td class="border-r-2 border-darkblue-500 input-nilai cursor-pointer relative"
                                         data-id="{{ $siswa->id }}" data-tugas="{{ $data_tugas->id }}">
                                         <input type="number"
@@ -149,7 +152,9 @@
                                     "_token": "{{ csrf_token() }}",
                                     'id_siswa': currentTd.data('id'),
                                     'id_tugas': currentTd.data('tugas'),
-                                    'nilai': $(this).val()
+                                    'nilai': $(this).val(),
+                                    'tahun_ajar': "{{ $info_kelas->tahun_ajar }}",
+                                    'semester': "{{ $info_kelas->semester }}"
                                 },
                                 dataType: "json",
                                 success: function(response) {

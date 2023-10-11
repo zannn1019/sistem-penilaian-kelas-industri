@@ -19,6 +19,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
                 <div class="self-end text-sm flex gap-1 uppercase justify-center items-center font-semibold">
                     <i class="fa-solid fa-users"></i>
@@ -40,8 +42,8 @@
                             class="text-xs px-5 py-1 rounded-xl filter-link {{ request('filter') == 'belum_dinilai' ? 'bg-tosca-500 text-black' : 'bg-gray-200 text-gray-400' }}">Belum
                             Dinilai</a>
                     </div>
-                    <a href="" class="text-xs px-4 py-1.5 rounded-xl bg-gray-200"><i
-                            class="fa-solid fa-download"></i>
+                    <a href="{{ route('ExportPerKelas', ['kelas' => $info_kelas->id]) }}"
+                        class="text-xs px-4 py-1.5 rounded-xl bg-gray-200"><i class="fa-solid fa-download"></i>
                         Export</a>
                 </div>
                 <div class="overflow-x-auto w-full h-full scroll-arrow" dir="rtl" data-theme="light">
@@ -68,9 +70,19 @@
                                             $totalNilai = 0;
                                             $totalTugas = 0;
                                             $tugasBelumDinilai = [];
-                                            foreach ($mapel->tugas as $tugas) {
-                                                $nilai = $tugas->nilai->where('id_siswa', $siswa->id)->first();
-                                            
+                                            foreach (
+                                                $mapel->tugas
+                                                    ->where('id_kelas', $info_kelas->id)
+                                                    ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+                                                    ->where('semester', $siswa->kelas->semester)
+                                                as $tugas
+                                            ) {
+                                                $nilai = $tugas->nilai
+                                                    ->where('id_siswa', $siswa->id)
+                                                    ->where('id_siswa', $siswa->id)
+                                                    ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+                                                    ->where('semester', $siswa->kelas->semester)
+                                                    ->first();
                                                 if ($nilai === null) {
                                                     $nilaiKosong = true;
                                                     $tugasBelumDinilai[] = $tugas->nama;
@@ -79,14 +91,13 @@
                                                     $totalTugas++;
                                                 }
                                             }
-                                            
-                                            $avgNilai = $nilaiKosong ? 'Belum dinilai' : ($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
+                                            $avgNilai = $nilaiKosong ? 'Belum dinilai' : number_format($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
                                             $isKosong = $nilaiKosong ? 'belum_dinilai' : 'dinilai';
                                         @endphp
                                         <td class="border-r-2 border-darkblue-500" data-avg="{{ $isKosong }}">
                                             @if ($nilaiKosong)
                                                 <div class="tooltip tooltip-error"
-                                                    data-tip="{{ $mapel->tugas->count() - $totalTugas }} tugas belum dinilai:
+                                                    data-tip="{{ $mapel->tugas->where('id_kelas', $info_kelas->id)->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->count() - $totalTugas }} tugas belum dinilai:
                                             @foreach ($tugasBelumDinilai as $index => $tugas)
                                                 {{ $tugas }}{{ $index < count($tugasBelumDinilai) - 1 ? ', ' : '' }} @endforeach">
                                                     <button class="text-red-500">Belum Dinilai</button>
@@ -96,7 +107,6 @@
                                             @endif
                                         </td>
                                     @endforeach
-
                                 </tr>
                             @endforeach
                         </tbody>

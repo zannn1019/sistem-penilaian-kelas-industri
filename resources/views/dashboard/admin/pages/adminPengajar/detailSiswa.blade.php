@@ -6,7 +6,7 @@
     <div class="w-full h-full p-3 flex flex-col">
         <header class="w-full flex justify-between gap-3 items-center text-2xl text-black">
             <div class="w-full flex gap-3 py-3 max-md:px-3 justify-center items-center">
-                <a href="{{ route('admin-kelas-pengajar', ['pengajar' => $info_pengajar->id]) }}"
+                <a href="{{ route('admin-show-siswa-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
                     class="fa-solid fa-chevron-left max-md:text-lg text-black"></a>
                 <div class="w-full flex flex-col text-xs border-b border-black">
                     <div class="text-sm max-sm:hidden breadcrumbs p-0">
@@ -42,19 +42,24 @@
                 </div>
             </div>
         </header>
-        <div class="w-full h-full px-7 max-sm:px-0 flex flex-col gap-2">
+        <div class="w-full h-full px-7 max-sm:px-0 flex flex-col">
             <div
                 class="w-full bg-darkblue-500 py-5 px-10 max-sm:px-5 rounded-3xl grid grid-cols-3 max-sm:grid-cols-1 text-white text-sm gap-2">
                 <div class="flex gap-2 items-center">
                     <i class="fa-solid fa-chalkboard text-xl"></i>
                     <span class="font-semibold">Kelas</span>
                     <span
-                        class="border-l px-2 text-xs">{{ $info_kelas->tingkat }}-{{ $info_kelas->jurusan }}-{{ $info_kelas->kelas }}</span>
+                        class="border-l px-2 text-xs">{{ $info_siswa->kelas->tingkat }}-{{ $info_siswa->kelas->jurusan }}-{{ $info_siswa->kelas->kelas }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-user text-xl"></i>
-                    <span class="font-semibold">No Id</span>
-                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->id }} ({{ $nomor_id }})</span>
+                    <i class="fa-solid fa-calendar text-xl"></i>
+                    <span class="font-semibold">Tahun Ajaran</span>
+                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->kelas->tahun_ajar }}</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <i class="fa-solid fa-book text-xl"></i>
+                    <span class="font-semibold">Semester</span>
+                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->kelas->semester }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <i class="fa-solid fa-phone text-xl"></i>
@@ -84,7 +89,15 @@
                             <div
                                 class="w-full text-black py-3 px-10 flex items-end gap-1 max-sm:flex max-sm:justify-center">
                                 <span>Rata-rata nilai :</span>
-                                <span class="text-4xl">89</span>
+                                <span class="text-4xl" id="rata-rata" data-avg="{{ $rata_rata ?? 'null' }}">
+                                    @if ($rata_rata == null)
+                                        <div class="tooltip tooltip-error" data-tip="Nilai belum lengkap!">
+                                            <button class="">
+                                                <i class="fa fa-info-circle text-error  text-lg" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    @endif
+                                </span>
                             </div>
                         </div>
                         <div class="flex flex-col max-sm:flex-row justify-between gap-2 text-black">
@@ -99,7 +112,7 @@
                                 </div>
                                 <div class="flex gap-1">
                                     <div class="w-5 h-5 bg-tosca-500"></div>
-                                    <span class="text-sm">Ujian</span>
+                                    <span class="text-sm">Assessment</span>
                                 </div>
                                 <div class="flex gap-1">
                                     <div class="w-5 h-5 bg-gray-200"></div>
@@ -134,7 +147,7 @@
                                         </svg>
                                         <span id="ujian_ternilai">0</span>
                                         <span class="text-xs">/ {{ $tugas['ujian'] }}</span>
-                                        <span class="text-xs text-tosca-500">Ujian</span>
+                                        <span class="text-xs text-tosca-500">Assessment</span>
                                     </div>
                                 </div>
                             </div>
@@ -210,6 +223,32 @@
                                     </div>
                                 @endif
                                 @foreach ($daftar_mapel as $mapel)
+                                    @php
+                                        $nilaiKosong = false;
+                                        $totalNilai = 0;
+                                        $totalTugas = 0;
+                                        $tugasBelumDinilai = [];
+                                        foreach (
+                                            $mapel->tugas
+                                                ->where('id_kelas', $info_siswa->kelas->id)
+                                                ->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)
+                                                ->where('semester', $info_siswa->kelas->semester)
+                                            as $tugas
+                                        ) {
+                                            $nilai = $tugas->nilai->where('id_siswa', $info_siswa->id)->first();
+
+                                            if ($nilai === null) {
+                                                $nilaiKosong = true;
+                                                $tugasBelumDinilai[] = $tugas->nama;
+                                            } else {
+                                                $totalNilai += $nilai->nilai;
+                                                $totalTugas++;
+                                            }
+                                        }
+
+                                        $avgNilai = $nilaiKosong ? '-' : number_format($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
+                                        $isKosong = $nilaiKosong ? 'belum_dinilai' : 'dinilai';
+                                    @endphp
                                     @if (request('view') == 'full')
                                         <div tabindex="0"
                                             class="collapse rounded-none h-max border-t border-black  overflow-x-auto">
@@ -227,32 +266,29 @@
                                                     class="flex-col w-60 flex justify-center items-center border-r border-black text-sm">
                                                     <div class="w-full flex">
                                                         <h1 class="w-20 border-r border-black py-2">
-                                                            {{ $mapel->tugas->avg(function ($tugas) {
-                                                                return $tugas->nilai->avg('nilai');
-                                                            }) }}
+                                                            {{ $avgNilai }}
                                                         </h1>
                                                         <h1 class="flex-grow w-full border-black py-2 capitalize">
-                                                            {{ NumberToWords::transformNumber(
-                                                                'id',
-                                                                $mapel->tugas->avg(function ($tugas) {
-                                                                    return $tugas->nilai->avg('nilai');
-                                                                }),
-                                                            ) }}
+                                                            {{ $avgNilai != '-' ? NumberToWords::transformNumber('id', $avgNilai) : '-' }}
                                                         </h1>
                                                     </div>
                                                 </div>
                                                 <h1 class="flex justify-center items-center flex-grow">
-                                                    {{ $mapel->tugas->avg(function ($tugas) {
-                                                        return $tugas->nilai->avg('nilai');
-                                                    }) <= 75
-                                                        ? 'Nilai kurang'
-                                                        : 'Terlampaui' }}
+                                                    @if ($avgNilai != '-')
+                                                        {{ $mapel->tugas->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->avg(function ($tugas) use ($info_siswa) {
+                                                                return $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->avg('nilai');
+                                                            }) <= 75
+                                                            ? 'Nilai kurang'
+                                                            : 'Terlampaui' }}
+                                                    @else
+                                                        Belum lengkap
+                                                    @endif
                                                 </h1>
                                             </div>
                                             <div
                                                 class="collapse-content flex flex-col justify-center items-center pb-0 px-0 border-t border-black w-full bg-darkblue-200">
-                                                @if ($mapel->tugas->where('id_kelas', $info_kelas->id)->count())
-                                                    @foreach ($mapel->tugas->where('id_kelas', $info_kelas->id) as $tugas)
+                                                @if ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->count())
+                                                    @foreach ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester) as $tugas)
                                                         <div
                                                             class="p-0 flex h-max text-center text-sm w-full min-h-0 border-b border-black {{ $tugas->nilai->value('nilai') == null || $tugas->nilai->value('nilai') <= 75 ? 'text-red-600' : '' }}">
                                                             <h1
@@ -270,17 +306,28 @@
                                                                 class="flex-col w-60 flex justify-center items-center border-r border-black text-sm">
                                                                 <div class="w-full flex">
                                                                     <h1 class="w-20 border-r border-black py-2">
-                                                                        {{ $tugas->nilai->value('nilai') }}
+                                                                        {{ $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai') ?? '-' }}
                                                                     </h1>
                                                                     <h1
                                                                         class="flex-grow w-full border-black py-2 capitalize">
-                                                                        {{ NumberToWords::transformNumber('id', $tugas->nilai->value('nilai')) }}
+                                                                        {{ $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai') != null
+                                                                            ? NumberToWords::transformNumber(
+                                                                                'id',
+                                                                                $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai'),
+                                                                            )
+                                                                            : '-' }}
                                                                     </h1>
                                                                 </div>
                                                             </div>
                                                             <h1
                                                                 class="flex justify-center items-center flex-grow max-md:truncate max-md:px-3">
-                                                                {{ $tugas->nilai->value('nilai') <= 75 ? 'Nilai kurang' : 'Terlampaui' }}
+                                                                @if ($tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai') != null)
+                                                                    {{ $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai') <= 75
+                                                                        ? 'Nilai kurang'
+                                                                        : 'Terlampaui' }}
+                                                                @else
+                                                                    -
+                                                                @endif
                                                             </h1>
                                                         </div>
                                                     @endforeach
@@ -290,7 +337,8 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div tabindex="0" class="collapse rounded-none h-max border-t border-black">
+                                        <div tabindex="0"
+                                            class="collapse rounded-none h-max border-t border-black {{ $isKosong == 'belum_dinilai' ? 'bg-red-500 font-semibold' : '' }}">
                                             <div
                                                 class="collapse-title p-0 grid grid-cols-3 text-center text-sm w-full place-content-center min-h-0">
                                                 <h1
@@ -300,25 +348,23 @@
                                                     class="w-full py-3 border-r border-black h-full flex justify-center items-center">
                                                     75</h1>
                                                 <h1 class="w-full py-3 h-full flex justify-center items-center">
-                                                    {{ $mapel->tugas->avg(function ($tugas) {
-                                                        return $tugas->nilai->avg('nilai');
-                                                    }) }}
+                                                    {{ $avgNilai }}
                                                 </h1>
                                             </div>
                                             <div
-                                                class="collapse-content flex flex-col justify-center items-center pb-0 px-0 border-t border-black w-full bg-darkblue-200">
-                                                @if ($mapel->tugas->where('id_kelas', $info_kelas->id)->count())
-                                                    @foreach ($mapel->tugas->where('id_kelas', $info_kelas->id) as $tugas)
+                                                class="collapse-content flex flex-col justify-center items-center pb-0 px-0 border-t border-black w-full bg-darkblue-200 font-normal">
+                                                @if ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->count())
+                                                    @foreach ($mapel->tugas->where('id_kelas', $info_siswa->kelas->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester) as $tugas)
                                                         <div class="grid grid-cols-3 text-center text-sm w-full ">
                                                             <h1
-                                                                class=" w-full h-full flex justify-center items-center py-3 border-r border-b border-black {{ $tugas->nilai->value('nilai') == null || $tugas->nilai->value('nilai') <= 75 ? 'text-red-500 font-bold' : '' }}">
+                                                                class=" w-full h-full flex justify-center items-center py-3 border-r border-b border-black ">
                                                                 {{ $tugas->nama }}</h1>
                                                             <h1
-                                                                class=" w-full h-full flex justify-center items-center py-3 border-r border-b border-black {{ $tugas->nilai->value('nilai') == null || $tugas->nilai->value('nilai') <= 75 ? 'text-red-500 font-bold' : '' }}">
+                                                                class=" w-full h-full flex justify-center items-center py-3 border-r border-b border-black ">
                                                                 75</h1>
                                                             <h1
-                                                                class=" w-full h-full flex justify-center items-center py-3 border-b border-black {{ $tugas->nilai->value('nilai') == null || $tugas->nilai->value('nilai') <= 75 ? 'text-red-500 font-bold' : '' }}">
-                                                                {{ $tugas->nilai->value('nilai') ?? 'Belum Dinilai' }}
+                                                                class=" w-full h-full flex justify-center items-center py-3 border-b border-black ">
+                                                                {{ $tugas->nilai->where('id_siswa', $info_siswa->id)->where('tahun_ajar', $info_siswa->kelas->tahun_ajar)->where('semester', $info_siswa->kelas->semester)->value('nilai') ?? 'Belum Dinilai' }}
                                                             </h1>
                                                         </div>
                                                     @endforeach
@@ -344,6 +390,18 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function() {
+            let rataRata = $("#rata-rata").data('avg');
+            if (rataRata != null) {
+                let num = 0;
+                let interval = setInterval(() => {
+                    num++;
+                    $("#rata-rata").text(num);
+                    if (num >= rataRata) {
+                        clearInterval(interval);
+                    }
+                }, 10);
+            }
+
             function makeChart(tugas, kuis, ujian, belum) {
                 const data = {
                     datasets: [{

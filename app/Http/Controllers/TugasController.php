@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\DB;
 
 class TugasController extends Controller
 {
+    public function showNilai(Kelas $kelas, Mapel $mapel)
+    {
+        return view('dashboard.pengajar.pages.showNilaiPerTugas', [
+            'title' => "Nilai pertugas",
+            'full' => true,
+            'info_pengajar' => auth()->user(),
+            'info_kelas' => $kelas,
+            'info_mapel' => $mapel,
+        ]);
+    }
     public static function getKodeTugas($tipe)
     {
         $tipeTugas = $tipe;
@@ -25,12 +35,12 @@ class TugasController extends Controller
                 'kode' => "QZ"
             ],
             [
-                'tipe' => "PTS",
-                'kode' => "PTS"
+                'tipe' => "assessment_blok_a",
+                'kode' => "ASMA"
             ],
             [
-                'tipe' => "PAS",
-                'kode' => "PAS"
+                'tipe' => "assessment_blok_b",
+                'kode' => "ASMB"
             ],
         ]);
         $count = Tugas::where('tipe', $tipe)->count();
@@ -38,26 +48,33 @@ class TugasController extends Controller
         return $codeTugas;
     }
 
-    public function createUjian($request, $tipe)
+    public function createUjian($request, $tipe, $nama)
     {
+        $kelas = Kelas::find($request->get('id_kelas'));
+        if (!$request->get('tahun_ajar') && !$request->get('semester')) {
+            $request['tahun_ajar'] = $kelas->tahun_ajar;
+            $request['semester'] = $kelas->semester;
+        }
         return [
             '_token' => $request->_token,
             'id_kelas' => $request->id_kelas,
             'id_pengajar' => $request->id_pengajar,
-            'nama' => $tipe,
+            'nama' => $nama,
             'kode_tugas' => $this->getKodeTugas($tipe),
             'tipe' => $tipe,
+            'tahun_ajar' => $request->tahun_ajar,
+            'semester' => $request->semester
         ];
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Mapel $mapel, Kelas $kelas)
+    public function index(Kelas $kelas, Mapel $mapel)
     {
         $daftar_tugas = collect([
             'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
-            'ujian' => $mapel->tugas()->tipe(['tipe' => ['PTS', 'PAS']])->where('id_kelas', $kelas->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.pengajar.pages.selectTugas', [
             'title' => "Pilih Tugas",
@@ -86,22 +103,34 @@ class TugasController extends Controller
         if (auth()->user()->role == 'pengajar') {
             if ($request->otomatis == 'on') {
                 $ujian = collect([
-                    "PTS" => $this->createUjian($request, "PTS"),
-                    "PAS" => $this->createUjian($request, "PAS"),
+                    "assessment_blok_a" => $this->createUjian($request, "assessment_blok_a", "Assessment Blok A"),
+                    "assessment_blok_b" => $this->createUjian($request, "assessment_blok_b", 'Assessment Blok B'),
                 ]);
-                if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PTS')->count()) {
-                    Tugas::create($ujian["PTS"]);
+                $kelas = Kelas::find($request->get('id_kelas'));
+                if ($kelas->semester == 'ganjil') {
+                    if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'assessment_blok_a')->count()) {
+                        Tugas::create($ujian["assessment_blok_a"]);
+                    }
                 }
-                if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'PAS')->count()) {
-                    Tugas::create($ujian["PAS"]);
+                if ($kelas->semester == 'genap') {
+                    if (!Tugas::where('id_pengajar', $request->id_pengajar)->where('id_kelas', $request->id_kelas)->where('tipe', 'assessment_blok_b')->count()) {
+                        Tugas::create($ujian["assessment_blok_b"]);
+                    }
                 }
                 return back()->with('success', 'Tugas berhasil di tambahkan!');
             } else {
+                $kelas = Kelas::find($request->get('id_kelas'));
+                if (!$request->get('tahun_ajar') && !$request->get('semester')) {
+                    $request['tahun_ajar'] = $kelas->tahun_ajar;
+                    $request['semester'] = $kelas->semester;
+                }
                 $validatedData = $request->validate([
                     'id_kelas' => ['required'],
                     'id_pengajar' => ['required'],
                     'tipe' => ['required'],
-                    'nama' => ['required', 'unique:tugas,nama']
+                    'nama' => ['required', 'unique:tugas,nama'],
+                    'tahun_ajar' => ['required'],
+                    'semester' => ['required']
                 ]);
                 $validatedData['kode_tugas'] = $this->getKodeTugas($validatedData['tipe']);
                 Tugas::create($validatedData);
@@ -141,6 +170,6 @@ class TugasController extends Controller
      */
     public function destroy(Tugas $tugas)
     {
-        //
+        $tugas->delete();
     }
 }

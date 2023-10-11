@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminPengajarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiController;
@@ -45,13 +46,16 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
         Route::get('/profile', [DashboardController::class, 'profile'])->name('profile-pengajar');
         Route::get('/kelas', [DashboardController::class, 'kelas'])->name('kelas-pengajar');
         Route::get('/kelas/{kelas}', [DashboardController::class, 'selectMapel'])->name('select-mapel');
-        Route::get('/kelas/{kelas}/mapel/{mapel}', [DashboardController::class, 'selectTugas'])->name('select-tugas');
         Route::get('/kelas/{kelas}/tugas/{tugas}/nilai', [DashboardController::class, 'inputNilai'])->name('input-nilai');
         Route::get('/kelas/{kelas}/siswa', [DashboardController::class, 'showSiswa'])->name('show-siswa');
         Route::get('/kelas/{kelas}/nilai', [DashboardController::class, 'showNilaiPerKelas'])->name('show-nilai-perkelas');
         Route::get('/kelas/{kelas}/siswa/{siswa}', [DashboardController::class, 'detailSiswa'])->name('detail-siswa');
+        Route::controller(TugasController::class)->group(function () {
+            Route::get('/kelas/{kelas}/mapel/{mapel}', 'index')->name('tugas.index');
+            Route::get('/kelas/{kelas}/mapel/{mapel}/nilai', 'showNilai')->name('tugas.shownilai');
+            Route::post('/tugas', 'store')->name('tugas.store');
+        });
         Route::resource('/nilai', NilaiController::class)->names('nilai');
-        Route::resource('/tugas', TugasController::class)->names('tugas');
     });
 });
 
@@ -88,4 +92,10 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
             });
         });
     });
+});
+
+Route::controller(ExportController::class)->group(function () {
+    Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
+    Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
+    Route::get('/export/tugas/{tugas}', 'ExportPerTugas')->name('ExportPerTugas');
 });

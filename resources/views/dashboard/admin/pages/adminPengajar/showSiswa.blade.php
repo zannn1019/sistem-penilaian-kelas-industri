@@ -21,6 +21,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
                 <div class="self-end text-sm flex gap-1 uppercase justify-center items-center font-semibold">
                     <i class="fa-solid fa-users"></i>

@@ -24,6 +24,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-lg">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
             <div class="d-flex gap-1 w-40 text-sm self-end p-2 font-semibold">
@@ -57,7 +59,8 @@
                                     <td class="border-r-2 border-darkblue-500 waktu-tanggal">
                                         {{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->updated_at ?? '-' }}
                                     </td>
-                                    <td class="border-r-2 border-darkblue-500">{{ $data_tugas->tipe }}</td>
+                                    <td class="border-r-2 border-darkblue-500">
+                                        {{ implode(' ', array_map('ucfirst', explode('_', $data_tugas->tipe))) }}</td>
                                     <td class="border-r-2 border-darkblue-500 input-nilai relative"
                                         data-id="{{ $siswa->id }}" data-tugas="{{ $data_tugas->id }}">
                                         <input type="number" class="w-24 text-center bg-transparent focus:outline-none"

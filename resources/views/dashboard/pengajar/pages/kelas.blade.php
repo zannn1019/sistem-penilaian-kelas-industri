@@ -5,7 +5,7 @@
             class="w-full h-24 max-sm:h-auto max-sm:gap-5 max-md:grid-cols-1 max-md:h-auto grid grid-cols-2 max-sm:grid-cols-1 text-black p-5 max-sm:px-5 px-10 z-10 place-content-end">
             <div class="info flex items-end gap-3">
                 <h1 class="text-4xl font-bold">Class Your’re In</h1>
-                <span class="font-semibold">(12)</span>
+                <span class="font-semibold">({{ $info_pengajar->kelas()->count() }})</span>
             </div>
             <div class="w-full flex justify-end items-end">
                 <div class="filter bg-gray-200 flex rounded-2xl transition-all justify-end items-end " id="filter"
@@ -59,6 +59,7 @@
                                 class="w-32
                         ">
                             <div class="info flex flex-col text-xs gap-2">
+                                <span class="capitalize"><b>Semester {{ $kelas->semester }}</b></span>
                                 <span><i class="fa-solid fa-chalkboard"></i>
                                     {{ $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas }}</span>
                                 <span><i class="fa-solid fa-users"></i> {{ $kelas->siswa->count() }} Siswa</span>

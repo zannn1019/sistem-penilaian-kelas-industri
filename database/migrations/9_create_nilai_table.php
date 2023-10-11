@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('id_siswa')->constrained('siswa');
             $table->foreignId('id_tugas')->constrained('tugas');
             $table->integer('nilai');
+            $table->string("tahun_ajar");
+            $table->enum("semester", ['ganjil', 'genap']);
             $table->timestamps();
             $table->softDeletes();
         });

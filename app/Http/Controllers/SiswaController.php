@@ -57,7 +57,8 @@ class SiswaController extends Controller
         $kelas = Kelas::find($siswa->id_kelas);
 
         // ?? Mengambil tugas siswa
-        $tugas = $kelas->tugas;
+        $tugas = $kelas->tugas->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+            ->where('semester', $siswa->kelas->semester);
 
         // ?? Mengambil total semua tugas
         $total = $tugas->count();
@@ -66,19 +67,20 @@ class SiswaController extends Controller
         $mapelIds = PengajarMapel::whereIn('id_user', $kelas->pengajar->pluck('id')->toArray())
             ->pluck('id_mapel')
             ->toArray();
-
+        $avgNilai = Nilai::siswaAvg($siswa);
         return view("dashboard.admin.pages.detailSiswa", [
             'title' => "Detail Siswa",
             'full' => true,
             'info_siswa' => $siswa,
             'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
             'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
+            'rata_rata' => $avgNilai,
             'tugas' => [
                 'total' => $total,
                 'ternilai' => $siswa->nilai()->count(),
                 'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
                 'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
-                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['assessment_blok_a', 'assessment_blok_b'])->count(),
             ]
         ]);
     }

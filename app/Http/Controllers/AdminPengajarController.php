@@ -29,11 +29,11 @@ class AdminPengajarController extends Controller
                 'total' => 0,
                 'ternilai' => 0,
             ],
-            'PTS' => [
+            'assessment_blok_a' => [
                 'total' => 0,
                 'ternilai' => 0,
             ],
-            'PAS' => [
+            'assessment_blok_b' => [
                 'total' => 0,
                 'ternilai' => 0,
             ],
@@ -92,7 +92,7 @@ class AdminPengajarController extends Controller
     {
         $daftar_tugas = collect([
             'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
-            'ujian' => $mapel->tugas()->tipe(['tipe' => ['PTS', 'PAS']])->where('id_kelas', $kelas->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.admin.pages.adminPengajar.selectTugas', [
             'title' => "Pilih Tugas",
@@ -144,7 +144,8 @@ class AdminPengajarController extends Controller
     public function detailSiswa(User $pengajar, Kelas $kelas, Siswa $siswa)
     {
         // ?? Mengambil tugas siswa
-        $tugas = Kelas::find($siswa->id_kelas)->tugas;
+        $tugas = Kelas::find($siswa->id_kelas)->tugas->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+            ->where('semester', $siswa->kelas->semester);
 
         // ?? Mengambil total semua tugas
         $total = $tugas->count();
@@ -154,6 +155,8 @@ class AdminPengajarController extends Controller
             ->pluck('id_mapel')
             ->toArray();
 
+        $avgNilai = Nilai::siswaAvg($siswa);
+
         return view('dashboard.admin.pages.adminPengajar.detailSiswa', [
             'title' => 'Detail Siswa',
             'full' => true,
@@ -162,12 +165,15 @@ class AdminPengajarController extends Controller
             'info_siswa' => $siswa,
             'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
             'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
+            'rata_rata' => $avgNilai,
             'tugas' => [
                 'total' => $total,
-                'ternilai' => $siswa->nilai()->count(),
+                'ternilai' => $siswa->nilai()->where('id_siswa', $siswa->id)
+                    ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+                    ->where('semester', $siswa->kelas->semester)->count(),
                 'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
                 'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
-                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['assessment_blok_a', 'assessment_blok_b'])->count(),
             ]
         ]);
     }

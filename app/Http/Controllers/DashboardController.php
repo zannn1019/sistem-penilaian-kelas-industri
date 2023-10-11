@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\Mapel;
+use App\Models\Nilai;
 use App\Models\PengajarMapel;
 use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
+use Brick\Math\BigRational;
 use Illuminate\Support\Facades\DB;
 use NumberToWords\NumberToWords;
 
@@ -28,11 +30,11 @@ class DashboardController extends Controller
                     'total' => 0,
                     'ternilai' => 0,
                 ],
-                'PTS' => [
+                'assessment_blok_a' => [
                     'total' => 0,
                     'ternilai' => 0,
                 ],
-                'PAS' => [
+                'assessment_blok_b' => [
                     'total' => 0,
                     'ternilai' => 0,
                 ],
@@ -135,7 +137,8 @@ class DashboardController extends Controller
     public function detailSiswa(Kelas $kelas, Siswa $siswa)
     {
         // ?? Mengambil tugas siswa
-        $tugas = Kelas::find($siswa->id_kelas)->tugas;
+        $tugas = Kelas::find($siswa->id_kelas)->tugas->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+            ->where('semester', $siswa->kelas->semester);
 
         // ?? Mengambil total semua tugas
         $total = $tugas->count();
@@ -145,6 +148,7 @@ class DashboardController extends Controller
             ->pluck('id_mapel')
             ->toArray();
 
+        $avgNilai = Nilai::siswaAvg($siswa);
         return view('dashboard.pengajar.pages.detailSiswa', [
             'title' => 'Detail siswa',
             'full' => true,
@@ -153,12 +157,15 @@ class DashboardController extends Controller
             'info_siswa' => $siswa,
             'daftar_mapel' => Mapel::whereIn('id', $mapelIds)->get(),
             'nomor_id' => NumberToWords::transformNumber('id', $siswa->id),
+            'rata_rata' => $avgNilai,
             'tugas' => [
                 'total' => $total,
-                'ternilai' => $siswa->nilai()->count(),
+                'ternilai' => $siswa->nilai()->where('id_siswa', $siswa->id)
+                    ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+                    ->where('semester', $siswa->kelas->semester)->count(),
                 'tugas' =>  $tugas->whereIn('tipe', ['tugas'])->count(),
                 'kuis' =>  $tugas->whereIn('tipe', ['quiz'])->count(),
-                'ujian' =>  $tugas->whereIn('tipe', ['PAS', 'PTS'])->count(),
+                'ujian' =>  $tugas->whereIn('tipe', ['assessment_blok_a', 'assessment_blok_b'])->count(),
             ]
         ]);
     }
@@ -179,7 +186,7 @@ class DashboardController extends Controller
         $pengajar_mapel = PengajarMapel::where('id_mapel', $mapel->id)->where('id_user', auth()->user()->id);
         $daftar_tugas = collect([
             'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
-            'ujian' => $mapel->tugas()->tipe(['tipe' => ['PTS', 'PAS']])->where('id_kelas', $kelas->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.pengajar.pages.selectTugas', [
             'title' => 'Pilih tugas',

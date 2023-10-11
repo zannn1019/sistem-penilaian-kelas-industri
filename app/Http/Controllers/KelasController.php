@@ -69,6 +69,12 @@ class KelasController extends Controller
         ]);
 
         Kelas::create($validated_data);
+        activity()
+            ->event('created')
+            ->useLog('kelas')
+            ->performedOn(Kelas::latest()->first())
+            ->causedBy(auth()->user()->id)
+            ->log('Menambah data kelas');
         return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()])->with('success', 'Data kelas berhasil ditambahkan!');
     }
 
@@ -123,6 +129,12 @@ class KelasController extends Controller
             'tahun_ajar.regex' => 'Format tahun harus dalam format "yyyy/yyyy", contoh: 2023/2024',
         ]);
         $kela->update($validated_data);
+        activity()
+            ->event('update')
+            ->useLog('kelas')
+            ->performedOn($kela)
+            ->causedBy(auth()->user()->id)
+            ->log('Mengubah data kelas');
         return back()->with('success', 'Data kelas berhasil di ubah!');
     }
 
@@ -132,6 +144,12 @@ class KelasController extends Controller
     public function destroy(Kelas $kela)
     {
         $kela->delete();
+        activity()
+            ->event('arsip')
+            ->useLog('kelas')
+            ->performedOn($kela)
+            ->causedBy(auth()->user()->id)
+            ->log('Mengarsipkan data kelas');
         return redirect()->route('sekolah.show', $kela->sekolah->id)->with('success', 'Data kelas berhasil diarsipkan');
     }
 }

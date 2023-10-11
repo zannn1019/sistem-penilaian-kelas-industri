@@ -20,6 +20,8 @@
                     <h1 class="text-3xl font-semibold">Kelas Industri - {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
         </header>

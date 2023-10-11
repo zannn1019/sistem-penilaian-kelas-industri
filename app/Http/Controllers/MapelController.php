@@ -56,6 +56,13 @@ class MapelController extends Controller
             'nama_mapel' => ['required', 'min:1', 'max:75', 'unique:mapel,nama_mapel']
         ]);
         Mapel::create($validated_data);
+        activity()
+            ->event('created')
+            ->useLog('mapel')
+            ->performedOn(Mapel::latest()->first())
+            ->causedBy(auth()->user()->id)
+            ->log('Menambah data mapel');
+
         return redirect()->back()->with('success', 'Mata pelajaran berhasil di tambahkan');
     }
 
@@ -89,7 +96,12 @@ class MapelController extends Controller
         ]);
 
         $mapel->update($validated_data);
-        session()->forget('errors');
+        activity()
+            ->event('update')
+            ->useLog('mapel')
+            ->performedOn($mapel)
+            ->causedBy(auth()->user()->id)
+            ->log('Mengubah data mapel');
         return redirect()->back()->with('success', 'Mata pelajaran berhasil diubah');
     }
 
@@ -100,6 +112,12 @@ class MapelController extends Controller
     {
         PengajarMapel::where('id_mapel', $mapel->id)->delete();
         $mapel->delete();
+        activity()
+            ->event('arsip')
+            ->useLog('mapel')
+            ->performedOn($mapel)
+            ->causedBy(auth()->user()->id)
+            ->log('Mengarsipkan data mapel');
         return redirect()->route('mapel.index')->with('success', 'Mata pelajaran berhasil diarsipkan');
     }
 }

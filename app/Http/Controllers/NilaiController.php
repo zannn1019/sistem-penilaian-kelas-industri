@@ -17,13 +17,13 @@ class NilaiController extends Controller
         // ?? Jika request lewat XHTTP request / AJAX
         if ($request->ajax()) {
             // ?? Mengambil data nilai dan data siswa
-            $nilai = Nilai::where('id_siswa', $request->get('id_siswa'))->get();
             $siswa = Siswa::find($request->get('id_siswa'));
+            $nilai = Nilai::where('id_siswa', $request->get('id_siswa'))->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->get();
 
             // ?? Mengambil data jumlah tugas,kuis dan ujian yang sudah di nilai
             $tugas = $nilai->whereIn("tugas.tipe", ['tugas'])->count();
             $kuis = $nilai->whereIn("tugas.tipe", ['quiz'])->count();
-            $ujian = $nilai->whereIn("tugas.tipe", ['PTS', 'PAS'])->count();
+            $ujian = $nilai->whereIn("tugas.tipe", ['assessment_blok_a', 'assessment_blok_b'])->count();
 
             // ?? Mengambil data nilai yang belum di nilai dan total smeua tugas
             $belum = Kelas::find($siswa->id_kelas)->tugas->count() - $tugas - $kuis - $ujian;
@@ -39,10 +39,10 @@ class NilaiController extends Controller
         }
         if (auth()->user()->role == 'pengajar') {
             $data_nilai = collect([]);
-            if ($request->hasAny(['filter', 'tgl'])) {
-                $data_nilai = Nilai::all();
+            $siswa = Siswa::find($request->get('id_siswa'));
+            if ($request->hasAny(['tgl'])) {
+                $data_nilai = Nilai::filter(['tgl' => $request->get('tgl')])->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->get();
             }
-
             return view('dashboard.pengajar.pages.nilai', [
                 'title' => "Nilai",
                 'full' => false,
@@ -72,12 +72,20 @@ class NilaiController extends Controller
             $validatedData = $request->validate([
                 'id_siswa' => ['required'],
                 'id_tugas' => ['required'],
-                'nilai' => ['required']
+                'nilai' => ['required'],
+                'tahun_ajar' => ['required'],
+                'semester' => ['required'],
             ]);
 
             if (!$cek_data->count()) {
                 // ?? Jika nilai nya belum di tambahkan
                 if (Nilai::create($validatedData)) {
+                    activity()
+                        ->event('created')
+                        ->useLog('nilai')
+                        ->performedOn(Nilai::latest()->first())
+                        ->causedBy(auth()->user()->id)
+                        ->log('Menambah data nilai');
                     return response()->json(['success' => 'data_store', 'time' => date(now())]);
                 } else {
                     return response()->json(['error' => 'Nilai gagal di tambahkan!']);
@@ -86,12 +94,19 @@ class NilaiController extends Controller
                 // ?? Jika nilai nya sudah di tambahkan
                 $nilai = $cek_data;
                 if ($nilai->update($validatedData)) {
+                    activity()
+                        ->event('update')
+                        ->useLog('nilai')
+                        ->performedOn($nilai->first())
+                        ->causedBy(auth()->user()->id)
+                        ->log('Mengubah data nilai');
                     return response()->json(['success' => "data_update", 'time' => date(now())]);
                 } else {
                     return response()->json(['error' => 'Nilai gagal di ubah!']);
                 }
             }
         }
+        return redirect()->back();
     }
 
     /**

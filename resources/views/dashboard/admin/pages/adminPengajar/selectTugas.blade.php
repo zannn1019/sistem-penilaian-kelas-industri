@@ -25,6 +25,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-lg    ">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
         </header>
@@ -49,7 +51,7 @@
             </div>
             <div class="px-5 py-2 max-sm:px-0 w-full h-full text-black flex flex-col gap-2">
                 @if ($daftar_tugas['ujian']->count())
-                    <h1 class="font-semibold">Ujian</h1>
+                    <h1 class="font-semibold">Assesmen</h1>
                     <div class="w-full grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2">
                         @foreach ($daftar_tugas['ujian'] as $ujian)
                             <div class="box w-full h-56 p-2">

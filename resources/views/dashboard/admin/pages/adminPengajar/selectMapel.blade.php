@@ -24,6 +24,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
         </header>
@@ -73,8 +75,8 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['pas', 'pts'], 'id_kelas' => $info_kelas->id])->count() }}</span>
-                                    <span class="text-xs text-tosca-500">Ujian</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['assessment_blok_b', 'assessment_blok_a'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                    <span class="text-xs text-tosca-500">Assessment</span>
                                 </div>
                             </div>
                         </div>

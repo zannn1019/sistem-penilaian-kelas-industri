@@ -18,6 +18,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-lg    ">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
         </header>
@@ -32,7 +34,7 @@
                             class="p-3 shadow-box rounded-3xl dropdown-content bg-white absolute bottom-0 left-0 max-sm:-left-52 w-64  flex flex-col text-black text-center justify-center items-center gap-2">
                             <a href="{{ route('show-siswa', ['kelas' => $info_kelas->id]) }}"
                                 class="w-full border-b p-2 border-black hover:font-semibold">Daftar siswa</a>
-                            <a href="{{ route('show-nilai-perkelas', ['kelas' => $info_kelas->id]) }}"
+                            <a href="{{ route('tugas.shownilai', ['kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}"
                                 class="w-full p-2 hover:font-semibold">Daftar nilai</a>
                         </div>
                     </details>
@@ -51,14 +53,14 @@
                                 onclick="quiz.showModal()">Tambah
                                 Kuis</button>
                             <button
-                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Ujian</button>
+                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Assessment</button>
                         </div>
                     </details>
                 </div>
             </div>
             <div class="px-5 py-2 max-sm:px-0 w-full h-full text-black flex flex-col gap-2">
                 @if ($daftar_tugas['ujian']->count())
-                    <h1 class="font-semibold">Ujian</h1>
+                    <h1 class="font-semibold">Assessment</h1>
                     <div class="w-full grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2">
                         @foreach ($daftar_tugas['ujian'] as $ujian)
                             <div class="box w-full h-56 p-2">
@@ -166,6 +168,31 @@
                 <input type="hidden" value="tugas" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
+                <div class="w-full flex gap-5 checkbox-tahunajar">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $info_kelas->tahun_ajar }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                            </option>
+                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex w-full items-center p-2 text-xs gap-2">
+                    <input type="checkbox" checked="checked" class="checkbox w-6 h-5 tahun_ajaran" />
+                    <span>Ubah tahun ajaran dan semester</span>
+                </div>
                 <input type="submit" value="Tambah" class="btn self-end">
             </form>
         </div>
@@ -177,13 +204,38 @@
         <div class="modal-box">
             <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul kuis!</h3>
             <form action="{{ route('tugas.store') }}" method="POST"
-                class="flex flex-col gap-2 justify-center items-center">
+                class="flex flex-col gap-2 justify-center items-center form-tugas">
                 @csrf
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
                 <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
                 <input type="hidden" value="quiz" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
+                <div class="w-full flex gap-5 checkbox-tahunajar">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $info_kelas->tahun_ajar }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                            </option>
+                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex w-full items-center p-2 text-xs gap-2">
+                    <input type="checkbox" checked="checked" class="checkbox w-6 h-5 tahun_ajaran" />
+                    <span>Ubah tahun ajaran dan semester</span>
+                </div>
                 <input type="submit" value="Tambah" class="btn self-end">
             </form>
         </div>
@@ -193,25 +245,46 @@
     </dialog>
     <dialog id="ujian" class="modal" data-theme="light">
         <div class="modal-box text-black">
-            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul ujian!</h3>
+            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul Assessment!</h3>
             <form action="{{ route('tugas.store') }}" method="POST"
                 class="flex flex-col gap-2 justify-center items-center" id="form-ujian">
                 <div class="flex w-full items-center p-2 text-xs gap-2">
                     <input type="checkbox" checked="checked" class="checkbox w-6 h-5" name="otomatis"
                         id="ujian-otomatis" />
-                    <span>Tambahkan ujian secara otomatis</span>
+                    <span>Tambahkan assessment secara otomatis</span>
                 </div>
                 @csrf
                 <input type="hidden" value="ujian" name="tipe" id="is-ujian">
                 <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
                 <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
                 <input disabled type="text" name="nama" class="input input-bordered text-black w-full"
-                    placeholder="Judul Ujian" required>
+                    placeholder="Judul Assessment" required>
                 <select name="tipe" id="" class="input input-bordered w-full" disabled>
-                    <option value="" selected>Pilih Ujian</option>
-                    <option value="PTS">PTS</option>
-                    <option value="PAS">PAS</option>
+                    <option value="" selected>Pilih Blok</option>
+                    <option value="assessment_blok_a">Blok A</option>
+                    <option value="assessment_blok_b">Blok B</option>
                 </select>
+                <div class="w-full flex gap-5">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $info_kelas->tahun_ajar }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                            </option>
+                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <input type="submit" value="Tambah" class="btn self-end">
             </form>
         </div>
@@ -236,6 +309,15 @@
                         "disabled", true)
                 } else {
                     $("#form-ujian").find("input[type='text'],select").removeAttr(
+                        "disabled")
+                }
+            })
+            $(".tahun_ajaran").click(function() {
+                if ($(this).is(":checked")) {
+                    $(".checkbox-tahunajar").find("input[type='text'],select").attr(
+                        "disabled", true)
+                } else {
+                    $(".checkbox-tahunajar").find("input[type='text'],select").removeAttr(
                         "disabled")
                 }
             })

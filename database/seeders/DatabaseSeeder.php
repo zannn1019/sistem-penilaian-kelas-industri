@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         if (User::where('nik', '1')->count() == 0) {
             User::create([
-                'foto' => 'admin.jpg',
+                'foto' => 'user.png',
                 'nik' => '1',
                 'nama' => 'Admin',
                 'username' => 'admin',
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         }
         if (User::where('nik', '2')->count() == 0) {
             User::create([
-                'foto' => 'ahmad-fauza.jpg',
+                'foto' => 'user.png',
                 'nik' => '2',
                 'nama' => 'Pengajar',
                 'username' => 'pengajar',

@@ -3,14 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Scout\Searchable;
 
 class Kelas extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes, Searchable, LogsActivity;
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName("kelas");
+    }
+    protected $logAttributes = ['nama_kelas', 'tingkat', 'kelas', 'tahun_ajar', 'semester'];
     protected $guarded = [
         'id'
     ];

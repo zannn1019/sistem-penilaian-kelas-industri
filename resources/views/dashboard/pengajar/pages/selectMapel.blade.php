@@ -16,6 +16,8 @@
                         {{ $info_kelas->sekolah->nama }}</h1>
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
+                    <h1 class="text-2xl font-semibold max-sm:text-sm">
+                        {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
         </header>
@@ -23,7 +25,7 @@
             class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-1 gap-5 h-full  p-5 max-sm:p-0 ">
             @foreach ($data_mapel->paginate(8) as $mapel)
                 <div class="box w-full h-56 p-2">
-                    <a href="{{ route('select-tugas', ['kelas' => $info_kelas->id, 'mapel' => $mapel->id]) }}"
+                    <a href="{{ route('tugas.index', ['kelas' => $info_kelas->id, 'mapel' => $mapel->id]) }}"
                         class="w-full flex h-full bg-tosca-100 rounded-box p-5 shadow-lg flex-col">
                         <div class="w-full flex justify-between h-2/6">
                             <div class="flex justify-between items-center w-full">
@@ -65,8 +67,8 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['pas', 'pts'], 'id_kelas' => $info_kelas->id])->count() }}</span>
-                                    <span class="text-xs text-tosca-500">Ujian</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['assessment_blok_b', 'assessment_blok_a'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                    <span class="text-xs text-tosca-500">Assessment</span>
                                 </div>
                             </div>
                         </div>
