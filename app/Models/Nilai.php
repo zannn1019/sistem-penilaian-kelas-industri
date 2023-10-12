@@ -44,21 +44,34 @@ class Nilai extends Model
         $totalTugas = 0;
         $totalNilai = 0;
         $tugasBelumDinilai = [];
+
         foreach ($pengajarDikelas->pluck('mapel')->flatten() as $mapel) {
+            $nilaiMapel = collect([]);
+            $totalTugasMapel = 0;
+
             foreach ($mapel->tugas->where('id_kelas', $siswa->kelas->id) as $tugas) {
                 $totalTugas++;
-                $nilai = $tugas->nilai->where('id_siswa', $siswa->id)->where('id_siswa', $siswa->id)
+                $totalTugasMapel++;
+                $nilai = $tugas->nilai->where('id_siswa', $siswa->id)
                     ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
-                    ->where('semester', $siswa->kelas->semester)->first();
+                    ->where('semester', $siswa->kelas->semester)
+                    ->first();
+
                 if ($nilai === null) {
                     $tugasBelumDinilai[] = $tugas->nama;
                 } else {
                     $totalNilai += $nilai->nilai;
-                    $nilaiSiswa->push($nilai->nilai);
+                    $nilaiMapel->push($nilai->nilai);
                 }
             }
+
+            if ($totalTugasMapel > 0) {
+                $rataRataMapel = $nilaiMapel->avg();
+                $nilaiSiswa->push($rataRataMapel);
+            }
         }
-        if ($totalTugas == $nilaiSiswa->count()) {
+
+        if ($totalTugas > 0) {
             return $nilaiSiswa->avg();
         }
     }

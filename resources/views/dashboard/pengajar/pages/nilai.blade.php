@@ -107,8 +107,6 @@
                 <a href="" class="text-xs">Buka History</a>
             </div>
             <div class="w-full h-1/3 bg-gray-200 flex flex-col gap-2 p-2 pb-4">
-                @foreach ($collection as $item)
-                @endforeach
                 <a href=""
                     class="box w-full bg-bluesea-200 h-1/2 rounded-lg flex gap-5 p-2 items-center justify-between">
                     <img src="{{ asset('img/dkv.png') }}" alt="" class="h-full">

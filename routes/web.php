@@ -97,5 +97,5 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
 Route::controller(ExportController::class)->group(function () {
     Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
     Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
-    Route::get('/export/tugas/{tugas}', 'ExportPerTugas')->name('ExportPerTugas');
+    Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
 });

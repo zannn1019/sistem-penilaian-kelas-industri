@@ -156,7 +156,7 @@
                         <h1
                             class="w-full justify-self-start font-semibold {{ request('view') == 'full' ? '' : 'hidden' }}">
                             Daftar nilai siswa</h1>
-                        <a href="">
+                        <a href="{{ route('ExportPerSiswa', ['siswa' => $info_siswa->id]) }}">
                             <i class="fa-solid fa-download"></i>
                         </a>
                         <a href="{{ request('view') == 'full' ? '?view=min' : '?view=full' }}">

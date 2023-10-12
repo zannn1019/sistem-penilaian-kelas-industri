@@ -25,13 +25,20 @@ class NilaiExport implements
      * @return \Illuminate\Support\Collection
      */
 
-    protected $kelas, $heading, $no = 0;
-    public function __construct($kelas, array $heading)
+    protected $kelas, $heading, $tipe, $judul, $mapel;
+    /**
+     * @param $kelas Model untuk kelas
+     * @param $heading heading untuk tabel
+     */
+    public function __construct($kelas, array $heading, int $tipe, string $judul, $mapel = null)
     {
         $this->kelas = $kelas;
         $this->heading = $heading;
+        $this->tipe = $tipe;
+        $this->judul = $judul;
+        $this->mapel = $mapel;
     }
-    public function getNilai($kelas)
+    public function nilaiPerMapel($kelas)
     {
         $data_kelas = $kelas;
         $data_siswa = collect([$this->heading]);
@@ -45,7 +52,27 @@ class NilaiExport implements
             ];
             foreach ($data_mapel as $mapel) {
                 $nilai = $this->hitungRataRataNilai($mapel, $siswa);
-                $siswaData[$mapel->nama_mapel] = $nilai ?? "Belum lengkap";
+                $siswaData[$mapel->nama_mapel] = ($nilai !== null) ? $nilai : "Belum lengkap";
+            }
+            $data_siswa->push($siswaData);
+        }
+        return $data_siswa;
+    }
+
+    public function nilaiPerTugas($kelas, $mapel)
+    {
+        $data_kelas = $kelas;
+        $data_siswa = collect([$this->heading]);
+        $data_mapel = $mapel;
+        $no = 0;
+        foreach ($data_kelas->siswa as $siswa) {
+            $siswaData = [
+                'no' => $no += 1,
+                'nis' => $siswa->nis,
+                'nama' => $siswa->nama,
+            ];
+            foreach ($data_mapel->tugas->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester) as $tugas) {
+                $siswaData[$tugas->nama] = $tugas->nilai->where('id_siswa', $siswa->id)->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->where('id_tugas', $tugas->id)->value('nilai') ?? "Belum dinilai";
             }
             $data_siswa->push($siswaData);
         }
@@ -55,22 +82,41 @@ class NilaiExport implements
 
     private function hitungRataRataNilai($mapel, $siswa)
     {
-        return $mapel->tugas
+        $nilaiTugas = $mapel->tugas
             ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
             ->where('semester', $siswa->kelas->semester)
-            ->avg(function ($tugas) use ($siswa) {
-                return $tugas->nilai
-                    ->where('id_siswa', $siswa->id)
-                    ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
-                    ->where('semester', $siswa->kelas->semester)
-                    ->avg('nilai');
-            });
+            ->pluck('nilai')
+            ->flatten()
+            ->where('id_siswa', $siswa->id)
+            ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+            ->where('semester', $siswa->kelas->semester)
+            ->whereNotNull('nilai')
+            ->pluck('nilai');
+        $totalTugas =  $mapel->tugas
+            ->where('tahun_ajar', $siswa->kelas->tahun_ajar)
+            ->where('semester', $siswa->kelas->semester)
+            ->where('id_kelas', $siswa->kelas->id)
+            ->count();
+
+        if ($totalTugas == $nilaiTugas->count()) {
+            return number_format($nilaiTugas->avg(), 0);
+        }
+        return "Belum lengkap";
     }
+
 
 
     public function collection()
     {
-        return $this->getNilai($this->kelas);
+        switch ($this->tipe) {
+            case 1:
+                return $this->nilaiPerMapel($this->kelas);
+                break;
+
+            case 2:
+                return $this->nilaiPerTugas($this->kelas, $this->mapel);
+                break;
+        }
     }
 
     public function title(): string
@@ -121,7 +167,7 @@ class NilaiExport implements
                 $sheet->mergeCells('A1:' . $sheet->getHighestColumn() . '1');
                 $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle('A1')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-                $sheet->setCellValue('A1', "RAPORT KELAS " . strtoupper($this->kelas->tingkat . ' ' . $this->kelas->jurusan . ' ' . $this->kelas->kelas));
+                $sheet->setCellValue('A1', strtoupper($this->judul));
                 $cellRange = 'A1:' . $sheet->getHighestColumn() . $sheet->getHighestRow();
                 $sheet->getDelegate()->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             },
