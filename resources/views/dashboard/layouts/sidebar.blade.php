@@ -18,10 +18,13 @@
             </a>
         </div>
         <div class="user text-white p-5 text-2xl flex flex-col justify-center items-center gap-3 max-sm:flex-row">
-            <a href="{{ route('profile-pengajar') }}" class=" rounded-full shadow-lg aspect-square overflow-hidden">
+            @if (Storage::disk('public')->exists('pengajar/' . auth()->user()->foto))
                 <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}" class="w-full h-full object-cover"
                     alt="">
-            </a>
+            @else
+                <img src="{{ asset('img/user.png') }}" class="w-full h-full object-cover" alt="">
+            @endif
+
         </div>
     </div>
 
@@ -70,8 +73,12 @@
         <div
             class="user {{ $title == 'Profile' ? 'bg-white rounded-l-2xl text-white' : '' }} px-5 py-2 text-2xl flex flex-col justify-center items-center gap-3 max-sm:flex-row">
             <a href="{{ route('profile-admin') }}" class=" rounded-full shadow-lg aspect-square overflow-hidden">
-                <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}" class="w-full h-full object-cover"
-                    alt="">
+                @if (Storage::disk('public')->exists('pengajar/' . auth()->user()->foto))
+                    <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}"
+                        class="w-full h-full object-cover" alt="">
+                @else
+                    <img src="{{ asset('img/user.png') }}" class="w-full h-full object-cover" alt="">
+                @endif
             </a>
         </div>
     </div>

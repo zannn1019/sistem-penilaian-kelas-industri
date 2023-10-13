@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\Nilai;
+use App\Models\Sekolah;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -38,15 +39,18 @@ class NilaiController extends Controller
             ]]);
         }
         if (auth()->user()->role == 'pengajar') {
-            $data_nilai = collect([]);
-            $siswa = Siswa::find($request->get('id_siswa'));
-            if ($request->hasAny(['tgl'])) {
-                $data_nilai = Nilai::filter(['tgl' => $request->get('tgl')])->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->get();
-            }
+            $data_nilai = Nilai::filterByTgl($request->input('tgl'))
+                ->filterBySekolah($request->input('sekolah'))
+                ->filterByKelas($request->input('kelas'))
+                ->filterBySemester($request->input('semester'))
+                ->filterByTugas($request->input('tugas'))
+                ->get();
             return view('dashboard.pengajar.pages.nilai', [
                 'title' => "Nilai",
                 'full' => false,
-                'data_nilai' => $data_nilai
+                'data_nilai' => $data_nilai,
+                'data_sekolah' => Sekolah::all(),
+                'terakhir_dinilai' => Nilai::latest()->take(2)->get()
             ]);
         }
         return redirect()->back();

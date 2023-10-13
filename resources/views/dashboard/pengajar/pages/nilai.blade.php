@@ -19,29 +19,48 @@
     <div class="w-full h-full flex pl-3 gap-1 max-md:p-0 max-sm:flex-col max-md:flex-col overflow-y-auto">
         <div class="w-10/12 max-sm:w-full max-md:w-full h-full flex flex-col text-black items-center py-5 px-4 gap-2">
             <div
-                class="filter flex items-center flex-wrap max-sm:gap-2 max-md:gap-2 max-md:justify-normal max-sm:justify-normal text-sm gap-2 border-b border-b-black pb-2 w-full justify-center">
+                class="filter flex flex-wrap max-sm:gap-2 max-md:gap-2 max-md:justify-normal max-sm:justify-normal text-sm gap-2 border-b border-b-black pb-2 w-full justify-center">
                 <span class="font-semibold max-sm:hidden">Filter by:</span>
                 <a href="?filter=all"
                     class="px-3 py-1 rounded-box {{ request('filter') == 'all' ? 'bg-tosca-500' : 'bg-gray-300' }}">All</a>
-                <select name="" id="" class="text-black bg-gray-300  px-3 py-1 rounded-box">
-                    <option value="">Kelas</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
+                <select name="sekolah" class="custom-select text-black bg-gray-300  px-3 py-1 rounded-box max-w-[8rem]"
+                    data-filter="sekolah">
+                    <option value="">Pilih Sekolah</option>
+                    @foreach ($data_sekolah as $sekolah)
+                        <option value="{{ $sekolah->id }}" class="truncate"
+                            {{ $sekolah->id == request('sekolah') ? 'selected' : '' }}>
+                            {{ $sekolah->nama }}</option>
+                    @endforeach
                 </select>
-                <select name="" id="" class="text-black bg-gray-300  px-3 py-1 rounded-box">
-                    <option value="">Sekolah</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
+                <select name="kelas" class="custom-select text-black bg-gray-300  px-3 py-1 rounded-box max-w-[8rem]"
+                    data-filter="kelas" {{ request('sekolah') == null ? 'disabled' : '' }}>
+                    <option value="">Pilih Kelas</option>
+                    @if (request('sekolah') != null)
+                        @foreach ($data_sekolah->find(request('sekolah'))->kelas as $kelas)
+                            <option value="{{ $kelas->id }}" class="truncate"
+                                {{ $kelas->id == request('kelas') ? 'selected' : '' }}>
+                                {{ $kelas->tingkat }} - {{ $kelas->jurusan }} - {{ $kelas->kelas }}
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
-                <select name="" id="" class="text-black bg-gray-300  px-3 py-1 rounded-box">
-                    <option value="">Tugas</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
+                <select name="semester" class="custom-select text-black bg-gray-300  px-3 py-1 rounded-box max-w-[8rem]"
+                    data-filter="semester">
+                    <option value="">Pilih Semester</option>
+                    <option value="ganjil" {{ request('semester') == 'ganjil' ? 'selected' : '' }}>Ganjil</option>
+                    <option value="genap" {{ request('semester') == 'genap' ? 'selected' : '' }}>Genap</option>
                 </select>
-                <select name="" id="" class="text-black bg-gray-300  px-3 py-1 rounded-box">
-                    <option value="">Semester</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
+                <select name="tugas" class="custom-select text-black bg-gray-300  px-3 py-1 rounded-box max-w-[8rem]"
+                    data-filter="tugas"
+                    {{ request('sekolah') != null && request('kelas') != null && request('semester') != null ? '' : 'disabled' }}>
+                    <option value="">Pilih Tugas</option>
+                    @if (request('sekolah') != null && request('kelas') != null && request('semester') != null)
+                        @foreach ($data_sekolah->find(request('sekolah'))->kelas()->find(request('kelas'))->tugas->where('semester', request('semester')) as $tugas)
+                            <option value="{{ $tugas->id }}"{{ request('tugas') == $tugas->id ? 'selected' : '' }}>
+                                {{ $tugas->nama }}
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             @if ($data_nilai->count())
@@ -102,37 +121,27 @@
             <div class="w-full h-20 bg-gray-300 flex justify-between items-center p-5 text-black">
                 <div class="flex gap-2">
                     <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
-                    <h1 class="text-xl">Terakhir Dibuka</h1>
+                    <h1 class="text-xl">Terakhir Dinilai</h1>
                 </div>
-                <a href="" class="text-xs">Buka History</a>
             </div>
             <div class="w-full h-1/3 bg-gray-200 flex flex-col gap-2 p-2 pb-4">
-                <a href=""
-                    class="box w-full bg-bluesea-200 h-1/2 rounded-lg flex gap-5 p-2 items-center justify-between">
-                    <img src="{{ asset('img/dkv.png') }}" alt="" class="h-full">
-                    <div class="info w-full text-2xs flex flex-col text-black">
-                        <span class="font-bold">SMKN 2 Cimahi</span>
-                        <h1 class="text-sm font-bold leading-3 text-bluesea-500">Kelas DKV</h1>
-                        <span>XII-DKV-C - Semester Genap</span>
-                        <span class="leading-5">Terakhir diakses hari ini pukul 11:02</span>
-                    </div>
-                    <div class="info text-2xs flex flex-col text-bluesea-500 text-5xl">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                </a>
-                <a href=""
-                    class="box w-full bg-bluesea-200 h-1/2 rounded-lg flex gap-5 p-2 items-center justify-between">
-                    <img src="{{ asset('img/dkv.png') }}" alt="" class="h-full">
-                    <div class="info w-full text-2xs flex flex-col text-black">
-                        <span class="font-bold">SMKN 2 Cimahi</span>
-                        <h1 class="text-sm font-bold leading-3 text-bluesea-500">Kelas DKV</h1>
-                        <span>XII-DKV-C - Semester Genap</span>
-                        <span class="leading-5">Terakhir diakses hari ini pukul 11:02</span>
-                    </div>
-                    <div class="info text-2xs flex flex-col text-bluesea-500 text-5xl">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                </a>
+                @foreach ($terakhir_dinilai as $nilai)
+                    <a href="{{ route('select-mapel', ['kelas' => $nilai->siswa->kelas->id]) }}"
+                        class="box w-full bg-bluesea-200 h-1/2 rounded-lg flex gap-5 p-2 items-center justify-between">
+                        <img src="{{ asset('img/data_kelas.png') }}" alt="" class="h-full">
+                        <div class="info w-full text-2xs flex flex-col text-black">
+                            <span class="font-bold">{{ $nilai->siswa->kelas->sekolah->nama }}</span>
+                            <h1 class="text-sm font-bold leading-3 text-bluesea-500">{{ $nilai->siswa->kelas->nama_kelas }}
+                            </h1>
+                            <span>{{ $nilai->siswa->kelas->tingkat }} {{ $nilai->siswa->kelas->jurusan }}
+                                {{ $nilai->siswa->kelas->kelas }} - {{ $nilai->siswa->kelas->semester }}</span>
+                            <span class="leading-5">Terakhir dinilai {{ $nilai->timeElapsed }}</span>
+                        </div>
+                        <div class="info text-2xs flex flex-col text-bluesea-500 text-5xl">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </a>
+                @endforeach
             </div>
         </div>
     </div>
@@ -140,6 +149,19 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $(".custom-select").change(function() {
+                let selectedValue = $(this).val();
+                let filter = $(this).data('filter');
+                let queryParams = new URLSearchParams(window.location.search);
+                queryParams.set(filter, selectedValue);
+                let newUrl = window.location.pathname + "?" + queryParams.toString();
+                window.location.href = newUrl;
+            });
+            $("select[name='sekolah']").change(function() {
+                let selectedValue = $(this).val();
+                let newUrl = window.location.pathname + "?sekolah=" + selectedValue;
+                window.location.href = newUrl;
+            });
             $(".clickable-row").click(function() {
                 window.location.href = $(this).data('link')
             })

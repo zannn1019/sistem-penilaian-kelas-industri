@@ -9,6 +9,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\PengajarController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TugasController;
@@ -94,8 +95,12 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
     });
 });
 
-Route::controller(ExportController::class)->group(function () {
-    Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
-    Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
-    Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
+
+Route::middleware(['auth', 'user:pengajar', 'user:admin'])->group(function () {
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
+    Route::controller(ExportController::class)->group(function () {
+        Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
+        Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
+        Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
+    });
 });

@@ -1,242 +1,134 @@
-@extends('template')
-
-@section('css')
-    <style>
-        .form-select {
-            font-size: 14px;
-        }
-
-        .form-control {
-            font-size: 14px;
-        }
-
-        #table1_wrapper .row:nth-child(2) {
-            overflow-x: auto;
-        }
-
-        tr.lunas {
-            background-color: #00B050 !important;
-            color: white !important;
-        }
-
-        tr.batal {
-            background-color: #FF4747 !important;
-            color: white !important;
-        }
-    </style>
-@endsection
-
+@extends('dashboard.layouts.main')
 @section('content')
-    <div class="page-content" style="font-size: 18px;">
-        <section class="section">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h3>DAFTAR RESERVASI</h3>
-                        <div id="export-button-container">
-                            <label></label>
-                            <button class="btn btn-success btn-sm" id="export-button">Export to Excel</button>
+    <div class="w-full h-full p-5 text-black flex flex-col">
+        <header class="w-full flex gap-3 items-center text-2xl">
+            <a href="{{ route('sekolah.index') }}" class="fa-solid fa-chevron-left max-md:text-lg text-black max-sm:p-5"></a>
+            <div class="text-sm max-sm:hidden breadcrumbs">
+                <ul>
+                    <li><a href="{{ route('sekolah.index') }}">Sekolah</a></li>
+                    <li><a href="{{ route('sekolah.show', ['sekolah' => $info_sekolah->id]) }}">{{ $info_sekolah->nama }}</a>
+                    </li>
+                    <li>Pengajar</li>
+                </ul>
+            </div>
+        </header>
+        <div class="info-sekolah flex max-md:flex-col max-md:items-center gap-5 relative w-full max-md:pb-10">
+            <img src="{{ asset('storage/sekolah/' . $info_sekolah->logo) }}"
+                class="w-44 h-44 z-[5] aspect-square bg-white rounded-circle border-4 border-darkblue-500" alt="">
+            <div class="info w-full text-center">
+                <h1 class="text-5xl font-semibold py-2 border-b border-black w-full text-start">
+                    {{ $info_sekolah->nama }}</h1>
+            </div>
+            <div
+                class="w-11/12 h-1/2 rounded-box text-white flex py-2 justify-end max-md:justify-start pl-20 max-md:px-0 absolute bottom-0 right-0 bg-darkblue-500 ">
+                <div class="filter w-full h-full flex px-5 items-center gap-2">
+                    <div class="tingkat h-full flex flex-col gap-1 justify-center">
+                        <span class="text-xs leading-3 font-semibold">Status</span>
+                        <div class="max-w-[15rem] h-full flex gap-1 flex-wrap justify-start items-start">
+                            <a href="?status=aktif&sort={{ request('sort') ?? 'asc' }}"
+                                class="{{ request('status') == 'aktif' ? 'bg-white border-white text-black' : '' }} text-xs px-5 py-1 border border-white rounded-md">Aktif</a>
+                            <a href="?status=online&sort={{ request('sort') ?? 'asc' }}"
+                                class="{{ request('status') == 'online' ? 'bg-white border-white text-black' : '' }} text-xs px-5 py-1 border border-white rounded-md">Sedang
+                                Mengakses</a>
+                            <a href="?status=nonaktif&sort={{ request('sort') ?? 'asc' }}"
+                                class="{{ request('status') == 'nonaktif' ? 'bg-white border-white text-black' : '' }} text-xs px-5 py-1 border border-white rounded-md">Nonaktif</a>
+                            <a href="{{ route('sekolah.maximize', ['sekolah' => $info_sekolah->id, 'data' => 'pengajar', 'sort' => request('sort')]) }}"
+                                class="{{ request('status') == '' ? 'bg-white border-white text-black' : '' }} text-xs px-5 py-1 border border-white rounded-md">Semua</a>
                         </div>
                     </div>
-                    <br>
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <label>Tgl Awal</label>
-                                <input type="date" class="form-control form-control-sm" id="tgl_awal" name="tgl_awal"
-                                    value="{{ $tgl_awal }}">
-                            </div>
-                            <div class="col-sm-2">
-                                <label>Tgl Akhir</label>
-                                <input type="date" class="form-control form-control-sm" id="tgl_akhir" name="tgl_akhir"
-                                    value="{{ $tgl_akhir }}">
-                            </div>
-                            <div class="col-sm-3" style="width:220px">
-                                <label>Filter</label>
-                                <select class="form-select form-select-sm" id="filter" name="filter">
-                                    <option value="0" {{ $filter == 0 ? 'selected' : '' }}>Waktu Keberangkatan</option>
-                                    <option value="1" {{ $filter == 1 ? 'selected' : '' }}>Waktu Lunas</option>
-                                    <option value="2" {{ $filter == 2 ? 'selected' : '' }}>Waktu Pemesanan</option>
-                                    <option value="3" {{ $filter == 3 ? 'selected' : '' }}>Waktu Pembatalan</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-3" style="width:220px">
-                                <label>Status</label>
-                                <select class="form-select form-select-sm" id="status" name="status">
-                                    <option value="0" {{ $status == 0 ? 'selected' : '' }}>Semua</option>
-                                    <option value="1" {{ $status == 1 ? 'selected' : '' }}>Paid</option>
-                                    <option value="2" {{ $status == 2 ? 'selected' : '' }}>Book</option>
-                                    <option value="3" {{ $status == 3 ? 'selected' : '' }}>Cancel</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-2" style="width:100px">
-                                <label></label>
-                                <button type="submit" class="form-control btn btn-primary btn-sm">
-                                    <i data-feather="filter"></i> Filter
-                                </button>
-                            </div>
+                    <div class="tingkat border-l border-gray-50 pl-5 h-full flex flex-col gap-1 justify-center">
+                        <span class="text-xs leading-3 font-semibold">Urutan</span>
+                        <div class="h-full flex gap-1 flex-wrap justify-start items-start">
+                            <a href="?status={{ request('status') ?? '' }}&sort={{ request('sort') == 'asc' || request('sort') == '' ? 'desc' : 'asc' }}"
+                                class=" p-1 px-3 min-w-[6rem] border-darkblue-100 border-2 rounded-lg font-bold flex flex-col justify-center items-center {{ request('sort') == 'asc' || request('sort') == '' ? 'bg-white text-black border-white' : '' }}">
+                                <i class="fa-solid fa-arrow-down-a-z text-2xl"></i>
+                                <h1 class="text-2xs font-normal">A-Z</h1>
+                            </a>
+                            <a href="?status={{ request('status') ?? '' }}&sort={{ request('sort') == 'asc' || request('sort') == '' ? 'desc' : 'asc' }}&sort=edited"
+                                class=" p-1 px-3 min-w-[6rem] border-darkblue-100 border-2 rounded-lg font-bold flex flex-col justify-center items-center {{ request('sort') == 'edited' ? 'bg-white text-black border-white' : '' }}">
+                                <i class="fa-solid fa-pen text-2xl"></i>
+                                <h1 class="text-2xs font-normal">Terakhir Diubah</h1>
+                            </a>
                         </div>
-                    </form>
-                    <hr>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <table class="table table-bordered " id="table1" style="font-size: 14px; text-align: center;">
-                            <thead>
-                                @foreach ($data['header'] as $row)
-                                    <tr>
-                                        @foreach ($row as $cell)
-                                            @if (is_array($cell))
-                                                @php($content = $cell[0])
-                                                @php($colspan = isset($cell['colspan']) ? 'colspan=' . $cell['colspan'] : '')
-                                                @php($rowspan = isset($cell['rowspan']) ? 'rowspan=' . $cell['rowspan'] : '')
+                    </div>
 
-                                                <th {{ $colspan }} {{ $rowspan }}>{{ $content }}</th>
-                                            @else
-                                                <th style="min-width: 100px;">{{ $cell }}</th>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                @endforeach
-                            </thead>
-                            <tbody>
-                                @foreach ($data['data'] as $row)
-                                    <tr>
-                                        @foreach ($row as $value)
-                                            <td>{{ $value }}</td>
-                                        @endforeach
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
-        </section>
-    </div>
-@endsection
-
-
-@section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.0/exceljs.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            var table1 = $('#table1').DataTable();
-            table1.columns([1, 2]).visible(false);
-
-            var rowColors = [];
-
-            function setRowColors() {
-                table1.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                    var data = this.data();
-                    var isLunas = parseInt(data[1]);
-                    var isBatal = parseInt(data[2]);
-
-                    if (isLunas === 1 && isBatal === 0) {
-                        rowColors[rowIdx] = {
-                            fill: {
-                                type: 'pattern',
-                                pattern: 'solid',
-                                fgColor: {
-                                    argb: '00B050'
-                                },
-                            },
-                            font: {
-                                color: {
-                                    argb: 'FFFFFF'
-                                },
-                            },
-                            name: 'lunas',
-                        };
-                    } else if (isBatal === 1) {
-                        rowColors[rowIdx] = {
-                            fill: {
-                                type: 'pattern',
-                                pattern: 'solid',
-                                fgColor: {
-                                    argb: 'FF4747'
-                                },
-                            },
-                            font: {
-                                color: {
-                                    argb: 'FFFFFF'
-                                },
-                            },
-                            name: 'batal',
-                        };
-                    }
-                });
-            }
-
-            setRowColors();
-
-            table1.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                var rowColor = rowColors[rowIdx];
-                if (rowColor) {
-                    $(this.node()).addClass(rowColor.name);
-                }
-            });
-
-
-            $('#export-button').on('click', function() {
-                var table1PageLength = table1.page.len();
-                table1.page.len(-1).draw();
-
-                var workbook = new ExcelJS.Workbook();
-                var worksheet = workbook.addWorksheet('Detail Reservasi');
-
-                var header = [];
-                table1.columns().every(function(colIdx) {
-                    if (colIdx !== 1 && colIdx !== 2) {
-                        header.push(this.header().textContent);
-                    }
-                });
-                worksheet.addRow(header);
-
-                table1.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                    var rowData = this.data();
-                    var filteredData = [];
-                    for (var i = 0; i < rowData.length; i++) {
-                        if (i !== 1 && i !== 2) {
-                            var cellText = rowData[i].toString();
-                            if (i === 18 || i === 19 || i === 20) {
-                                cellText = cellText.replace("Rp ", "").replace(/\./g, "");
+        </div>
+        @if ($daftar_pengajar->count() > 0)
+            <div class="w-full h-96 overflow-auto scroll-arrow" dir="rtl">
+                <div class="grid grid-cols-4 max-md:grid-cols-1 p-2 max-sm:p-0 gap-2" dir="ltr">
+                    @foreach ($daftar_pengajar->paginate(8) as $pengajar)
+                        @php
+                            if (Cache::has('is_online' . $pengajar->id) && $pengajar->status == 'aktif') {
+                                $is_online = true;
+                                $bg = 'bg-bluesea-100';
+                                $btn = 'bg-bluesea-500';
+                            } else {
+                                $is_online = false;
+                                if ($pengajar->status == 'aktif') {
+                                    $bg = 'bg-tosca-100';
+                                    $btn = 'bg-tosca-500';
+                                } else {
+                                    $bg = 'bg-darkblue-100';
+                                    $btn = 'bg-darkblue-500';
+                                }
                             }
-                            filteredData.push(cellText);
-                        }
-                    }
-                    worksheet.addRow(filteredData);
-
-                    var rowColor = rowColors[rowIdx];
-                    if (rowColor) {
-                        worksheet.getRow(rowIdx + 2).fill = rowColor.fill;
-                        worksheet.getRow(rowIdx + 2).font = rowColor.font;
-                    }
-                });
-
-                // Mengatur lebar kolom berdasarkan isi konten
-                for (var i = 1; i <= header.length; i++) {
-                    worksheet.getColumn(i).eachCell({
-                        includeEmpty: true
-                    }, function(cell, rowNumber) {
-                        var column = worksheet.getColumn(cell.col);
-                        var length = String(cell.value).length;
-                        if (column.width === undefined || length > column.width) {
-                            column.width = length;
-                        }
-                    });
-                }
-                workbook.xlsx.writeBuffer().then(function(buffer) {
-                    var blob = new Blob([buffer], {
-                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    });
-                    saveAs(blob, 'laporan_daftar_reservasi.xlsx');
-                });
-
-                table1.page.len(table1PageLength).draw();
-            });
-
-        });
-    </script>
+                        @endphp
+                        <div
+                            class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative py-5">
+                            <div class="avatar">
+                                <div class="w-20 rounded-full">
+                                    <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt="">
+                                </div>
+                            </div>
+                            <h1 class="font-semibold truncate w-full px-2 text-center">{{ $pengajar->nama }}</h1>
+                            <span class="capitalize text-xs">
+                                {!! $is_online == true
+                                    ? 'Mengakses : ' . '<b>' . Cache::get('at_page' . $pengajar->id) . '</b>'
+                                    : $pengajar->status !!}</span>
+                            <div class="w-full flex flex-wrap text-center justify-evenly items-center gap-5">
+                                <div>
+                                    <h1 class="text-xs">Sekolah</h1>
+                                    <span class="font-semibold">{{ $pengajar->jumlah_sekolah }}</span>
+                                </div>
+                                <div>
+                                    <h1 class="text-xs">Kelas</h1>
+                                    <span class="font-semibold">{{ $pengajar->kelas()->count() }}</span>
+                                </div>
+                                <div>
+                                    <h1 class="text-xs">Mapel</h1>
+                                    <span class="font-semibold">{{ $pengajar->mapel()->count() }}</span>
+                                </div>
+                            </div>
+                            <div class="w-full flex justify-evenly p-2">
+                                <a href="{{ route('pengajar.show', ['pengajar' => $pengajar->id]) }}"
+                                    class="{{ $btn }} px-3 py-1 rounded-box text-white text-xs"><i
+                                        class="fa-solid fa-user"></i> Profile</a>
+                                <div class="dropdown bg-transparent" data-theme="light">
+                                    <div tabindex="0"
+                                        class="{{ $btn }} cursor-pointer px-3 py-1 rounded-box text-white text-xs">
+                                        <i class="fa-solid fa-envelope"></i> Contact
+                                    </div>
+                                    <ul tabindex="0"
+                                        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-44 ">
+                                        <li><a href="https://wa.me/{{ $pengajar->no_telp }}">Nomor Telepon</a></li>
+                                        <li><a href="mailto:{{ $pengajar->email }}">Email</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="w-full py-5" dir="ltr">
+                    {{ $daftar_pengajar->paginate(8)->withQueryString()->links('components.pagination') }}
+                </div>
+            </div>
+        @else
+            <div class="w-full h-full flex flex-col font-semibold text-gray-300 justify-center items-center ">
+                <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
+                <h1>Tidak ada data pengajar!</h1>
+            </div>
+        @endif
+    </div>
 @endsection

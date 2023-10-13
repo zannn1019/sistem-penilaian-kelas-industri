@@ -50,8 +50,8 @@
                             class="text-xs px-5 py-1 rounded-xl filter-link {{ request('filter') == 'belum_dinilai' ? 'bg-tosca-500 text-black' : 'bg-gray-200 text-gray-400' }}">Belum
                             Dinilai</a>
                     </div>
-                    <a href="" class="text-xs px-4 py-1.5 rounded-xl bg-gray-200"><i
-                            class="fa-solid fa-download"></i>
+                    <a href="{{ route('ExportPerTugas', ['kelas' => $info_kelas->id, 'mapel' => $info_mapel->id]) }}"
+                        class="text-xs px-4 py-1.5 rounded-xl bg-gray-200"><i class="fa-solid fa-download"></i>
                         Export</a>
                 </div>
                 <div class="w-full h-full overflow-hidden">
