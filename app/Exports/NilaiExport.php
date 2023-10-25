@@ -44,20 +44,55 @@ class NilaiExport implements
         $data_siswa = collect([$this->heading]);
         $data_mapel = $kelas->pengajar->pluck('mapel')->flatten();
         $no = 0;
+
         foreach ($data_kelas->siswa as $siswa) {
+            $nilai_mapel = collect([]);
             $siswaData = [
                 'no' => $no += 1,
                 'nis' => $siswa->nis,
                 'nama' => $siswa->nama,
             ];
+
+            $tugasTuntas = true;
+
             foreach ($data_mapel as $mapel) {
                 $nilai = $this->hitungRataRataNilai($mapel, $siswa);
+                $nilai_mapel->push($nilai);
+
+                if ($nilai === "Belum lengkap") {
+                    $tugasTuntas = false;
+                }
+
                 $siswaData[$mapel->nama_mapel] = ($nilai !== null) ? $nilai : "Belum lengkap";
             }
+            if ($tugasTuntas) {
+                $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
+                if ($siswaData['Nilai Akhir'] >= 65 && $siswaData['Nilai Akhir'] <= 75) {
+                    $siswaData['Nilai Mapel'] = ($nilai_mapel->avg() / 10) +  (70 - $siswaData['Nilai Akhir']);
+                    $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'] + $siswaData['Nilai Mapel'];
+                }
+                if ($siswaData['Nilai Akhir'] >= 76 && $siswaData['Nilai Akhir'] <= 100) {
+                    $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
+                    $siswaData['Nilai Mapel'] = "-";
+                    $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'];
+                }
+                if ($siswaData['Nilai Akhir'] <= 50) {
+                    $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
+                    $siswaData['Nilai Mapel'] = "Remedial";
+                    $siswaData['Total Nilai'] = "Remedial";
+                }
+            } else {
+                $siswaData['Nilai Mapel'] = "Belum lengkap";
+                $siswaData['Nilai Akhir'] = "Belum lengkap";
+                $siswaData['Total Nilai'] = "Belum lengkap";
+            }
+
             $data_siswa->push($siswaData);
         }
+
         return $data_siswa;
     }
+
 
     public function nilaiPerTugas($kelas, $mapel)
     {
@@ -99,7 +134,8 @@ class NilaiExport implements
             ->count();
 
         if ($totalTugas == $nilaiTugas->count()) {
-            return number_format($nilaiTugas->avg(), 0);
+            $nilaiRataRata = number_format($nilaiTugas->avg(), 0);
+            return intval($nilaiRataRata);
         }
         return "Belum lengkap";
     }

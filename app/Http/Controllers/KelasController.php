@@ -18,8 +18,13 @@ class KelasController extends Controller
     {
         //?Request ajax
         if ($request->ajax()) {
-            $data = Kelas::search($request->get('query'))->where('id_sekolah', $request->get('id_sekolah'))->get();
-            return response()->json($data);
+            if ($request->get('query')) {
+                $data = Kelas::search($request->get('query'))->where('id_sekolah', $request->get('id_sekolah'))->get();
+                return response()->json($data);
+            } else {
+                $data = Kelas::where('id_sekolah', $request->get('id_sekolah'))->get();
+                return response()->json($data);
+            }
         }
         if (auth()->user()->role == "pengajar") {
             //?Jika pengguna memiliki role 'pengajar'

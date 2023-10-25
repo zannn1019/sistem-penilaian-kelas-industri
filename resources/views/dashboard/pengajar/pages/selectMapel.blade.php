@@ -20,6 +20,11 @@
                         {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
+            <a href="{{ route('input-nilai-akhir', ['kelas' => $info_kelas->id]) }}"
+                class="self-end m-2 btn text-xs text-white">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Nilai Akhir
+            </a>
         </header>
         <div
             class="overflow-auto grid grid-rows-[repeat(auto-fit, 1fr)] grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-1 gap-5 h-full  p-5 max-sm:p-0 ">

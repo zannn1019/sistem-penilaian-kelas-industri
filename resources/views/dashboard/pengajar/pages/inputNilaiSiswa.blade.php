@@ -63,7 +63,7 @@
                                     <td class="border-r-2 border-darkblue-500 input-nilai cursor-pointer relative"
                                         data-id="{{ $siswa->id }}" data-tugas="{{ $data_tugas->id }}">
                                         <input type="number"
-                                            class="w-24 text-center pointer-events-auto bg-transparent focus:outline-none"
+                                            class="w-24 text-center pointer-events-none bg-transparent focus:outline-none"
                                             placeholder="{{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->nilai ?? 'Belum Dinilai' }}"
                                             value="{{ optional($siswa->nilai->where('id_tugas', $data_tugas->id)->first())->nilai ?? '' }}"
                                             disabled min="0" max="100">
@@ -98,9 +98,9 @@
 
                 $(".input-nilai input").removeAttr("disabled");
                 $(this).siblings().find('input').attr("disabled", true);
+
+                $(this).find('input').focus();
             });
-
-
 
             $(".input-nilai input").on('keydown', function(event) {
                 if (event.key === "ArrowUp") {

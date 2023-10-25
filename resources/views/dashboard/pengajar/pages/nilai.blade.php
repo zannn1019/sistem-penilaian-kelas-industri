@@ -1,17 +1,51 @@
 @extends('dashboard.layouts.main')
 @section('head')
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <style>
+        .selected-date {
+            background-color: turquoise !important;
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            let calendarEl = document.getElementById('calendar');
+            let calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 dateClick: function(info) {
-                    let linkURL = "?tgl=" + info.dateStr
-                    window.location.href = linkURL
+                    let allDates = document.querySelectorAll('.fc-day');
+                    allDates.forEach(function(date) {
+                        date.classList.remove('selected-date');
+                    });
+
+                    info.dayEl.classList.add('selected-date');
+
+                    let todayDates = document.querySelectorAll('.fc-day-today');
+                    todayDates.forEach(function(today) {
+                        today.classList.remove('selected-date');
+                    });
+
+                    let todayDate = document.querySelector('.fc-day[data-date="' + info.dateStr + '"]');
+                    todayDate.classList.add('selected-date');
+
+                    let linkURL = "?tgl=" + info.dateStr;
+                    window.location.href = linkURL;
                 },
             });
             calendar.render();
+
+            let queryString = window.location.search;
+            if (queryString) {
+                let params = new URLSearchParams(queryString);
+                let tglParam = params.get('tgl');
+                if (tglParam) {
+                    let dateElements = document.querySelectorAll('.fc-day');
+                    dateElements.forEach(function(dateElement) {
+                        if (dateElement.getAttribute('data-date') === tglParam) {
+                            dateElement.classList.add('selected-date');
+                        }
+                    });
+                }
+            }
         });
     </script>
 @endsection

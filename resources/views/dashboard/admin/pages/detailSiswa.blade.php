@@ -34,7 +34,8 @@
                                     class="fa-solid fa-ellipsis-vertical"></i></label>
                             <div tabindex="0"
                                 class="dropdown-content z-[1] p-2 shadow bg-gray-300 rounded-box w-52 flex flex-col">
-                                <a href="" class="w-full hover:font-semibold border-b border-black p-2">Edit</a>
+                                <button class="w-full hover:font-semibold text-start border-b border-black p-2"
+                                    onclick="editModal.showModal()">Edit</button>
                                 <a href="" class="w-full hover:font-semibold p-2">Arsip </a>
                             </div>
                         </div>
@@ -382,6 +383,36 @@
             </div>
         </div>
     </div>
+    <dialog id="editModal" class="modal" data-theme="light">
+        <div class="modal-box text-black">
+            <h1 class="font-bold text-3xl w-full text-center ">Edit Siswa</h1>
+            <form action="{{ route('siswa.update', ['siswa' => $info_siswa->id]) }}" method="POST"
+                class="w-full h-full flex flex-col gap-2">
+                @csrf
+                @method('PATCH')
+                <select name="id_sekolah" id="select_sekolah" class="select select-bordered border-black ">
+                    <option value="" selected>Pilih Sekolah</option>
+                    @foreach ($info_siswa->sekolah->all() as $sekolah)
+                        <option value="{{ $sekolah->id }}"
+                            {{ $info_siswa->sekolah->id == $sekolah->id ? 'selected' : '' }}>{{ $sekolah->nama }}</option>
+                    @endforeach
+                </select>
+                <select name="id_kelas" id="select_kelas" class="select select-bordered border-black" disabled>
+                    <option value="" selected>Pilih Kelas</option>
+                </select>
+                <input name="nama" type="text" class="input-bordered input border-black" placeholder="NIS"
+                    value="{{ $info_siswa->nama }}" required>
+                <input name="nis" type="text" class="input-bordered input border-black" placeholder="No.Telp"
+                    value="{{ $info_siswa->nis }}" required>
+                <input name="no_telp" pattern="[0-9]+" type="text" class="input-bordered input border-black"
+                    placeholder="No.Telp" value="{{ $info_siswa->no_telp }}" required>
+                <input type="submit" value="Edit" class="btn btn-info text-white">
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 @endsection
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -390,6 +421,66 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function() {
+            if ($("#select_sekolah").val() != "") {
+                let id_sekolah = $(this).find(':selected').val()
+                let id_kelas_siswa = "{{ $info_siswa->kelas->id }}"
+                $("#select_kelas").removeAttr("disabled")
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('kelas.index') }}",
+                    data: {
+                        id_sekolah: id_sekolah
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        let option = document.createElement("option")
+                        $.each(response, function(i, val) {
+                            option = $("<option>")
+                                .attr("value", val.id)
+                                .attr("selected", val.id == id_kelas_siswa ? true : false)
+                                .text(val.tingkat + " " + val.jurusan + " " + val
+                                    .kelas);
+                            $("#select_kelas").append(option);
+                        });
+                    }
+                });
+            }
+            $("#select_sekolah").change(function() {
+                let id_sekolah = $(this).val();
+                let $selectKelas = $("#select_kelas");
+
+                $selectKelas.empty();
+
+                if (id_sekolah !== "") {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('kelas.index') }}",
+                        data: {
+                            id_sekolah: id_sekolah
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            let option = $("<option>")
+                                .attr("value", "")
+                                .text("Pilih Kelas");
+                            $selectKelas.append(option);
+
+                            $.each(response, function(i, val) {
+                                option = $("<option>")
+                                    .attr("value", val.id)
+                                    .text(val.tingkat + " " + val.jurusan + " " + val
+                                        .kelas);
+                                $selectKelas.append(option);
+                            });
+
+                            $selectKelas.removeAttr("disabled");
+                        }
+                    });
+                } else {
+                    $selectKelas.attr("disabled", true);
+                }
+            });
+
             let rataRata = $("#rata-rata").data('avg');
             if (rataRata != null) {
                 let num = 0;

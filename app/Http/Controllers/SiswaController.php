@@ -98,7 +98,19 @@ class SiswaController extends Controller
      */
     public function update(Request $request, Siswa $siswa)
     {
-        //
+        $cek_data = Siswa::where('nis', $request->nis);
+        if ($cek_data->count() && $cek_data->first()->id != $siswa->id) {
+            return redirect()->back()->with('error', 'NIS sudah digunakan!');
+        }
+        $validated_data = $request->validate([
+            'id_sekolah' => ['required'],
+            'id_kelas' => ['required'],
+            'nis' => ['required'],
+            'nama' => ['required'],
+            'no_telp' => ['required'],
+        ]);
+        $siswa->update($validated_data);
+        return redirect()->back()->with('success', 'Siswa berhasil diubah!');
     }
 
     /**

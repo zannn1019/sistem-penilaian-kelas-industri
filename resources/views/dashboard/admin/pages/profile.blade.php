@@ -102,6 +102,11 @@
                 }
             })
 
+            $("#foto-input").on("change", function(e) {
+                const file = URL.createObjectURL(e.target.files[0]);
+                $("#foto-preview").attr("src", file);
+            });
+
             $("#nama").text($("#input-nama").val());
             $("#input-nama").on('input', function(event) {
                 var inputValue = $(this).val();

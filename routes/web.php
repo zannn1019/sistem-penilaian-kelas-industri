@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
+use App\Http\Controllers\NilaiAkhirController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\PengajarController;
 use App\Http\Controllers\SearchController;
@@ -57,6 +58,8 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
             Route::post('/tugas', 'store')->name('tugas.store');
         });
         Route::resource('/nilai', NilaiController::class)->names('nilai');
+        Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
+        Route::get('/kelas/{kelas}/nilaiakhir', [DashboardController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir');
     });
 });
 
@@ -98,9 +101,9 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
 
 Route::middleware(['auth', 'user:pengajar', 'user:admin'])->group(function () {
     Route::get('/search', [SearchController::class, 'search'])->name('search');
-    Route::controller(ExportController::class)->group(function () {
-        Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
-        Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
-        Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
-    });
+});
+Route::controller(ExportController::class)->group(function () {
+    Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
+    Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
+    Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
 });

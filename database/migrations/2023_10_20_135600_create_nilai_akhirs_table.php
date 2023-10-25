@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nilai', function (Blueprint $table) {
+        Schema::create('nilai_akhir', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_siswa')->constrained('siswa');
-            $table->foreignId('id_tugas')->constrained('tugas');
             $table->integer('nilai');
-            $table->string("tahun_ajar");
-            $table->enum("semester", ['ganjil', 'genap']);
+            $table->text('keterangan')->nullable(true);
+            $table->string('tahun_ajar');
+            $table->enum('semester', ['ganjil', 'genap']);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nilai');
+        Schema::dropIfExists('nilai_akhir');
     }
 };

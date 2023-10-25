@@ -75,8 +75,8 @@
                                                 <div tabindex="0"
                                                     class="dropdown-content z-[1] menu p-2 w-40 text-center shadow rounded-box flex flex-col gap-2"
                                                     data-theme="light">
-                                                    <a href=""
-                                                        class="hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</a>
+                                                    <button
+                                                        class="hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</button>
                                                     <a href=""
                                                         class="hover:font-semibold py-1 px-4 w-full ">Arsip</a>
                                                 </div>
@@ -292,6 +292,50 @@
             <button>close</button>
         </form>
     </dialog>
+    {{-- <dialog id="edit_assessment" class="modal" data-theme="light">
+        <div class="modal-box text-black">
+            <h3 class="font-semibold text-2xl text-black text-center w-full">Edit Assessment!</h3>
+            <form action="{{ route('tugas.store') }}" method="POST"
+                class="flex flex-col gap-2 justify-center items-center" id="form-ujian">
+                @csrf
+                <input type="hidden" value="ujian" name="tipe" id="is-ujian">
+                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
+                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
+                <input type="text" name="nama" class="input input-bordered text-black w-full"
+                    placeholder="Judul Assessment" required>
+                <select name="tipe" id="" class="input input-bordered w-full">
+                    <option value="" selected>Pilih Blok</option>
+                    <option value="assessment_blok_a">Blok A</option>
+                    <option value="assessment_blok_b">Blok B</option>
+                </select>
+                <div class="w-full flex gap-5">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $info_kelas->tahun_ajar }}" />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black ">
+                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                            </option>
+                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" value="Tambah" class="btn self-end">
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog> --}}
 @endsection
 @section('script')
     <script>

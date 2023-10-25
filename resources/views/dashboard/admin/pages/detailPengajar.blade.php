@@ -30,6 +30,10 @@
                     <div id="edit-gambar"
                         class="input-logo bg-gray-100 w-52 max-md:w-53 aspect-square border border-black rounded-circle flex justify-center items-center relative">
                         <div
+                            class="absolute cursor-pointer edit-btn hidden border-darkblue-500 border-4 top-2 right-2 z-30 bg-bluesea-500 px-2 py-1 rounded-circle text-white">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </div>
+                        <div
                             class="overflow-hidden text-4xl text-gray-500 w-full h-full bg-gray-200 z-10 flex justify-center items-center rounded-circle border border-black relative">
                             <input type="file" name="foto" id="input-photo"
                                 class="hidden z-10 w-full h-full rounded-circle cursor-pointer opacity-0 absolute top-0 left-0"
@@ -119,33 +123,41 @@
                     <div class="w-full h-full">
                         <h1 class="font-semibold">Detail</h1>
                         <div
-                            class="w-full h-full grid grid-cols-2 gap-2 p-5 max-md:grid-cols-1 max-md:p-0 place-content-center">
+                            class="relative w-full h-full grid grid-cols-2 gap-2 p-5 max-md:grid-cols-1 max-md:p-0 place-content-center">
                             <div
-                                class="w-full overflow-hidden rounded-3xl bg-darkblue-200 relative flex justify-center items-center gap-2 h-24">
-                                <img src="{{ asset('img/sekolah.png') }}" class="object-fill absolute -bottom-1/2 left-0"
-                                    alt="">
+                                class="w-full rounded-3xl bg-darkblue-200 relative flex justify-center items-center gap-2 h-24">
+                                <img src="{{ asset('img/sekolah.png') }}"
+                                    class="object-cover w-full absolute bottom-0 left-0 h-full" alt="">
                                 <h1 class="text-4xl font-semibold ">
                                     {{ $jumlah_sekolah }}</h1>
                                 <span class="font-semibold">Sekolah</span>
+                                <div class="absolute cursor-pointer edit-btn hidden border-white border-4 -top-2 -right-2 bg-bluesea-500 px-2 py-1 rounded-circle text-white"
+                                    onclick="daftar_sekolah_modal.showModal()">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                </div>
                             </div>
                             <div
-                                class="w-full overflow-hidden rounded-3xl bg-bluesea-100 relative flex justify-center items-center gap-2 h-24">
-                                <img src="{{ asset('img/kelas.png') }}" class="object-fill absolute -bottom-1/2 left-0"
-                                    alt="">
+                                class="w-full rounded-3xl bg-bluesea-100 relative flex justify-center items-center gap-2 h-24">
+                                <img src="{{ asset('img/kelas.png') }}"
+                                    class="object-cover w-full absolute bottom-0 left-0 h-full" alt="">
                                 <h1 class="text-4xl font-semibold ">{{ $data_pengajar->kelas()->count() }}</h1>
                                 <span class="font-semibold">Kelas</span>
+                                <div class="absolute cursor-pointer edit-btn hidden border-white border-4 -top-2 -right-2 bg-bluesea-500 px-2 py-1 rounded-circle text-white"
+                                    onclick="daftar_kelas_modal.showModal()">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                </div>
                             </div>
                             <div
-                                class="w-full overflow-hidden rounded-3xl bg-bluesky-100 relative flex justify-center items-center gap-2 h-24">
-                                <img src="{{ asset('img/tugas.png') }}" class="object-fill absolute -bottom-1/2 left-0"
-                                    alt="">
+                                class="w-full rounded-3xl bg-bluesky-100 relative flex justify-center items-center gap-2 h-24">
+                                <img src="{{ asset('img/tugas.png') }}"
+                                    class="object-cover w-full absolute bottom-0 left-0 h-full" alt="">
                                 <h1 class="text-4xl font-semibold ">{{ $data_pengajar->tugas()->count() }}</h1>
                                 <span class="font-semibold">Tugas</span>
                             </div>
                             <div
-                                class="w-full overflow-hidden rounded-3xl bg-tosca-100 relative flex justify-center items-center gap-2 h-24">
-                                <img src="{{ asset('img/siswa.png') }}" class="object-fill absolute -bottom-1/2 left-0"
-                                    alt="">
+                                class="w-full rounded-3xl bg-tosca-100 relative flex justify-center items-center gap-2 h-24">
+                                <img src="{{ asset('img/siswa.png') }}"
+                                    class="object-cover w-full absolute bottom-0 left-0 h-full" alt="">
                                 <h1 class="text-4xl font-semibold ">{{ $jumlah_siswa }}</h1>
                                 <span class="font-semibold">Siswa</span>
                             </div>
@@ -182,6 +194,64 @@
             </div>
         </form>
     </dialog>
+    <dialog id="daftar_sekolah_modal" class="modal" data-theme="light">
+        <div class="modal-box w-full h-auto flex flex-col text-black">
+            <h3 class="font-bold text-lg">Daftar Sekolah pengajar</h3>
+            <div class="w-full h-full max-h-96 overflow-auto flex flex-col gap-3">
+                @foreach ($data_pengajar->sekolah()->get()->unique('id_sekolah') as $sekolah)
+                    <div
+                        class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between border-gray-300">
+                        <div class="flex h-full justify-center items-center gap-2">
+                            <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" class="w-10 h-10"
+                                alt="">
+                            <div class="flex flex-col">
+                                <span class="font-semibold">{{ $sekolah->nama }}</span>
+                                <span class="text-sm">{{ $sekolah->no_telp }}</span>
+                            </div>
+                        </div>
+                        <a class="self-center justify-self-end btn detach-btn" data-tipe="sekolah"
+                            data-id="{{ $sekolah->id }}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">Batal</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
+    <dialog id="daftar_kelas_modal" class="modal" data-theme="light">
+        <div class="modal-box w-full h-auto flex flex-col text-black">
+            <h3 class="font-bold text-lg">Daftar kelas pengajar</h3>
+            <div class="w-full h-full max-h-96 overflow-auto flex flex-col">
+                @foreach ($data_pengajar->sekolah()->get()->unique('id_sekolah') as $sekolah)
+                    <h1 class="font-semibold">{{ $sekolah->nama }}</h1>
+                    @foreach ($data_pengajar->kelas->where('id_sekolah', $sekolah->id) as $kelas)
+                        <div
+                            class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between mb-1 border-gray-300">
+                            <div class="flex h-full flex-col gap-2">
+                                <h1 class="font-semibold">{{ $kelas->nama_kelas }}</h1>
+                                <span
+                                    class="text-sm">{{ $kelas->tingkat }}-{{ $kelas->jurusan }}-{{ $kelas->kelas }}</span>
+                            </div>
+                            <a class="self-center justify-self-end detach-btn btn" data-tipe="kelas"
+                                data-id="{{ $kelas->id }}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        </div>
+                    @endforeach
+                @endforeach
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">Batal</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
 @endsection
 
 @section('script')
@@ -190,10 +260,30 @@
             function isValidLetter(key) {
                 return /^[a-zA-Z]$/.test(key);
             }
+
+            $(".detach-btn").click(function(e) {
+                e.preventDefault()
+                let id = $(this).data('id');
+                let tipe = $(this).data('tipe');
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ route('pengajar.destroy', ['pengajar' => $data_pengajar->id]) }}",
+                    data: {
+                        tipe: tipe,
+                        id: id,
+                        '_token': '{{ csrf_token() }}'
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            })
+
             $(".remove-btn").click(function(e) {
                 e.preventDefault()
-                let id = $(this).data('id')
-                let btn = $(this)
+                let id = $(this).data('id');
+                let btn = $(this);
                 $.ajax({
                     type: "DELETE",
                     url: "{{ route('pengajar.destroy', ['pengajar' => $data_pengajar]) }}",
@@ -289,6 +379,7 @@
                     $("#edit-submit").removeAttr('disabled')
                     $("#mapel-add").removeClass('hidden')
                     $(".remove-btn").removeClass("hidden")
+                    $(".edit-btn").removeClass("hidden");
                 } else {
                     $("#edit-gambar").removeClass('hover:brightness-50');
                     $("#input-photo").addClass('hidden');
@@ -297,6 +388,7 @@
                     $(".profile-input.profile-input-2").removeClass('outline outline-1');
                     $("#mapel-add").addClass('hidden')
                     $(".remove-btn").addClass("hidden")
+                    $(".edit-btn").addClass("hidden");
                 }
             })
         })

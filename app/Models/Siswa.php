@@ -14,9 +14,14 @@ class Siswa extends Model
     ];
     protected $table = 'siswa';
     protected $dates = ['deleted_at'];
+    protected $with = ['nilai_akhir'];
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class, 'id_sekolah');
+    }
+    public function nilai_akhir()
+    {
+        return $this->hasMany(NilaiAkhir::class, 'id_siswa');
     }
     public function kelas()
     {

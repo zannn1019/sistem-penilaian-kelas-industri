@@ -23,6 +23,9 @@ class ExportController extends Controller
         foreach ($mapel_names as $mapel_name) {
             array_push($heading, $mapel_name['nama_mapel']);
         }
+        array_push($heading, "Nilai Akhir");
+        array_push($heading, "Nilai Tambahan");
+        array_push($heading, "Total Nilai");
 
         return Excel::download(new NilaiExport(
             $kelas,

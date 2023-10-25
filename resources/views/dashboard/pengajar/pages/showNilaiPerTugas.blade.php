@@ -109,14 +109,22 @@
 
             rows.each(function(index) {
                 let row = $(this);
-                let tds = row.children('td').slice(2);
-
+                let tds = row.find('td');
                 tds.each(function() {
-                    if (filter === 'all' || $(this).data('avg') === filter) {
-                        row.show();
-                        visibleRowCount++;
-                    } else {
-                        row.hide();
+                    let dataAvg = $(this).data('avg');
+                    if (dataAvg != null) {
+                        console.log(dataAvg);
+                        if (filter === 'dinilai' && dataAvg != "belum_dinilai") {
+                            row.show();
+                            visibleRowCount++;
+                        } else {
+                            if (filter === 'all' || dataAvg === filter) {
+                                row.show();
+                                visibleRowCount++;
+                            } else {
+                                row.hide();
+                            }
+                        }
                     }
                 });
 

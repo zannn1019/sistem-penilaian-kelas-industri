@@ -107,6 +107,7 @@
                                 class="max-md:w-1/2 max-sm:w-3/4
                             ">
                             <div class="info flex flex-col text-xs gap-2">
+                                <span class="text-black font-semibold">Semester {{ $kelas->semester }}</span>
                                 <span><i class="fa-solid fa-chalkboard"></i>
                                     {{ $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas }}</span>
                                 <span><i class="fa-solid fa-users"></i> {{ $kelas->siswa->count() }} Siswa</span>

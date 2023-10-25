@@ -124,22 +124,6 @@
                                     @endphp
                                     <div
                                         class="w-full h-fit {{ $bg }} flex p-2 rounded-box shadow-xl flex-col items-center gap-0.5 relative ">
-                                        <div class="dropdown dropdown-end absolute top-0 right-0 px-5 py-3">
-                                            <label tabindex="0" class="cursor-pointer">
-                                                <i class="fa-solid fa-ellipsis"></i>
-                                            </label>
-                                            <div tabindex="0"
-                                                class="dropdown-content z-[1] menu shadow bg-white rounded-box w-20 flex flex-col">
-                                                <a href="{{ route('pengajar.show', ['pengajar' => $info->id]) }}"
-                                                    class="p-2 hover:font-bold">Edit</a>
-                                                <form action="{{ route('users.destroy', $info->id) }}" method="POST"
-                                                    class="p-2 hover:font-bold">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit">Arsip</button>
-                                                </form>
-                                            </div>
-                                        </div>
                                         <div class="avatar">
                                             <div class="w-20 rounded-full">
                                                 <img src="{{ asset('storage/pengajar/' . $info->foto) }}" alt="">
@@ -200,8 +184,7 @@
                             <label id="add-btn" tabindex="0"
                                 class="btn rounded-circle text-white text-xl absolute bottom-0 right-0 z-10"><i
                                     class="fa-solid fa-plus"></i></label>
-                            <ul tabindex="0"
-                                class="dropdown-content z-[1] menu p-2 shadow-box bg-white rounded-box w-64">
+                            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-box bg-white rounded-box w-64">
                                 <li class="border-b"><a onclick="kelasModal.showModal()">Tambah kelas baru</a></li>
                                 <li><a onclick="pengajarModal.showModal()">Tambah Pengajar</a></li>
                             </ul>

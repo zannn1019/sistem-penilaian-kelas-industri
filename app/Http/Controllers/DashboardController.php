@@ -209,4 +209,16 @@ class DashboardController extends Controller
             'data_tugas' => $tugas
         ]);
     }
+
+    public function inputNilaiAkhir(Kelas $kelas)
+    {
+        $total_ternilai = $kelas->siswa()->withCount('nilai_akhir')->pluck('nilai_akhir_count')->sum();
+        return view('dashboard.pengajar.pages.inputNilaiAkhir', [
+            'title' => "Input nilai akhir",
+            'full' => true,
+            'info_pengajar' => auth()->user(),
+            'info_kelas' => $kelas,
+            'total_ternilai' => $total_ternilai
+        ]);
+    }
 }

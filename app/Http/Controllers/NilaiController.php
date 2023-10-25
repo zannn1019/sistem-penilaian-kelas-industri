@@ -37,23 +37,23 @@ class NilaiController extends Controller
                 'ujian' => $ujian,
                 'belum' => $belum
             ]]);
+        } else {
+            if (auth()->user()->role == 'pengajar') {
+                $data_nilai = Nilai::filterByTgl($request->input('tgl'))
+                    ->filterBySekolah($request->input('sekolah'))
+                    ->filterByKelas($request->input('kelas'))
+                    ->filterBySemester($request->input('semester'))
+                    ->filterByTugas($request->input('tugas'))
+                    ->get();
+                return view('dashboard.pengajar.pages.nilai', [
+                    'title' => "Nilai",
+                    'full' => false,
+                    'data_nilai' => $data_nilai,
+                    'data_sekolah' => Sekolah::all(),
+                    'terakhir_dinilai' => Nilai::latest()->take(2)->get()
+                ]);
+            }
         }
-        if (auth()->user()->role == 'pengajar') {
-            $data_nilai = Nilai::filterByTgl($request->input('tgl'))
-                ->filterBySekolah($request->input('sekolah'))
-                ->filterByKelas($request->input('kelas'))
-                ->filterBySemester($request->input('semester'))
-                ->filterByTugas($request->input('tugas'))
-                ->get();
-            return view('dashboard.pengajar.pages.nilai', [
-                'title' => "Nilai",
-                'full' => false,
-                'data_nilai' => $data_nilai,
-                'data_sekolah' => Sekolah::all(),
-                'terakhir_dinilai' => Nilai::latest()->take(2)->get()
-            ]);
-        }
-        return redirect()->back();
     }
 
     /**
@@ -70,47 +70,47 @@ class NilaiController extends Controller
     public function store(Request $request)
     {
         // ?? Jika user request lewat XHTTP request / AJAX
-        if ($request->ajax()) {
-            // ?? Cek data nilai siswa apakah sudah dinilai atau belum
-            $cek_data = Nilai::where('id_siswa', $request->id_siswa)->where('id_tugas', $request->id_tugas);
-            $validatedData = $request->validate([
-                'id_siswa' => ['required'],
-                'id_tugas' => ['required'],
-                'nilai' => ['required'],
-                'tahun_ajar' => ['required'],
-                'semester' => ['required'],
-            ]);
+        if (!$request->ajax()) {
+            abort(404);
+        }
+        // ?? Cek data nilai siswa apakah sudah dinilai atau belum
+        $cek_data = Nilai::where('id_siswa', $request->id_siswa)->where('id_tugas', $request->id_tugas);
+        $validatedData = $request->validate([
+            'id_siswa' => ['required'],
+            'id_tugas' => ['required'],
+            'nilai' => ['required'],
+            'tahun_ajar' => ['required'],
+            'semester' => ['required'],
+        ]);
 
-            if (!$cek_data->count()) {
-                // ?? Jika nilai nya belum di tambahkan
-                if (Nilai::create($validatedData)) {
-                    activity()
-                        ->event('created')
-                        ->useLog('nilai')
-                        ->performedOn(Nilai::latest()->first())
-                        ->causedBy(auth()->user()->id)
-                        ->log('Menambah data nilai');
-                    return response()->json(['success' => 'data_store', 'time' => date(now())]);
-                } else {
-                    return response()->json(['error' => 'Nilai gagal di tambahkan!']);
-                }
+        if (!$cek_data->count()) {
+            // ?? Jika nilai nya belum di tambahkan
+            if (Nilai::create($validatedData)) {
+                activity()
+                    ->event('created')
+                    ->useLog('nilai')
+                    ->performedOn(Nilai::latest()->first())
+                    ->causedBy(auth()->user()->id)
+                    ->log('Menambah data nilai');
+                return response()->json(['success' => 'data_store', 'time' => date(now())]);
             } else {
-                // ?? Jika nilai nya sudah di tambahkan
-                $nilai = $cek_data;
-                if ($nilai->update($validatedData)) {
-                    activity()
-                        ->event('update')
-                        ->useLog('nilai')
-                        ->performedOn($nilai->first())
-                        ->causedBy(auth()->user()->id)
-                        ->log('Mengubah data nilai');
-                    return response()->json(['success' => "data_update", 'time' => date(now())]);
-                } else {
-                    return response()->json(['error' => 'Nilai gagal di ubah!']);
-                }
+                return response()->json(['error' => 'Nilai gagal di tambahkan!']);
+            }
+        } else {
+            // ?? Jika nilai nya sudah di tambahkan
+            $nilai = $cek_data;
+            if ($nilai->update($validatedData)) {
+                activity()
+                    ->event('update')
+                    ->useLog('nilai')
+                    ->performedOn($nilai->first())
+                    ->causedBy(auth()->user()->id)
+                    ->log('Mengubah data nilai');
+                return response()->json(['success' => "data_update", 'time' => date(now())]);
+            } else {
+                return response()->json(['error' => 'Nilai gagal di ubah!']);
             }
         }
-        return redirect()->back();
     }
 
     /**

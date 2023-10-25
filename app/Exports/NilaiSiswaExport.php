@@ -135,6 +135,35 @@ class NilaiSiswaExport implements
                 $result->push($tugas);
             }
         }
+        $nilai_akhir = $siswa->nilai_akhir()->where('tahun_ajar', $kelas->tahun_ajar)->where('semester', $kelas->semester)->first()->nilai;
+        $nilaiMapel = [
+            "#",
+            "Nilai Mapel",
+            $avgNilai,
+            strtoupper(NumberToWords::transformNumber('id', $avgNilai)) ?? "-",
+        ];
+        $result->push($nilaiMapel);
+        $nilaiAkhir = [
+            "#",
+            "Nilai Akhir",
+            $nilai_akhir ?? "-",
+            strtoupper(NumberToWords::transformNumber('id', $nilai_akhir)) ?? "-",
+        ];
+        $result->push($nilaiAkhir);
+        $nilaiTambah = [
+            "#",
+            "Nilai Tambahan",
+            ($avgNilai / 10) + (70 - $nilai_akhir),
+            strtoupper(NumberToWords::transformNumber('id', ($avgNilai / 10) + (70 - $nilai_akhir)))
+        ];
+        $result->push($nilaiTambah);
+        $nilaiTotal = [
+            "#",
+            "Total Nilai",
+            $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir),
+            strtoupper(NumberToWords::transformNumber('id', $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir)))
+        ];
+        $result->push($nilaiTotal);
         return $result;
     }
 
@@ -224,11 +253,29 @@ class NilaiSiswaExport implements
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet;
+                $lastRow = $sheet->getDelegate()->getHighestRow();
                 $sheet->mergeCells('A1:' . $sheet->getHighestColumn() . '1');
                 $sheet->mergeCells('A2:' . $sheet->getHighestColumn() . '2');
                 $sheet->mergeCells('A3:' . $sheet->getHighestColumn() . '3');
                 $cellRange = 'A4:' . $sheet->getHighestColumn() . $sheet->getHighestRow();
                 $sheet->getDelegate()->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                for ($row = 5; $row <= $lastRow; $row++) {
+                    if (!$sheet->getDelegate()->getCell('A' . $row)->getValue()) {
+                        $nilai = $sheet->getDelegate()->getCell('C' . $row)->getValue();
+
+                        if ($nilai < 75) {
+                            $sheet->getDelegate()->getStyle('A' . $row . ':' . $sheet->getHighestColumn() . $row)->applyFromArray([
+                                'fill' => [
+                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                    'startColor' => ['rgb' => 'FF0000'],
+                                ],
+                                'font' => [
+                                    'color' => ['rgb' => 'FFFFFF'],
+                                ],
+                            ]);
+                        }
+                    }
+                }
             },
         ];
     }

@@ -58,7 +58,7 @@
         @if ($daftar_pengajar->count() > 0)
             <div class="w-full h-96 overflow-auto scroll-arrow" dir="rtl">
                 <div class="grid grid-cols-4 max-md:grid-cols-1 p-2 max-sm:p-0 gap-2" dir="ltr">
-                    @foreach ($daftar_pengajar->paginate(8) as $pengajar)
+                    @foreach ($daftar_pengajar as $pengajar)
                         @php
                             if (Cache::has('is_online' . $pengajar->id) && $pengajar->status == 'aktif') {
                                 $is_online = true;
@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <h1 class="font-semibold truncate w-full px-2 text-center">{{ $pengajar->nama }}</h1>
-                            <span class="capitalize text-xs">
+                            <span class="capitalize text-xs text-center">
                                 {!! $is_online == true
                                     ? 'Mengakses : ' . '<b>' . Cache::get('at_page' . $pengajar->id) . '</b>'
                                     : $pengajar->status !!}</span>
@@ -121,7 +121,7 @@
                     @endforeach
                 </div>
                 <div class="w-full py-5" dir="ltr">
-                    {{ $daftar_pengajar->paginate(8)->withQueryString()->links('components.pagination') }}
+                    {{ $daftar_pengajar->links('components.pagination') }}
                 </div>
             </div>
         @else

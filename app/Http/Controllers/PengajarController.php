@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PengajarMapel;
+use App\Models\PengajarSekolah;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -148,6 +151,27 @@ class PengajarController extends Controller
                     return response()->json(['success' => "Data berhasil di hapus"]);
                 } else {
                     return response()->json(['error' => "Data gagal di hapus"]);
+                }
+            }
+            if ($request->get('tipe') == 'sekolah') {
+                try {
+                    $pengajar->sekolah()->detach($request->get('id'));
+                    return response()->json(['success' => "Data berhasil di hapus"]);
+                } catch (\Exception $err) {
+                    return response()->json(['error' => "Data gagal di hapus", "error-info" => $err]);
+                }
+            }
+            if ($request->get('tipe') == 'kelas') {
+                try {
+                    $idKelas = $request->get('id');
+                    $idPengajar = $pengajar->id;
+                    PengajarSekolah::where('id_user', $idPengajar)
+                        ->where('id_kelas', $idKelas)
+                        ->delete();
+                    Tugas::where("id_kelas", $idKelas);
+                    return response()->json(['success' => "Data berhasil di hapus"]);
+                } catch (\Exception $err) {
+                    return response()->json(['error' => "Data gagal di hapus", "error-info" => $err]);
                 }
             }
         }
