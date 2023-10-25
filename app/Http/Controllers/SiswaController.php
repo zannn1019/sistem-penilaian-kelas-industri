@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SiswaImport;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Nilai;
 use App\Models\PengajarMapel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use NumberToWords\NumberToWords;
 
 class SiswaController extends Controller
@@ -119,5 +121,23 @@ class SiswaController extends Controller
     public function destroy(Siswa $siswa)
     {
         //
+    }
+
+    public function getExcelFormat()
+    {
+        $file = public_path() . "/excel/siswa_import_example.xlsx";
+
+        $headers = array(
+            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        );
+        return response()->download($file, "siswa_import_example.xlsx", $headers);
+    }
+
+    public function importSiswa(Kelas $kelas, Request $request)
+    {
+        if ($request->hasFile('excel-file')) {
+            Excel::import(new SiswaImport($kelas), $request->file('excel-file'));
+            return redirect()->back()->with('success', 'Data siswa berhasi ditambahkan!');
+        }
     }
 }

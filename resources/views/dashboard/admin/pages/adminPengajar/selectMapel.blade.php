@@ -27,6 +27,11 @@
                     <h1 class="text-2xl font-semibold max-sm:text-sm">
                         {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
+                <a href="{{ route('nilai-akhir', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id]) }}"
+                    class="self-end m-2 btn text-xs text-white">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    Nilai Akhir
+                </a>
             </div>
         </header>
         <div

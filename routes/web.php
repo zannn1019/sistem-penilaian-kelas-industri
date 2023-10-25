@@ -72,12 +72,14 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 'full' => true
             ]);
         })->name('profile-admin');
+        Route::get('/siswa/fileFormat', [SiswaController::class, 'getExcelFormat'])->name('siswa-excel-format');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
         Route::resource('/sekolah', SekolahController::class)->names('sekolah');
         Route::get('/sekolah/{sekolah}/{data}', [SekolahController::class, 'maximize'])->name('sekolah.maximize');
         Route::resource('/kelas', KelasController::class)->names('kelas');
         Route::resource('/pengajar', PengajarController::class)->names('pengajar');
         Route::resource('/siswa', SiswaController::class)->names('siswa');
+        Route::post('/kelas/{kelas}/importsiswa', [SiswaController::class, 'importSiswa'])->name('siswa-import');
         Route::resource('user', UserController::class)->names('users');
         Route::resource('/mapel', MapelController::class)->names('mapel');
         Route::get('/nilai', [NilaiController::class, 'index'])->name('getNilai');
@@ -93,6 +95,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 Route::get('/kelas/{kelas}/mapel/{mapel}/nilai', 'showNilai')->name('admin-show-nilai-pengajar');
                 Route::get('/kelas/{kelas}/tugas/{tugas}', 'nilaiSiswaPerKelas')->name('admin-show-nilai-pertugas-pengajar');
                 Route::get('/kelas/{kelas}/siswa/{siswa}', 'detailSiswa')->name('admin-detail-siswa-pengajar');
+                Route::get('/kelas/{kelas}/nilaiakhir', 'nilaiAkhir')->name('nilai-akhir');
             });
         });
     });

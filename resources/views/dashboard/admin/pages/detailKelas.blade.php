@@ -34,7 +34,15 @@
                     </form>
                 </div>
             </div>
-
+        </div>
+        <div class="w-full flex justify-end items-end gap-2">
+            <button onclick="my_modal_2.showModal()" class="btn btn-info text-xs self-end"><i
+                    class="fa-solid fa-file-import"></i>
+                Import</button>
+            <a href="{{ route('siswa-excel-format') }}" class="btn btn-success text-xs self-end"><i
+                    class="fa-solid fa-file-export"></i>
+                Download
+                Format</a>
         </div>
         <div class="w-full h-[75%] max-sm:h-full max-sm:pl-0 py-2 flex gap-1 max-sm:flex-col pl-10">
             @if ($data->siswa->count())
@@ -75,6 +83,39 @@
             </a>
         </div>
     </div>
+    <dialog id="my_modal_2" class="modal text-black" data-theme="light">
+        <form method="POST" action="{{ route('siswa-import', ['kelas' => $data->id]) }}"
+            class="modal-box shadow-box text-center bg-white text-black flex flex-col gap-2" data-theme="light"
+            enctype="multipart/form-data">
+            @csrf
+            <h3 class="font-semibold text-3xl">Import data siswa!</h3>
+            <div class="flex items-center justify-center w-full relative" id="dropFiles">
+                <label for="dropzone-file"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100"
+                    id="hover-effect">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Klik untuk
+                                mengunggah</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">.xlsx, .xls, .csv</p>
+                    </div>
+                    <input id="dropzone-file" name="excel-file" type="file" class="hidden" required
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                </label>
+            </div>
+            <div id="messages"></div>
+            <input type="submit" class="btn btn-success" value="TAMBAh">
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+
+    </dialog>
+
     <dialog id="kelasModal" class="modal backdrop-blur-lg">
         <form method="POST" action="{{ route('kelas.update', ['kela' => $data->id]) }}"
             class="modal-box shadow-box text-center bg-white text-black flex flex-col gap-2" data-theme="light">
@@ -83,8 +124,9 @@
             @method('PATCH')
             <input type="hidden" name="id_sekolah" value="{{ $data->sekolah->id }}">
             <div class="input-range p-3 border rounded-xl flex items-center border-black bg-gray-100">
-                <input type="text" placeholder="Nama Kelas" class="border-black bg-gray-100  w-full " name="nama_kelas"
-                    maxlength="25" id="nama_kelas" value="{{ $data->nama_kelas }}" id="nama_kelas" />
+                <input type="text" placeholder="Nama Kelas" class="border-black bg-gray-100  w-full "
+                    name="nama_kelas" maxlength="25" id="nama_kelas" value="{{ $data->nama_kelas }}"
+                    id="nama_kelas" />
                 <span class="font-normal" id="indicator">0</span>
                 <span class="font-normal">/25</span>
             </div>
@@ -137,6 +179,17 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $("#dropFiles").on("change", function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                $("#messages").append(`
+                    <b>
+                        ${$(this).find("#dropzone-file").val().split('\\').pop()    }
+                    </b>
+                `);
+            })
+
+
             $(".clickable-row").click(function() {
                 window.location.href = $(this).data('link');
             })

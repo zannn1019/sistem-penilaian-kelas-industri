@@ -200,4 +200,16 @@ class AdminPengajarController extends Controller
             'info_mapel' => $mapel
         ]);
     }
+
+    public function nilaiAkhir(User $pengajar, Kelas $kelas,)
+    {
+        $total_ternilai = $kelas->siswa()->withCount('nilai_akhir')->pluck('nilai_akhir_count')->sum();
+        return view('dashboard.admin.pages.adminPengajar.nilaiAkhir', [
+            'title' => 'Nilai Akhir',
+            'full' => true,
+            'info_pengajar' => $pengajar,
+            'info_kelas' => $kelas,
+            'total_ternilai' => $total_ternilai
+        ]);
+    }
 }
