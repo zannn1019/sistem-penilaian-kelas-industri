@@ -25,7 +25,7 @@ class SearchController extends Controller
         $result  = collect([]);
         $query = $request->input('query');
         $sekolah = $pengajar->sekolah()
-            ->select('nama')
+            ->select('id_sekolah', 'nama')
             ->where('nama', 'LIKE', $query . '%')
             ->get()
             ->unique('id_sekolah')
@@ -35,16 +35,35 @@ class SearchController extends Controller
                 return $sekolah;
             });
         $kelas = $pengajar->kelas()
-            ->select('nama_kelas as nama')
+            ->select('nama_kelas as nama', 'id_kelas', 'sekolah.nama as nama_sekolah')
+            ->join('sekolah', 'sekolah.id', '=', 'kelas.id_sekolah')
             ->where('nama_kelas', 'LIKE', $query . "%")
             ->get()
             ->map(function ($kelas) {
-                $url = '/pengajar/kelas/' . $kelas->id;
+                $url = '/pengajar/kelas/' . $kelas->id_kelas;
+                $desc = $kelas->nama_sekolah;
+                $kelas->desc = $desc;
                 $kelas->url = $url;
                 return $kelas;
             });
-
-        $result = ['sekolah' => $sekolah, 'kelas' => $kelas];
+        $siswa = $pengajar->sekolah()
+            ->with('siswa')
+            ->get()
+            ->pluck('siswa')
+            ->flatten()
+            ->filter(function ($siswa) use ($query) {
+                return stripos($siswa['nama'], $query) !== false;
+            })
+            ->map(function ($siswa) {
+                $url = '/pengajar/kelas/' . $siswa->id_kelas . '/siswa/' . $siswa->id;
+                $desc = $siswa->sekolah->nama . ' - ' . $siswa->kelas->nama_kelas;
+                $siswa->desc = $desc;
+                $siswa->url = $url;
+                return $siswa;
+            })
+            ->unique()
+            ->values();
+        $result = ['sekolah' => $sekolah, 'kelas' => $kelas, 'siswa' => $siswa];
         return response()->json($result, 200);
     }
 }

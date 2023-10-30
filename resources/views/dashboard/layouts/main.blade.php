@@ -125,18 +125,17 @@
                         },
                         dataType: "JSON",
                         success: function(response) {
-                            console.log(response);
                             $("#global-search").find(".search-result").html("");
                             $.each(response, function(index, val) {
                                 if (val.length > 0) {
                                     let title =
-                                        `<div class="title w-full bg-tosca-600 px-4 py-1 font-semibold">${index}</div>`;
+                                        `<div class="title w-full bg-tosca-600 px-4 py-1 font-semibold capitalize">${index}</div>`;
                                     $("#global-search").find(".search-result").append(
                                         title);
                                 }
                                 $.each(val, function(i, data) {
                                     let result =
-                                        `<a class="result-item px-4 py-2 hover:bg-tosca-300 w-full flex" href="${data.url}">${data.nama}</a>`;
+                                        `<a class="result-item px-4 py-2 hover:bg-tosca-300 w-full flex flex-col font-semibold" href="${data.url}">${data.nama} ${data.desc != null ? '<br><small class="font-normal">' + data.desc + '</small>' : ''}</a>`;
                                     $("#global-search").find(".search-result")
                                         .append(
                                             result);
