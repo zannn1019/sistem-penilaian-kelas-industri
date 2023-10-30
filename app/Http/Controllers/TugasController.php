@@ -24,7 +24,6 @@ class TugasController extends Controller
     }
     public static function getKodeTugas($tipe)
     {
-        $tipeTugas = $tipe;
         $listCodeTugas = collect([
             [
                 'tipe' => "tugas",
@@ -128,7 +127,20 @@ class TugasController extends Controller
                     'id_kelas' => ['required'],
                     'id_pengajar' => ['required'],
                     'tipe' => ['required'],
-                    'nama' => ['required', 'unique:tugas,nama'],
+                    'nama' => [
+                        'required',
+                        function ($attribute, $value, $fail) use ($request) {
+                            $pengajarId = $request->input('id_pengajar');
+                            $exists = DB::table('tugas')
+                                ->where('id_pengajar', $pengajarId)
+                                ->where('nama', $value)
+                                ->exists();
+
+                            if ($exists) {
+                                $fail('Nama tugas harus unik untuk satu pengajar.');
+                            }
+                        },
+                    ],
                     'tahun_ajar' => ['required'],
                     'semester' => ['required']
                 ]);
@@ -144,9 +156,18 @@ class TugasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tugas $tugas)
+    public function show(Tugas $tugas, Request $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(404);
+        }
+        return response()->json([
+            'id_kelas' => $tugas->id_kelas,
+            'tipe' => $tugas->tipe,
+            'judul' => $tugas->nama,
+            'tahun_ajar' => $tugas->tahun_ajar,
+            'semester' => $tugas->semester,
+        ], 200);
     }
 
     /**
@@ -162,7 +183,30 @@ class TugasController extends Controller
      */
     public function update(Request $request, Tugas $tugas)
     {
-        //
+        $request['tipe'] = $request->tipe ?? $tugas->tipe;
+        $validatedData = $request->validate([
+            'id_kelas' => ['required'],
+            'id_pengajar' => ['required'],
+            'tipe' => ['required'],
+            'nama' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $pengajarId = $request->input('id_pengajar');
+                    $exists = DB::table('tugas')
+                        ->where('id_pengajar', $pengajarId)
+                        ->where('nama', $value)
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Nama tugas sudah ada!');
+                    }
+                },
+            ],
+            'tahun_ajar' => ['required'],
+            'semester' => ['required'],
+        ]);
+        $tugas->update($validatedData);
+        return back()->with('success', 'Tugas berhasil di diubah!');
     }
 
     /**

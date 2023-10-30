@@ -33,9 +33,9 @@ class UserController extends Controller
                 ->causedBy(auth()->user())
                 ->log('Login');
             if (auth()->user()->role == "pengajar") {
-                return redirect()->intended('pengajar/dashboard')->with('success', "Welcome Back " . auth()->user()->nama);
+                return redirect()->intended('pengajar/dashboard')->with('success', "Selamat datang " . auth()->user()->nama);
             } else if (auth()->user()->role == "admin") {
-                return redirect()->intended('admin/dashboard')->with('success', "Welcome Back " . auth()->user()->nama);
+                return redirect()->intended('admin/dashboard')->with('success', "Selamat datang " . auth()->user()->nama);
             }
         }
         return back()->with('error', 'Incorect username or password');
@@ -120,8 +120,8 @@ class UserController extends Controller
             'foto' => ['required'],
             'nik' => ['required', 'unique:users,nik'],
             'nama' => ['required'],
-            'username' => ['required', 'unique:users,username'],
-            'password' => ['confirmed', 'required'],
+            'username' => ['required', 'unique:users,username', 'min:5'],
+            'password' => ['confirmed', 'required', 'min:5'],
             'email' => ['required', 'email:dns'],
             'no_telp' => ['required']
         ]);

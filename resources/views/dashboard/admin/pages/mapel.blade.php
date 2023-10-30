@@ -51,7 +51,7 @@
                         Terbaru</a>
                 </div>
                 @if ($daftar_mapel->count())
-                    <div class="w-full h-full overflow-y-auto grid grid-flow-row gap-4 scroll-arrow" dir="rtl">
+                    <div class="w-full h-full overflow-y-auto flex flex-col gap-4 scroll-arrow" dir="rtl">
                         @foreach ($daftar_mapel as $mapel)
                             <div class="w-full h-36 bg-gradient-to-r from-tosca-200 to-bluesky-200 rounded-xl shadow-box border overflow-hidden flex"
                                 dir="ltr">
@@ -108,7 +108,7 @@
                                                 @else
                                                     <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}"
                                                         alt=""
-                                                        class="w-10 aspect-square object-contain -mr-3 rounded-circle">
+                                                        class="w-10 aspect-square object-cover -mr-3 rounded-circle">
                                                 @endif
                                             @endforeach
                                         @else

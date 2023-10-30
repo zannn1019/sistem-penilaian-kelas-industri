@@ -113,6 +113,41 @@
                     }, 1000);
                 }, 1500 * (index + 1));
             });
+            $("#global-search input").on("input", function() {
+                let query = $(this).val();
+                if (query != '') {
+                    $("#global-search").find(".search-result").removeClass("hidden");
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ auth()->user()->role == 'pengajar' ? '/pengajar/search/' . auth()->user()->id : route('adminSearch') }}",
+                        data: {
+                            query: query
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            console.log(response);
+                            $("#global-search").find(".search-result").html("");
+                            $.each(response, function(index, val) {
+                                if (val.length > 0) {
+                                    let title =
+                                        `<div class="title w-full bg-tosca-600 px-4 py-1 font-semibold">${index}</div>`;
+                                    $("#global-search").find(".search-result").append(
+                                        title);
+                                }
+                                $.each(val, function(i, data) {
+                                    let result =
+                                        `<a class="result-item px-4 py-2 hover:bg-tosca-300 w-full flex" href="${data.url}">${data.nama}</a>`;
+                                    $("#global-search").find(".search-result")
+                                        .append(
+                                            result);
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    $("#global-search").find(".search-result").addClass("hidden");
+                }
+            })
         });
     </script>
     @yield('script')

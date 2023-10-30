@@ -7,9 +7,9 @@
         </div>
         <div class="page_link text-white flex flex-col w-full gap-2">
             <a href=""
-                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'FAQ' ? 'bg-white text-black' : '' }}">
-                <i class="fa-regular fa-message"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">FAQ</h1>
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Arsip' ? 'bg-white text-black' : '' }}">
+                <i class="fa fa-archive" aria-hidden="true"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">ARSIP</h1>
             </a>
             <a href=""
                 class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
@@ -34,7 +34,7 @@
             <div tabindex="0" class="dropdown-content z-[1] menu w-full flex flex-col gap-3 mb-2 ">
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-regular fa-message"></i>
+                    <i class="fa fa-archive"></i>
                 </a>
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
@@ -57,9 +57,9 @@
                 <h1 class="text-2xs leading-3 max-sm:hidden">MAPEL</h1>
             </a>
             <a href=""
-                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'FAQ' ? 'bg-white text-black' : '' }}">
-                <i class="fa-regular fa-message"></i>
-                <h1 class="text-2xs leading-3 max-sm:hidden">FAQ</h1>
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Arsip' ? 'bg-white text-black' : '' }}">
+                <i class="fa fa-archive" aria-hidden="true"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">ARSIP</h1>
             </a>
             <a href=""
                 class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
@@ -90,7 +90,7 @@
                 </a>
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-regular fa-message"></i>
+                    <i class="fa fa-archive"></i>
                 </a>
                 <a href=""
                     class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">

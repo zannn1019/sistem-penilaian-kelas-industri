@@ -50,7 +50,7 @@ class NilaiExport implements
             $siswaData = [
                 'no' => $no += 1,
                 'nis' => $siswa->nis,
-                'nama' => $siswa->nama,
+                'nama' => $siswa->nama
             ];
 
             $tugasTuntas = true;

@@ -44,6 +44,7 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->n
 //*Route Pengajar
 Route::middleware(['auth', 'user:pengajar'])->group(function () {
     Route::prefix('/pengajar')->group(function () {
+        Route::get('/search/{pengajar}', [SearchController::class, 'pengajarSearch'])->name('pengajarSearch');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-pengajar');
         Route::get('/profile', [DashboardController::class, 'profile'])->name('profile-pengajar');
         Route::get('/kelas', [DashboardController::class, 'kelas'])->name('kelas-pengajar');
@@ -56,6 +57,8 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
             Route::get('/kelas/{kelas}/mapel/{mapel}', 'index')->name('tugas.index');
             Route::get('/kelas/{kelas}/mapel/{mapel}/nilai', 'showNilai')->name('tugas.shownilai');
             Route::post('/tugas', 'store')->name('tugas.store');
+            Route::get('/tugas/{tugas}', 'show')->name('tugas.show');
+            Route::post('/tugas/{tugas}', 'update')->name('tugas.update');
         });
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
@@ -72,6 +75,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 'full' => true
             ]);
         })->name('profile-admin');
+        Route::get('/search', [SearchController::class, 'adminSearch'])->name('adminSearch');
         Route::get('/siswa/fileFormat', [SiswaController::class, 'getExcelFormat'])->name('siswa-excel-format');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
         Route::resource('/sekolah', SekolahController::class)->names('sekolah');
@@ -102,9 +106,6 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'user:pengajar', 'user:admin'])->group(function () {
-    Route::get('/search', [SearchController::class, 'search'])->name('search');
-});
 Route::controller(ExportController::class)->group(function () {
     Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
     Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');

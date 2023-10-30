@@ -75,8 +75,8 @@
                                                 <div tabindex="0"
                                                     class="dropdown-content z-[1] menu p-2 w-40 text-center shadow rounded-box flex flex-col gap-2"
                                                     data-theme="light">
-                                                    <button
-                                                        class="hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</button>
+                                                    <button data-id="{{ $ujian->id }}" data-tipe="2"
+                                                        class="edit-btn hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</button>
                                                     <a href=""
                                                         class="hover:font-semibold py-1 px-4 w-full ">Arsip</a>
                                                 </div>
@@ -86,7 +86,7 @@
                                     <a href="{{ route('input-nilai', ['kelas' => $info_kelas->id, 'tugas' => $ujian->id]) }}"
                                         class="w-full h-full grid grid-cols-2 gap-4 justify-between items-center text-black">
                                         <img src="{{ asset('img/_' . $ujian->tipe . '.png') }}" alt=""
-                                            class="">
+                                            class="max-h-32">
                                         <div class=" w-full h-full flex justify-center items-center">
                                             <div
                                                 class="flex justify-center flex-col items-center overflow-hidden w-28 aspect-square bg-tosca-500 rounded-circle">
@@ -119,8 +119,8 @@
                                                 <div tabindex="0"
                                                     class="dropdown-content z-[1] menu p-2 w-40 text-center shadow rounded-box flex flex-col gap-2"
                                                     data-theme="light">
-                                                    <a href=""
-                                                        class="hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</a>
+                                                    <button data-id="{{ $tugas->id }}" data-tipe="1"
+                                                        class=" edit-btn hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</button>
                                                     <a href=""
                                                         class="hover:font-semibold py-1 px-4 w-full ">Arsip</a>
                                                 </div>
@@ -292,54 +292,113 @@
             <button>close</button>
         </form>
     </dialog>
-    {{-- <dialog id="edit_assessment" class="modal" data-theme="light">
-        <div class="modal-box text-black">
-            <h3 class="font-semibold text-2xl text-black text-center w-full">Edit Assessment!</h3>
-            <form action="{{ route('tugas.store') }}" method="POST"
-                class="flex flex-col gap-2 justify-center items-center" id="form-ujian">
-                @csrf
-                <input type="hidden" value="ujian" name="tipe" id="is-ujian">
-                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
-                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
-                <input type="text" name="nama" class="input input-bordered text-black w-full"
-                    placeholder="Judul Assessment" required>
-                <select name="tipe" id="" class="input input-bordered w-full">
-                    <option value="" selected>Pilih Blok</option>
-                    <option value="assessment_blok_a">Blok A</option>
-                    <option value="assessment_blok_b">Blok B</option>
-                </select>
-                <div class="w-full flex gap-5">
-                    <div class="form-control w-full">
-                        <label class="label p-0">
-                            <span class="label-text">Tahun ajaran</span>
-                        </label>
-                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
-                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
-                            value="{{ $info_kelas->tahun_ajar }}" />
+    <template id="edit-template">
+        <dialog id="edit_modal" class="modal" data-theme="light">
+            <div class="modal-box text-black">
+                <h3 class="font-semibold text-2xl text-black text-center w-full" id="title">Edit Assessment!</h3>
+                <form action="" method="POST" class="flex flex-col gap-2 justify-center items-center"
+                    id="edit-form">
+                    @csrf
+                    <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
+                    <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
+                    <input type="text" name="nama" class="input input-bordered text-black w-full"
+                        placeholder="Judul" required id="judul">
+                    <select name="tipe" id="assessment-select" class="input input-bordered w-full">
+                        <option value="" selected>Pilih Blok</option>
+                        <option value="assessment_blok_a">Blok A</option>
+                        <option value="assessment_blok_b">Blok B</option>
+                    </select>
+                    <div class="w-full flex gap-5">
+                        <div class="form-control w-full">
+                            <label class="label p-0">
+                                <span class="label-text">Tahun ajaran</span>
+                            </label>
+                            <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                                class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                                value="{{ $info_kelas->tahun_ajar }}" />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label p-0">
+                                <span class="label-text">Semester</span>
+                            </label>
+                            <select name="semester" id="semester" class="select select-bordered border-black ">
+                                <option value="ganjil" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                                </option>
+                                <option value="genap" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-control w-full">
-                        <label class="label p-0">
-                            <span class="label-text">Semester</span>
-                        </label>
-                        <select name="semester" id="semester" class="select select-bordered border-black ">
-                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
-                            </option>
-                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <input type="submit" value="Tambah" class="btn self-end">
+                    <input type="submit" value="Edit" class="btn self-end">
+                </form>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
             </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog> --}}
+        </dialog>
+    </template>
+    <div id="modal"></div>
 @endsection
 @section('script')
     <script>
         $(document).ready(function() {
+            /**
+             *
+             * @param tipe 1 untuk kuis dan tugas
+             * @param tipe 2 untuk assessment
+             *
+             */
+            function editModal(tipe, id) {
+                $("#modal").html('');
+                const id_tugas = id;
+                const template = document.getElementById("edit-template");
+                const clone = document.importNode(template.content, true);
+                const modal = clone.getElementById("edit_modal");
+                const title = clone.getElementById("title");
+                const judul = clone.getElementById("judul");
+                const assessment = clone.getElementById("assessment-select");
+                const tahun_ajar = clone.getElementById("tahun_ajar");
+                const semester = clone.getElementById("semester");
+                const edit_form = clone.getElementById("edit-form");
+
+                $.ajax({
+                    type: "GET",
+                    url: `/pengajar/tugas/${id_tugas}`,
+                    dataType: "JSON",
+                    success: function(response) {
+                        judul.value = response.judul;
+                        tahun_ajar.value = response.tahun_ajar;
+                        tahun_ajar.semester = response.semester;
+                        assessment.value = response
+                            .tipe;
+                        edit_form.action = `/pengajar/tugas/${id_tugas}`;
+                    }
+                });
+
+                switch (tipe) {
+                    case 1:
+                        title.textContent = "Edit Tugas";
+                        assessment.remove();
+                        break;
+                    case 2:
+                        title.textContent = "Edit Assesment";
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return clone;
+            }
+
+            $(".edit-btn").click(function() {
+                let id = $(this).data("id");
+                let tipe = $(this).data("tipe");
+                let modal = editModal(tipe, id);
+                $("#modal").append(modal);
+                edit_modal.showModal();
+            })
+
+
             $("#add-btn").click(function() {
                 $(this).toggleClass("rotate-45");
             });

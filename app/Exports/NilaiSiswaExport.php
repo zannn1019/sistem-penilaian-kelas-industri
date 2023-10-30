@@ -105,7 +105,6 @@ class NilaiSiswaExport implements
                 ];
             }
 
-
             // Hitung nilai rata-rata atau gunakan tanda - jika nilai kosong
             $avgNilai = $nilaiKosong ? '-' : number_format($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
             $isKosong = $nilaiKosong ? 'belum_dinilai' : 'dinilai';
