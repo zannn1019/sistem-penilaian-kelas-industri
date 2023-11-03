@@ -24,7 +24,8 @@
                             accept="image/*" required>
                         <i class="fa-solid fa-plus "></i>
                         <img src="" alt=""
-                            class="absolute top-0 left-0 w-full h-full pointer-events-none z-20" id="photo-preview">
+                            class="absolute top-0 left-0 w-full h-full pointer-events-none object-cover z-20"
+                            id="photo-preview">
                     </div>
                     <div
                         class="absolute max-md:hidden w-64 h-10 bg-gradient-to-r from-bluesky-500 to-bluesea-500 top-0 left-12 rounded-6xl border border-black text-white font-semibold text-sm flex items-center justify-end px-2">
@@ -79,7 +80,7 @@
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Nomor Telepon</h1>
                             <input required pattern="[0-9]{10,15}" type="text"
-                                placeholder="Masukkan nomor telepon yang valid"
+                                placeholder="Masukkan nomor telepon yang valid (08xxxxxxx)"
                                 class="input input-bordered focus:outline-none w-full" name="no_telp"
                                 {{ old('no_telp') }} />
                         </div>

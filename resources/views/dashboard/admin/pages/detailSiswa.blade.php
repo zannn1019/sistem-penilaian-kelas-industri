@@ -404,6 +404,8 @@
                     value="{{ $info_siswa->nama }}" required>
                 <input name="nis" type="text" class="input-bordered input border-black" placeholder="No.Telp"
                     value="{{ $info_siswa->nis }}" required>
+                <input name="email" type="email" class="input-bordered input border-black" placeholder="Email"
+                    value="{{ $info_siswa->email }}" required>
                 <input name="no_telp" pattern="[0-9]+" type="text" class="input-bordered input border-black"
                     placeholder="No.Telp" value="{{ $info_siswa->no_telp }}" required>
                 <input type="submit" value="Edit" class="btn btn-info text-white">

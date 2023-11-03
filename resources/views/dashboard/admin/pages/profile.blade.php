@@ -23,16 +23,16 @@
             @csrf
             @method('PATCH')
             <div class=" flex flex-col profile bg-darkblue-500 p-10 rounded-2xl w-72 gap-2">
-                <div class="profile-picture rounded-circle aspect-square  relative">
+                <div class="profile-picture rounded-circle aspect-square relative w-full h-52">
                     <div class="editable-foto w-full h-full">
                         <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}"
                             class="object-cover rounded-circle w-full h-full" alt="" id="foto-preview">
                     </div>
-                    <div class="foto-edit hidden top-2 w-10 h-10 justify-center items-center right-2 absolute z-10 text-white bg-bluesea-500 rounded-circle"
+                    <div class="foto-edit hidden top-2 w-10 h-10 justify-center items-center right-2 absolute z-40 cursor-pointer text-white bg-bluesea-500 rounded-circle"
                         id="edit-pen-foto">
                         <i class="fa-solid fa-pen" aria-hidden="true"></i>
                         <input type="file" name="foto" id="foto-input"
-                            class="absolute opacity-0 w-full h-full rounded-circle" accept="image/*">
+                            class="absolute opacity-0 w-full h-full rounded-circle cursor-pointer" accept="image/*">
                     </div>
                 </div>
                 <div class="info flex flex-col w-full justify-center items-center gap-2">

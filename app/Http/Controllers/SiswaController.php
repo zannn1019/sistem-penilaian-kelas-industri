@@ -45,6 +45,7 @@ class SiswaController extends Controller
             'nis' => ['required', 'unique:siswa,nis'],
             'nama' => ['required'],
             'no_telp' => ['required'],
+            'email' => ['required', 'email:dns']
         ]);
         Siswa::create($validated_data);
         return redirect()->route('kelas.show', ['kela' => $request->id_kelas])->with('success', 'Siswa berhasil ditambahkan!');
@@ -110,6 +111,7 @@ class SiswaController extends Controller
             'nis' => ['required'],
             'nama' => ['required'],
             'no_telp' => ['required'],
+            'email' => ['required', 'email:dns']
         ]);
         $siswa->update($validated_data);
         return redirect()->back()->with('success', 'Siswa berhasil diubah!');
@@ -125,8 +127,7 @@ class SiswaController extends Controller
 
     public function getExcelFormat()
     {
-        $file = public_path() . "/excel/siswa_import_example.xlsx";
-
+        $file = public_path() . "/excel/siswa.xlsx";
         $headers = array(
             'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         );
@@ -137,7 +138,7 @@ class SiswaController extends Controller
     {
         if ($request->hasFile('excel-file')) {
             Excel::import(new SiswaImport($kelas), $request->file('excel-file'));
-            return redirect()->back()->with('success', 'Data siswa berhasi ditambahkan!');
+            return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan!');
         }
     }
 }

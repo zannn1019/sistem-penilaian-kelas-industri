@@ -39,7 +39,8 @@
                                 class="hidden z-10 w-full h-full rounded-circle cursor-pointer opacity-0 absolute top-0 left-0"
                                 accept="image/*">
                             <img src="{{ asset('storage/pengajar/' . $data_pengajar->foto) }}" alt=""
-                                class="absolute top-0 left-0 w-full h-full pointer-events-none z-20" id="photo-preview">
+                                class="absolute top-0 left-0 w-full h-full pointer-events-none z-20 object-cover"
+                                id="photo-preview">
                         </div>
                     </div>
                 </div>
@@ -199,8 +200,7 @@
             <h3 class="font-bold text-lg">Daftar Sekolah pengajar</h3>
             <div class="w-full h-full max-h-96 overflow-auto flex flex-col gap-3">
                 @foreach ($data_pengajar->sekolah()->get()->unique('id_sekolah') as $sekolah)
-                    <div
-                        class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between border-gray-300">
+                    <div class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between border-gray-300">
                         <div class="flex h-full justify-center items-center gap-2">
                             <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" class="w-10 h-10"
                                 alt="">
@@ -380,6 +380,7 @@
                     $("#mapel-add").removeClass('hidden')
                     $(".remove-btn").removeClass("hidden")
                     $(".edit-btn").removeClass("hidden");
+                    $(this).addClass("bg-green-200");
                 } else {
                     $("#edit-gambar").removeClass('hover:brightness-50');
                     $("#input-photo").addClass('hidden');

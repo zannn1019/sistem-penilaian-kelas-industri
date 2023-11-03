@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -117,7 +119,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated_data = $request->validate([
-            'foto' => ['required'],
+            'foto' => ['required', 'image'],
             'nik' => ['required', 'unique:users,nik'],
             'nama' => ['required'],
             'username' => ['required', 'unique:users,username', 'min:5'],
@@ -128,8 +130,11 @@ class UserController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
-            $file->move('storage/pengajar', $fileName);
+            $fileName = Str::slug($validated_data['nama']) . '-' . time() . '.' . $extension;
+            $image = Image::make($file->getRealPath());
+            $image->resize(300, 300, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('storage/pengajar') . '/' . $fileName);
             $validated_data['foto'] = $fileName;
         }
         $validated_data['role'] = "pengajar";
@@ -161,7 +166,7 @@ class UserController extends Controller
     {
         if ($request->foto != null) {
             $validated_data = $request->validate([
-                'foto' => [],
+                'foto' => ['image'],
                 'nik' => ['required'],
                 'nama' => ['required'],
                 'username' => ['required'],
@@ -170,10 +175,17 @@ class UserController extends Controller
                 'status' => ['required']
             ]);
             if ($request->hasFile('foto')) {
+                $path = public_path('storage/pengajar') . '/' . $user->foto;
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
                 $file = $request->file('foto');
                 $extension = $file->getClientOriginalExtension();
-                $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
-                $file->move('storage/pengajar', $fileName);
+                $fileName = Str::slug($validated_data['nama']) . '-' . time() . '.' . $extension;
+                $image = Image::make($file->getRealPath());
+                $image->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(public_path('storage/pengajar') . '/' . $fileName);
                 $validated_data['foto'] = $fileName;
             } else {
                 $validated_data['foto'] = $user->logo;

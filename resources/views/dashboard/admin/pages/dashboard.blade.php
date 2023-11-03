@@ -67,7 +67,7 @@
                                                 class="h-full p-1 py-5 bg-darkblue-500 rounded-l rounded-xl hidden indikator-pengajar">
                                             </div>
                                             <img src="{{ asset('storage/pengajar/' . $pengajar->foto) }}" alt=""
-                                                class="w-11 rounded-circle aspect-square ml-2 py-1">
+                                                class="w-11 rounded-circle object-cover aspect-square ml-2 py-1">
                                             <div class="info w-full text-xs flex flex-col gap-1 py-2">
                                                 <h1>{{ $pengajar->nama }}</h1>
                                                 <div class="w-full flex justify-between">

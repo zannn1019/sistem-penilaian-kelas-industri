@@ -24,6 +24,12 @@
                 @csrf
                 <input type="hidden" name="id_sekolah" value="{{ $data->sekolah->id }}">
                 <input type="hidden" name="id_kelas" value="{{ $data->id }}">
+                <label for="" class="font-semibold">NIS</label>
+
+                <input type="text" placeholder="Masukkan nis siswa" name="nis"
+                    class="flex justify-center items-center border border-black p-5 rounded-lg" required minlength="9"
+                    pattern="[0-9]+" />
+                <label for="" class="font-semibold">Nama</label>
                 <div class="input-range flex justify-center items-center border border-black p-5 rounded-lg ">
                     <input type="text" placeholder="Masukkan nama siswa" id="nama_siswa" name="nama" class="w-full "
                         maxlength="50" required minlength="3" />
@@ -31,22 +37,21 @@
                     <span class="font-normal">/50</span>
                 </div>
                 <div class="border border-black p-5 rounded-lg">
-                    <h1 class="text-lg font-semibold">Data Siswa</h1>
+                    <h1 class="text-lg font-semibold">Informasi tambahan</h1>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="form-control w-full">
                             <label class="label p-0">
-                                <span class="label-text">NIS</span>
+                                <span class="label-text">Email</span>
                             </label>
-                            <input type="text" placeholder="Masukkan NIS siswa" name="nis"
-                                class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
-                                required minlength="9" pattern="[0-9]+" />
+                            <input type="email" placeholder="Masukkan email siswa" name="email"
+                                class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs" />
                         </div>
                         <div class="form-control w-full">
                             <label class="label p-0">
                                 <span class="label-text">Nomor Telepon</span>
                             </label>
-                            <input type="text" placeholder="Masukkan nomor telepon yang valid" name="no_telp"
-                                minlength="11" pattern="[0-9]+"
+                            <input type="text" placeholder="Masukkan nomor telepon yang valid (08xxxxxxxx)"
+                                name="no_telp" minlength="11" pattern="[0-9]+"
                                 class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs" />
                         </div>
                     </div>

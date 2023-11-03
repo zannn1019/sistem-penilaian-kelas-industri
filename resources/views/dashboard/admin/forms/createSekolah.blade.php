@@ -91,7 +91,7 @@
                         <div class="w-full text-sm">
                             <h1 class="font-semibold">Nomor Telepon</h1>
                             <input required pattern="[0-9]{10,15}" type="text"
-                                placeholder="Masukkan nomor telepon yang valid"
+                                placeholder="Masukkan nomor telepon yang valid (022xxxxxxx)"
                                 class="input input-bordered focus:outline-none w-full" name="no_telp"
                                 {{ old('no_telp') }} />
                         </div>

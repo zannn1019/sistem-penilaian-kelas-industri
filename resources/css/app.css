@@ -223,6 +223,9 @@ input:focus {
 #button-3 .checkbox-custom:checked ~ .layer {
     background-color: #d3d7dc;
 }
+#button-3 .checkbox-custom:checked ~ .knobs::before {
+    background-color: #17bbdf;
+}
 
 @layer base {
     input[type="number"]::-webkit-inner-spin-button,

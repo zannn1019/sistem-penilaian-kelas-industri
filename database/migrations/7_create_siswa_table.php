@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nis')->unique();
             $table->string('nama');
             $table->string('no_telp');
+            $table->string('email')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

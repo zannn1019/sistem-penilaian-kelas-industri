@@ -124,7 +124,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="w-full flex justify-center items-center flex-col text-gray-500">
+                    <div class="w-full h-full flex justify-center items-center flex-col text-gray-500">
                         <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
                         <h1>Belum ada mata pelajaran!</h1>
                     </div>

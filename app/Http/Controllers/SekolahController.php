@@ -5,17 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Nilai;
+use App\Models\Tugas;
 use App\Models\Sekolah;
 use App\Models\Pengajar;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PengajarSekolah;
-use App\Models\Tugas;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Cache;
+use Intervention\Image\Facades\Image;
 
 class SekolahController extends Controller
 {
@@ -54,7 +55,7 @@ class SekolahController extends Controller
     public function store(Request $request)
     {
         $validated_data = $request->validate([
-            'logo' => ['required'],
+            'logo' => ['required', 'image'],
             'nama' => ['required', 'unique:sekolah,nama'],
             'provinsi' => ['required'],
             'kabupaten_kota' => ['required'],
@@ -70,8 +71,11 @@ class SekolahController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
-            $file->move('storage/sekolah', $fileName);
+            $fileName = Str::slug($validated_data['nama']) . '-' . time() . '.' . $extension;
+            $image = Image::make($file->getRealPath());
+            $image->resize(300, 300, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('storage/sekolah') . '/' . $fileName);
             $validated_data['logo'] = $fileName;
         }
         Sekolah::create($validated_data);
@@ -126,7 +130,7 @@ class SekolahController extends Controller
     public function update(Request $request, Sekolah $sekolah)
     {
         $validated_data = $request->validate([
-            'logo' => [''],
+            'logo' => ['image'],
             'nama' => ['required'],
             'provinsi' => ['required'],
             'kabupaten_kota' => ['required'],
@@ -137,10 +141,17 @@ class SekolahController extends Controller
             'no_telp' => ['required']
         ]);
         if ($request->hasFile('logo')) {
+            $path = public_path('storage/sekolah') . '/' . $sekolah->logo;
+            if (File::exists($path)) {
+                File::delete($path);
+            }
             $file = $request->file('logo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = Str::slug($validated_data['nama']) . '.' . $extension;
-            $file->move('storage/sekolah', $fileName);
+            $fileName = Str::slug($validated_data['nama']) . '-' . time() . '.' . $extension;
+            $image = Image::make($file->getRealPath());
+            $image->resize(300, 300, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('storage/sekolah') . '/' . $fileName);
             $validated_data['logo'] = $fileName;
         } else {
             $validated_data['logo'] = $sekolah->logo;
