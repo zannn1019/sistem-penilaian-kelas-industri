@@ -99,7 +99,7 @@
                             class="profile-input border-l border-black profile-input-2 w-full flex items-center px-2 bg-transparent"
                             disabled value="{{ $data_pengajar->nik }}">
                         <span><b>Mata Pelajaran</b></b></span>
-                        <span class="px-2 font-semibold flex flex-wrap gap-2 border-l border-black">
+                        <span class="px-2 font-semibold flex flex-wrap gap-2 border-l items-center border-black">
                             @php
                                 $warna = collect(['bg-purple-200 border-purple-500 text-purple-700', 'bg-tosca-200 border-tosca-500 text-tosca-700', 'bg-bluesea-200 border-bluesea-500 text-bluesea-700', 'bg-bluesky-200 border-bluesky-500 text-bluesky-700', 'bg-orange-200 border-orange-500 text-orange-700']);
                             @endphp
@@ -114,7 +114,8 @@
                                             class="fa-solid fa-x"></i></button>
                                 </div>
                             @endforeach
-                            <a onclick="mapel_modal.showModal()" class="badge badge-outline cursor-pointer hidden"
+                            <a onclick="mapel_modal.showModal()"
+                                class="rounded-full bg-bluesea-500 grid place-content-center cursor-pointer p-1 px-2 text-white hidden text-xs"
                                 id="mapel-add">
                                 <i class="fa-solid fa-plus"></i>
                             </a>
@@ -199,8 +200,9 @@
         <div class="modal-box w-full h-auto flex flex-col text-black">
             <h3 class="font-bold text-lg">Daftar Sekolah pengajar</h3>
             <div class="w-full h-full max-h-96 overflow-auto flex flex-col gap-3">
-                @foreach ($data_pengajar->sekolah()->get()->unique('id_sekolah') as $sekolah)
-                    <div class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between border-gray-300">
+                @foreach ($data_pengajar->sekolah->unique() as $sekolah)
+                    <div
+                        class="box w-full h-full border p-2 flex gap-3 rounded-xl shadow-md justify-between border-gray-300">
                         <div class="flex h-full justify-center items-center gap-2">
                             <img src="{{ asset('storage/sekolah/' . $sekolah->logo) }}" class="w-10 h-10"
                                 alt="">
@@ -227,7 +229,7 @@
         <div class="modal-box w-full h-auto flex flex-col text-black">
             <h3 class="font-bold text-lg">Daftar kelas pengajar</h3>
             <div class="w-full h-full max-h-96 overflow-auto flex flex-col">
-                @foreach ($data_pengajar->sekolah()->get()->unique('id_sekolah') as $sekolah)
+                @foreach ($data_pengajar->sekolah->unique() as $sekolah)
                     <h1 class="font-semibold">{{ $sekolah->nama }}</h1>
                     @foreach ($data_pengajar->kelas->where('id_sekolah', $sekolah->id) as $kelas)
                         <div
@@ -275,7 +277,9 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        console.log(response);
+                        if (response.success) {
+                            window.location.reload();
+                        }
                     }
                 });
             })

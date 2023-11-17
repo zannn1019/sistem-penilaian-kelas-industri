@@ -23,7 +23,7 @@
             <a href="{{ route('input-nilai-akhir', ['kelas' => $info_kelas->id]) }}"
                 class="self-end m-2 btn text-xs text-white">
                 <i class="fa-solid fa-graduation-cap"></i>
-                Nilai Akhir
+                Assessment
             </a>
         </header>
         <div
@@ -72,8 +72,8 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['assessment_blok_b', 'assessment_blok_a'], 'id_kelas' => $info_kelas->id])->count() }}</span>
-                                    <span class="text-xs text-tosca-500">Assessment</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['latihan'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                    <span class="text-xs text-tosca-500">Latihan</span>
                                 </div>
                             </div>
                         </div>

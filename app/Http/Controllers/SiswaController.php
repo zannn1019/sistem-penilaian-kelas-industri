@@ -9,6 +9,7 @@ use App\Models\Nilai;
 use App\Models\PengajarMapel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use NumberToWords\NumberToWords;
 
@@ -137,8 +138,21 @@ class SiswaController extends Controller
     public function importSiswa(Kelas $kelas, Request $request)
     {
         if ($request->hasFile('excel-file')) {
-            Excel::import(new SiswaImport($kelas), $request->file('excel-file'));
-            return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan!');
+            $import = new SiswaImport($kelas);
+            Excel::import($import, $request->file('excel-file'));
+
+            $duplicateCount = $import->getDuplicateData();
+            $incompleteCount = $import->getErrorCount();
+            $successCount = $import->getSuccessCount();
+            if ($duplicateCount > 0 || $incompleteCount > 0) {
+                Session::flash('error', $duplicateCount . ' Data duplikat dan ' . $incompleteCount . ' data tidak berhasil ditambahkan!');
+            }
+
+            if ($successCount > 0) {
+                Session::flash('success', $successCount . ' Data berhasil ditambahkan!');
+            }
+
+            return redirect()->back();
         }
     }
 }

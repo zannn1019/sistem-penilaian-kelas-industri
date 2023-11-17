@@ -81,10 +81,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(this).find("#bubble-median").draggable()
-            $("#bubble-median").dblclick(function() {
-                $(this).find('.dropdown').toggleClass('dropdown-open')
-            })
             $("#alert-box").find(".alert").each(function(index) {
                 setTimeout(() => {
                     $(this).velocity({

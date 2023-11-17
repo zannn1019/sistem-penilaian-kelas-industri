@@ -60,7 +60,7 @@
                 <select name="sekolah" class="custom-select text-black bg-gray-300  px-3 py-1 rounded-box max-w-[8rem]"
                     data-filter="sekolah">
                     <option value="">Pilih Sekolah</option>
-                    @foreach ($data_sekolah as $sekolah)
+                    @foreach ($info_pengajar->sekolah as $sekolah)
                         <option value="{{ $sekolah->id }}" class="truncate"
                             {{ $sekolah->id == request('sekolah') ? 'selected' : '' }}>
                             {{ $sekolah->nama }}</option>
@@ -70,7 +70,7 @@
                     data-filter="kelas" {{ request('sekolah') == null ? 'disabled' : '' }}>
                     <option value="">Pilih Kelas</option>
                     @if (request('sekolah') != null)
-                        @foreach ($data_sekolah->find(request('sekolah'))->kelas as $kelas)
+                        @foreach ($info_pengajar->sekolah->find(request('sekolah'))->kelas as $kelas)
                             <option value="{{ $kelas->id }}" class="truncate"
                                 {{ $kelas->id == request('kelas') ? 'selected' : '' }}>
                                 {{ $kelas->tingkat }} - {{ $kelas->jurusan }} - {{ $kelas->kelas }}
@@ -89,7 +89,7 @@
                     {{ request('sekolah') != null && request('kelas') != null && request('semester') != null ? '' : 'disabled' }}>
                     <option value="">Pilih Tugas</option>
                     @if (request('sekolah') != null && request('kelas') != null && request('semester') != null)
-                        @foreach ($data_sekolah->find(request('sekolah'))->kelas()->find(request('kelas'))->tugas->where('semester', request('semester')) as $tugas)
+                        @foreach ($info_pengajar->sekolah->find(request('sekolah'))->kelas()->find(request('kelas'))->tugas->where('semester', request('semester')) as $tugas)
                             <option value="{{ $tugas->id }}"{{ request('tugas') == $tugas->id ? 'selected' : '' }}>
                                 {{ $tugas->nama }}
                             </option>
@@ -116,6 +116,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Kelas Industri</th>
                                 <th>Kategori</th>
+                                <th>Nama Tugas</th>
                             </tr>
                         </thead>
                         <tbody class="bg-bluesea-200 text-xs">
@@ -128,10 +129,14 @@
                                         {{ $nilai->siswa->kelas->tingkat }}-{{ $nilai->siswa->kelas->jurusan }}-{{ $nilai->siswa->kelas->kelas }}
                                     </td>
                                     <td> {{ implode(' ', array_map('ucfirst', explode('_', $nilai->tugas->tipe))) }}</td>
+                                    <td>{{ $nilai->tugas->nama }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="pt-5">
+                        {{ $data_nilai->links('components.pagination') }}
+                    </div>
                 </div>
             @else
                 <form action="" method="GET" class="w-full flex gap-3">
@@ -141,10 +146,9 @@
                     <input type="submit" value="Search"
                         class="btn border-none text-white bg-bluesea-500 hover:bg-bluesea-600">
                 </form>
-                <div class="noting w-full h-full justify-center items-center flex flex-col">
-                    <img src="{{ asset('img/calendar.svg') }}" alt="" draggable="false">
-                    <h1 class="w-1/2 text-center  text-gray-400">Masukkan tanggal untuk melihat nilai yang
-                        ter-entry.</h1>
+                <div class="w-full h-full flex flex-col font-semibold text-gray-300 justify-center items-center ">
+                    <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
+                    <h1>Data nilai tidak ditemukan!</h1>
                 </div>
             @endif
         </div>

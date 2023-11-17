@@ -34,6 +34,10 @@ class TugasController extends Controller
                 'kode' => "QZ"
             ],
             [
+                'tipe' => "latihan",
+                'kode' => "LAT"
+            ],
+            [
                 'tipe' => "assessment_blok_a",
                 'kode' => "ASMA"
             ],
@@ -72,7 +76,7 @@ class TugasController extends Controller
     public function index(Kelas $kelas, Mapel $mapel)
     {
         $daftar_tugas = collect([
-            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->get(),
             'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.pengajar.pages.selectTugas', [

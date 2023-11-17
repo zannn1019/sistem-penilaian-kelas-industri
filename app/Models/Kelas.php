@@ -12,11 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kelas extends Model
 {
-    use HasFactory, SoftDeletes, Searchable, LogsActivity;
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->useLogName("kelas");
-    }
+    use HasFactory, SoftDeletes, Searchable;
     protected $logAttributes = ['nama_kelas', 'tingkat', 'kelas', 'tahun_ajar', 'semester'];
     protected $guarded = [
         'id'
@@ -42,6 +38,13 @@ class Kelas extends Model
     }
     public function scopeFilter($query, array $params)
     {
+        if ($params['sekolah'] != null) {
+            $query->when(
+                $params['sekolah'] ?? null,
+                fn ($query, $sekolah) =>
+                $query->where('id_sekolah', $sekolah)
+            );
+        }
         if ($params['tingkat'] != 'all') {
             $query->when(
                 $params['tingkat'] ?? null,
@@ -49,6 +52,7 @@ class Kelas extends Model
                 $query->where('tingkat', $tingkat)
             );
         }
+
         if ($params['jurusan'] != 'all') {
             $semuaJurusan = $query->pluck('jurusan')->unique()->values()->all();
             $jurusanUnik = collect($semuaJurusan)->mapWithKeys(function ($jurusan) {
@@ -71,6 +75,7 @@ class Kelas extends Model
         }
         return $query;
     }
+
     public function toSearchableArray()
     {
         return [

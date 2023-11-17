@@ -52,14 +52,19 @@
                             <button class="w-full border-b p-2 border-black hover:font-semibold"
                                 onclick="quiz.showModal()">Tambah
                                 Kuis</button>
-                            <button
-                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Assessment</button>
+                            <button class="w-full p-2 hover:font-semibold" onclick="latihan.showModal()">Tambah
+                                Latihan</button>
+                            {{--
+                                ??HAPUS BUTTON INI JIKA ASSESSMENT SUDAH BERES
+                                <button
+                                class="w-full p-2 border-black hover:font-semibold"onclick="ujian.showModal()">Assessment</button> --}}
                         </div>
                     </details>
                 </div>
             </div>
             <div class="px-5 py-2 max-sm:px-0 w-full h-full text-black flex flex-col gap-2">
-                @if ($daftar_tugas['ujian']->count())
+                {{-- @if ($daftar_tugas['ujian']->count())
+                    ?? HAPUS BAGIAN SINI JIKA SUDAH
                     <h1 class="font-semibold">Assessment</h1>
                     <div class="w-full grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2">
                         @foreach ($daftar_tugas['ujian'] as $ujian)
@@ -103,9 +108,9 @@
                             </div>
                         @endforeach
                     </div>
-                @endif
+                @endif --}}
                 @if ($daftar_tugas['tugas']->count())
-                    <h1 class="font-semibold">Tugas</h1>
+                    <h1 class="font-semibold">Daftar Tugas</h1>
                     <div class="w-full grid grid-cols-3  max-sm:grid-cols-1 max-md:grid-cols-2">
                         @foreach ($daftar_tugas['tugas'] as $tugas)
                             <div class="box w-full h-56 p-2">
@@ -148,6 +153,9 @@
                         @endforeach
                     </div>
                 @endif
+                {{--
+                    ?? HAPUS BAGIAN UJIAN JIKA SUDAH DI PERBAIKI
+                --}}
                 @if (!$daftar_tugas['tugas']->count() && !$daftar_tugas['ujian']->count())
                     <div class="w-full h-full flex flex-col text-black justify-center items-center">
                         <img src="{{ asset('img/404_kelas.png') }}" alt="">
@@ -168,6 +176,49 @@
                 <input type="hidden" value="tugas" name="tipe">
                 <input type="text" name="nama" class="input input-bordered text-black w-full"
                     placeholder="Judul tugas" required>
+                <div class="w-full flex gap-5 checkbox-tahunajar">
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Tahun ajaran</span>
+                        </label>
+                        <input type="text" placeholder="Masukkan tahun ajaran" name="tahun_ajar" id="tahun_ajar"
+                            class="input input-bordered focus:outline-none border-black  w-full placeholder:text-xs"
+                            value="{{ $info_kelas->tahun_ajar }}" disabled />
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label p-0">
+                            <span class="label-text">Semester</span>
+                        </label>
+                        <select name="semester" id="semester" class="select select-bordered border-black " disabled>
+                            <option value="1" {{ $info_kelas->semester == 'ganjil' ? 'selected' : '' }}>Ganjil
+                            </option>
+                            <option value="2" {{ $info_kelas->semester == 'genap' ? 'selected' : '' }}>Genap
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex w-full items-center p-2 text-xs gap-2">
+                    <input type="checkbox" checked="checked" class="checkbox w-6 h-5 tahun_ajaran" />
+                    <span>Ubah tahun ajaran dan semester</span>
+                </div>
+                <input type="submit" value="Tambah" class="btn self-end">
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+    <dialog id="latihan" class="modal" data-theme="light">
+        <div class="modal-box">
+            <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul latihan!</h3>
+            <form action="{{ route('tugas.store') }}" method="POST"
+                class="flex flex-col gap-2 justify-center items-center">
+                @csrf
+                <input type="hidden" value="{{ $info_kelas->id }}" name="id_kelas">
+                <input type="hidden" value="{{ $pengajar_mapel->id }}" name="id_pengajar">
+                <input type="hidden" value="latihan" name="tipe">
+                <input type="text" name="nama" class="input input-bordered text-black w-full"
+                    placeholder="Judul Latihan" required>
                 <div class="w-full flex gap-5 checkbox-tahunajar">
                     <div class="form-control w-full">
                         <label class="label p-0">
@@ -243,7 +294,9 @@
             <button>close</button>
         </form>
     </dialog>
-    <dialog id="ujian" class="modal" data-theme="light">
+    {{--
+        ??HAPUS BAGIAN MODAL INI JIKA SUDAH
+        <dialog id="ujian" class="modal" data-theme="light">
         <div class="modal-box text-black">
             <h3 class="font-semibold text-2xl text-black text-center w-full">Masukkan judul Assessment!</h3>
             <form action="{{ route('tugas.store') }}" method="POST"
@@ -291,7 +344,7 @@
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
-    </dialog>
+    </dialog> --}}
     <template id="edit-template">
         <dialog id="edit_modal" class="modal" data-theme="light">
             <div class="modal-box text-black">

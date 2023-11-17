@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\Nilai;
-use App\Models\Sekolah;
 use App\Models\Siswa;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
+use App\Models\PengajarMapel;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class NilaiController extends Controller
 {
@@ -39,17 +41,49 @@ class NilaiController extends Controller
             ]]);
         } else {
             if (auth()->user()->role == 'pengajar') {
-                $data_nilai = Nilai::filterByTgl($request->input('tgl'))
-                    ->filterBySekolah($request->input('sekolah'))
-                    ->filterByKelas($request->input('kelas'))
-                    ->filterBySemester($request->input('semester'))
-                    ->filterByTugas($request->input('tugas'))
-                    ->get();
+                if ($request->query() == null) {
+                    $data = PengajarMapel::where('id_user', auth()->user()->id)
+                        ->get()
+                        ->pluck('tugas')
+                        ->flatten()
+                        ->pluck('nilai')
+                        ->flatten();
+                } else {
+                    $data = PengajarMapel::where('id_user', auth()->user()->id)
+                        ->with(['tugas' => function ($query) use ($request) {
+                            $query->with(['nilai' => function ($query) use ($request) {
+                                $query->filterByTgl($request->input('tgl'))
+                                    ->filterBySekolah($request->input('sekolah'))
+                                    ->filterByKelas($request->input('kelas'))
+                                    ->filterBySemester($request->input('semester'))
+                                    ->filterByTugas($request->input('tugas'));
+                            }]);
+                        }])
+                        ->get()
+                        ->pluck('tugas')
+                        ->flatten()
+                        ->pluck('nilai')
+                        ->flatten();
+                }
+
+                $page = request()->get('page', 1);
+
+                $perPage = 12;
+
+                $data_nilai = new LengthAwarePaginator(
+                    $data->forPage($page, $perPage),
+                    $data->count(),
+                    $perPage,
+                    $page,
+                    ['path' => request()->url(), 'query' => request()->query()]
+                );
+
                 return view('dashboard.pengajar.pages.nilai', [
                     'title' => "Nilai",
                     'full' => false,
                     'data_nilai' => $data_nilai,
                     'data_sekolah' => Sekolah::all(),
+                    'info_pengajar' => auth()->user(),
                     'terakhir_dinilai' => Nilai::latest()->take(2)->get()
                 ]);
             }
@@ -91,6 +125,7 @@ class NilaiController extends Controller
                     ->useLog('nilai')
                     ->performedOn(Nilai::latest()->first())
                     ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
                     ->log('Menambah data nilai');
                 return response()->json(['success' => 'data_store', 'time' => date(now())]);
             } else {
@@ -105,6 +140,7 @@ class NilaiController extends Controller
                     ->useLog('nilai')
                     ->performedOn($nilai->first())
                     ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
                     ->log('Mengubah data nilai');
                 return response()->json(['success' => "data_update", 'time' => date(now())]);
             } else {

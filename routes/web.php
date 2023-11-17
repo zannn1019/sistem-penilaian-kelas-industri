@@ -10,6 +10,7 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiAkhirController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\PengajarController;
+use App\Http\Controllers\RiwayatEditController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\SiswaController;
@@ -102,6 +103,8 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 Route::get('/kelas/{kelas}/nilaiakhir', 'nilaiAkhir')->name('nilai-akhir');
             });
         });
+        Route::post('/nilaiakhir', [AdminPengajarController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir');
+        Route::get('/riwayatedit', [RiwayatEditController::class, 'index'])->name('riwayatEditAdmin');
     });
 });
 

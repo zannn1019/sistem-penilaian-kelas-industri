@@ -50,7 +50,9 @@
                 </div>
             </div>
             <div class="px-5 py-2 max-sm:px-0 w-full h-full text-black flex flex-col gap-2">
-                @if ($daftar_tugas['ujian']->count())
+                {{--
+                    ?? HAPUS JIKA SUDAH
+                    @if ($daftar_tugas['ujian']->count())
                     <h1 class="font-semibold">Assesmen</h1>
                     <div class="w-full grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2">
                         @foreach ($daftar_tugas['ujian'] as $ujian)
@@ -85,7 +87,7 @@
                             </div>
                         @endforeach
                     </div>
-                @endif
+                @endif --}}
                 @if ($daftar_tugas['tugas']->count())
                     <h1 class="font-semibold">Tugas</h1>
                     <div class="w-full grid grid-cols-3  max-sm:grid-cols-1 max-md:grid-cols-2">

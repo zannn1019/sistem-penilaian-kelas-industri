@@ -12,7 +12,7 @@
                             <li><a href="{{ route('select-mapel', ['kelas' => $info_kelas->id]) }}">
                                     {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</a>
                             </li>
-                            <li>Nilai Akhir</li>
+                            <li>Assessment {{ $info_kelas->semester == 'ganjil' ? 'Blok A' : 'Blok B' }}</li>
                         </ul>
                     </div>
                     <h1 class="text-3xl font-semibold max-sm:text-sm"> <span class="max-sm:hidden">Kelas Industri -</span>
@@ -52,22 +52,22 @@
                                         {{ $siswa->nama }}
                                     </th>
                                     <td class="border-r-2 border-darkblue-500 waktu-tanggal">
-                                        {{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->updated_at ?? '-' }}
+                                        {{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->updated_at ?? '-' }}
                                     </td>
-                                    <td class="border-r-2 border-darkblue-500 input-nilai cursor-pointer relative {{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->nilai <= 75? 'bg-red-300': '' }}"
+                                    <td class="border-r-2 border-darkblue-500 input-nilai relative {{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->nilai <= 75? 'bg-red-300': '' }}"
                                         data-id="{{ $siswa->id }}">
                                         <input type="number"
                                             class="w-auto text-center pointer-events-none bg-transparent focus:outline-none"
-                                            placeholder="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->nilai ?? '-' }}"
-                                            value="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->nilai ?? '' }}"
+                                            placeholder="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->nilai ?? '-' }}"
+                                            value="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->nilai ?? '' }}"
                                             disabled min="0" max="100">
                                     </td>
-                                    <td class="border-r-2 border-darkblue-500 input-keterangan cursor-pointer relative"
+                                    <td class="border-r-2 border-darkblue-500 input-keterangan relative"
                                         data-id="{{ $siswa->id }}">
                                         <input type="text"
                                             class="w-auto text-center pointer-events-none bg-transparent focus:outline-none"
-                                            placeholder="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->keterangan ?? '-' }}"
-                                            value="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()->keterangan ?? '' }}"
+                                            placeholder="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->keterangan ?? '-' }}"
+                                            value="{{ optional($siswa->nilai_akhir)->where('tahun_ajar', $info_kelas->tahun_ajar)->where('semester', $info_kelas->semester)->first()?->keterangan ?? '' }}"
                                             disabled>
                                     </td>
                                 </tr>
@@ -76,7 +76,7 @@
                     </table>
                 </div>
             @else
-                <div class="w-full flex justify-center items-center flex-col text-gray-500">
+                <div class="w-full flex justify-center items-center flex-col text-gray-500 pointer-events-none select-none">
                     <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
                     <h1>Belum ada siswa!</h1>
                 </div>
@@ -110,7 +110,9 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        console.log(response);
+                        if (response.nilai_kurang) {
+                            currentTd.addClass('bg-red-300')
+                        }
                         if (response.success) {
                             let tanggal = currentTr.find('.waktu-tanggal')
                             tanggal.text(response.time)

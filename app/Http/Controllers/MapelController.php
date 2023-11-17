@@ -61,6 +61,7 @@ class MapelController extends Controller
             ->useLog('mapel')
             ->performedOn(Mapel::latest()->first())
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Menambah data mapel');
 
         return redirect()->back()->with('success', 'Mata pelajaran berhasil di tambahkan');
@@ -101,6 +102,7 @@ class MapelController extends Controller
             ->useLog('mapel')
             ->performedOn($mapel)
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Mengubah data mapel');
         return redirect()->back()->with('success', 'Mata pelajaran berhasil diubah');
     }
@@ -117,6 +119,7 @@ class MapelController extends Controller
             ->useLog('mapel')
             ->performedOn($mapel)
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Mengarsipkan data mapel');
         return redirect()->route('mapel.index')->with('success', 'Mata pelajaran berhasil diarsipkan');
     }

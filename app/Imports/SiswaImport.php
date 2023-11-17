@@ -6,14 +6,13 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SiswaImport implements ToModel, WithStartRow, WithValidation
+class SiswaImport implements ToModel, WithStartRow
 {
     protected $kelas;
-
+    protected $duplicate = 0;
+    protected $dataError = 0;
+    protected $success = 0;
     public function startRow(): int
     {
         return 2;
@@ -29,22 +28,38 @@ class SiswaImport implements ToModel, WithStartRow, WithValidation
      */
     public function model(array $row)
     {
-        return new Siswa([
-            'id_sekolah' => $this->kelas->sekolah->id,
-            'id_kelas' => $this->kelas->id,
-            'nis'     => $row[0],
-            'nama'    => $row[1],
-            'no_telp' => $row[2],
-            'email' => $row[3]
-        ]);
+        if (empty($row[0]) || empty($row[1]) || empty($row[2]) || empty($row[3])) {
+            $this->dataError++;
+        } else {
+            $siswa = Siswa::where('nis', $row[0])->first();
+
+            if ($siswa) {
+                $this->duplicate++;
+            } else {
+                $this->success++;
+                return new Siswa([
+                    'id_sekolah' => $this->kelas->sekolah->id,
+                    'id_kelas'   => $this->kelas->id,
+                    'nis'        => $row[0],
+                    'nama'       => $row[1],
+                    'no_telp'    => $row[2],
+                    'email'      => $row[3]
+                ]);
+            }
+        }
     }
-    public function rules(): array
+
+    public function getDuplicateData(): int
     {
-        return [
-            '0' => 'required|numeric|unique:siswa,nis',
-            '1' => 'required|string|max:255',
-            '2' => 'required',
-            '3' => 'required|email',
-        ];
+        return $this->duplicate;
+    }
+
+    public function getErrorCount(): int
+    {
+        return $this->dataError;
+    }
+    public function getSuccessCount(): int
+    {
+        return $this->success;
     }
 }

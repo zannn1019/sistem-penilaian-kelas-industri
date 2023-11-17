@@ -34,10 +34,13 @@ class NilaiAkhirController extends Controller
             abort(404);
         }
         $cek_data = NilaiAkhir::where('id_siswa', $request->id_siswa);
+        if ($request->get('nilai') <= 75 && $request->get('keterangan') == null) {
+            return response()->json(['nilai_kurang' => 'Nilai yang di bawah 75 harus disertai keterangan']);
+        }
         $validatedData = $request->validate([
             'id_siswa' => ['required'],
             'nilai' => ['required', 'numeric', 'min:0', 'max:100'],
-            'keterangan' => ['required_if:nilai,<=75'],
+            'keterangan' => ['required_if:nilai,<=,75'],
             'tahun_ajar' => ['required', 'regex:/^\d{4}\/\d{4}$/'],
             'semester' => ['required']
         ]);
@@ -49,6 +52,7 @@ class NilaiAkhirController extends Controller
                     ->useLog('nilai_akhir')
                     ->performedOn(NilaiAkhir::latest()->first())
                     ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
                     ->log('Menambah data nilai akhir');
                 return response()->json(['success' => 'data_store', 'time' => date(now())]);
             } else {
@@ -63,6 +67,7 @@ class NilaiAkhirController extends Controller
                     ->useLog('nilai_akhir')
                     ->performedOn($nilai->first())
                     ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
                     ->log('Mengubah data nilai akhir');
                 return response()->json(['success' => "data_update", 'time' => date(now())]);
             } else {

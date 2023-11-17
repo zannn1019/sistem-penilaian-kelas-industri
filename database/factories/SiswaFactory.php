@@ -24,6 +24,7 @@ class SiswaFactory extends Factory
             'nis' => fake()->nik(),
             'nama' => fake()->name(),
             'no_telp' => fake()->phoneNumber(),
+            'email' => fake()->email(),
         ];
     }
 }

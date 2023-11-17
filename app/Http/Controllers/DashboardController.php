@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Nilai;
+use App\Models\NilaiAkhir;
 use App\Models\PengajarMapel;
 use App\Models\Sekolah;
 use App\Models\Siswa;
@@ -12,6 +13,7 @@ use App\Models\Tugas;
 use App\Models\User;
 use Brick\Math\BigRational;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use NumberToWords\NumberToWords;
 
 class DashboardController extends Controller
@@ -30,11 +32,11 @@ class DashboardController extends Controller
                     'total' => 0,
                     'ternilai' => 0,
                 ],
-                'assessment_blok_a' => [
+                'latihan' => [
                     'total' => 0,
                     'ternilai' => 0,
                 ],
-                'assessment_blok_b' => [
+                'assessment' => [
                     'total' => 0,
                     'ternilai' => 0,
                 ],
@@ -55,7 +57,14 @@ class DashboardController extends Controller
                 $status_tugas[$tipe]['total'] += $totalTugasByTipe;
                 $status_tugas[$tipe]['ternilai'] += $totalTernilaiByTipe;
             }
-
+            foreach ($pengajar->kelas->pluck('siswa')->flatten() as $siswa) {
+                if ($siswa->nilai_akhir->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->count()) {
+                    $status_tugas['assessment']['ternilai'] += 1;
+                    $status_tugas['total_ternilai'] += 1;
+                }
+                $status_tugas['assessment']['total'] += 1;
+                $status_tugas['total_tugas'] += 1;
+            }
             return view('dashboard.pengajar.pages.dashboard', [
                 'title' => "Dashboard",
                 'full' => false,
@@ -78,6 +87,7 @@ class DashboardController extends Controller
                 'siswa' => Siswa::all()->count()
             ]);
         }
+        return abort(404);
     }
 
     public function profile()
@@ -102,16 +112,47 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function kelas()
+    public function kelas(Request $request)
     {
+        if ($request->query() == null || $request->input("filter")) {
+            $data_kelas = auth()->user()->kelas();
+        } else {
+            $sekolah = $request->input('sekolah');
+            $tingkat = $request->input('tingkat');
+            $sort = $request->input('sort');
+            $semester = $request->input('semester');
+
+            $data_kelas = auth()->user()->kelas();
+
+            if ($sekolah) {
+                $data_kelas->where('kelas.id_sekolah', $sekolah);
+            }
+
+            if ($tingkat) {
+                $data_kelas->where('tingkat', $tingkat);
+            }
+
+            if ($sort == 'edited') {
+                $data_kelas->orderBy('updated_at', 'DESC');
+            }
+
+            if ($sort == 'az') {
+                $data_kelas->orderBy('nama_kelas', 'DESC');
+            }
+
+            if ($semester) {
+                $data_kelas->where('kelas.semester', $semester);
+            }
+        }
         return view('dashboard.pengajar.pages.kelas', [
             'title' => "Kelas",
             'full' => false,
-            'data_kelas' => auth()->user()->kelas,
+            'data_kelas' => $data_kelas,
             'info_pengajar' => auth()->user(),
             'data_mapel' => auth()->user()->mapel
         ]);
     }
+
 
     public function showSiswa(Kelas $kelas)
     {

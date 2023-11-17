@@ -24,10 +24,13 @@
                         </ul>
                     </div>
                     <div class="w-full flex justify-between items-center">
-                        <h1
-                            class="text-6xl max-md:text-3xl py-2 max-sm:py-0 font-semibold max-sm:text-lg truncate w-full max-w-5xl max-sm:max-w-[15rem]">
-                            {{ $info_siswa->nama }}
-                        </h1>
+                        <div class="flex flex-col">
+                            <h1
+                                class="text-6xl max-md:text-3xl py-2 max-sm:py-0 font-semibold max-sm:text-lg truncate w-full max-w-5xl max-sm:max-w-[15rem]">
+                                {{ $info_siswa->nama }}
+                            </h1>
+                            <span class="text-2xl font-semibold">{{ $info_siswa->nis }}</span>
+                        </div>
                         <div class="dropdown dropdown-left justify-self-end self-end p-5" data-theme="light">
                             <label tabindex="0"
                                 class="text-4xl self-end justify-self-end bg-transparent cursor-pointer "><i
@@ -46,10 +49,9 @@
             <div
                 class="w-full bg-darkblue-500 py-5 px-10 max-sm:px-5 rounded-3xl grid grid-cols-3 max-sm:grid-cols-1 text-white text-sm gap-2">
                 <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-chalkboard text-xl"></i>
-                    <span class="font-semibold">Kelas</span>
-                    <span
-                        class="border-l px-2 text-xs">{{ $info_siswa->kelas->tingkat }}-{{ $info_siswa->kelas->jurusan }}-{{ $info_siswa->kelas->kelas }}</span>
+                    <i class="fa-solid fa-envelope text-xl"></i>
+                    <span class="font-semibold">Email</span>
+                    <span class="border-l px-2 text-xs">{{ $info_siswa->email }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <i class="fa-solid fa-calendar text-xl"></i>
@@ -57,9 +59,9 @@
                     <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->kelas->tahun_ajar }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-book text-xl"></i>
-                    <span class="font-semibold">Semester</span>
-                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->kelas->semester }}</span>
+                    <i class="fa-solid fa-school text-xl"></i>
+                    <span class="font-semibold">Sekolah</span>
+                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->sekolah->nama }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <i class="fa-solid fa-phone text-xl"></i>
@@ -67,17 +69,16 @@
                     <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->no_telp }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-school text-xl"></i>
-                    <span class="font-semibold">Sekolah</span>
-                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->sekolah->nama }}</span>
+                    <i class="fa-solid fa-book text-xl"></i>
+                    <span class="font-semibold">Semester</span>
+                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->kelas->semester }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-id-card text-xl"></i>
-                    <span class="font-semibold">NIS</span>
-                    <span class="border-l px-2 text-xs capitalize">{{ $info_siswa->nis }}</span>
+                    <i class="fa-solid fa-chalkboard text-xl"></i>
+                    <span class="font-semibold">Kelas</span>
+                    <span
+                        class="border-l px-2 text-xs">{{ $info_siswa->kelas->tingkat }}-{{ $info_siswa->kelas->jurusan }}-{{ $info_siswa->kelas->kelas }}</span>
                 </div>
-            </div>
-            <div>
             </div>
             <div class="w-full grid {{ request('view') == 'full' ? 'grid-cols-1' : 'grid-cols-2' }} max-sm:grid-cols-1">
                 @if (request('view') != 'full')

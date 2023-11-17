@@ -32,22 +32,28 @@ class UserController extends Controller
             $request->session()->regenerate();
             activity()
                 ->useLog(auth()->user()->role)
+                ->event('login')
                 ->causedBy(auth()->user())
+                ->withProperties(['role' => auth()->user()->role])
                 ->log('Login');
             if (auth()->user()->role == "pengajar") {
                 return redirect()->intended('pengajar/dashboard')->with('success', "Selamat datang " . auth()->user()->nama);
             } else if (auth()->user()->role == "admin") {
                 return redirect()->intended('admin/dashboard')->with('success', "Selamat datang " . auth()->user()->nama);
+            } else {
+                return redirect()->back()->with('error', 'Username atau password salah!');
             }
         }
-        return back()->with('error', 'Incorect username or password');
+        return redirect()->back()->with('error', 'Username atau password salah!');
     }
 
     public function logout(Request $request)
     {
         activity()
             ->useLog(auth()->user()->role)
+            ->event('logout')
             ->causedBy(auth()->user())
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Logout');
         Auth::logout();
         $request->session()->invalidate();
@@ -140,6 +146,13 @@ class UserController extends Controller
         $validated_data['role'] = "pengajar";
         $validated_data['statue'] = "aktif";
         User::create($validated_data);
+        activity()
+            ->event('created')
+            ->useLog('user')
+            ->performedOn(User::latest()->first())
+            ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
+            ->log('Menambah data pengajar!');
         return redirect()->route('pengajar.index')->with('success', 'Pengajar berhasil ditambahkan');
     }
 
@@ -201,6 +214,13 @@ class UserController extends Controller
             ]);
         }
         if ($user->update($validated_data)) {
+            activity()
+                ->event('update')
+                ->useLog('user')
+                ->performedOn(User::latest()->first())
+                ->causedBy(auth()->user()->id)
+                ->withProperties(['role' => auth()->user()->role])
+                ->log('Mengubah informasi pengajar!');
             return back()->with('success', "Informasi berhasil diubah!");
         } else {
             return back()->with('success', "Informasi gagal diubah!");

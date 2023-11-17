@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Nilai;
-use App\Models\Pengajar;
-use App\Models\PengajarMapel;
-use App\Models\PengajarSekolah;
 use App\Models\Siswa;
 use App\Models\Tugas;
-use App\Models\User;
+use App\Models\Pengajar;
+use App\Models\NilaiAkhir;
+use Illuminate\Http\Request;
+use App\Models\PengajarMapel;
+use App\Models\PengajarSekolah;
 use NumberToWords\NumberToWords;
 use PhpParser\Node\Expr\FuncCall;
+use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 
 class AdminPengajarController extends Controller
 {
@@ -29,11 +32,11 @@ class AdminPengajarController extends Controller
                 'total' => 0,
                 'ternilai' => 0,
             ],
-            'assessment_blok_a' => [
+            'latihan' => [
                 'total' => 0,
                 'ternilai' => 0,
             ],
-            'assessment_blok_b' => [
+            'assessment' => [
                 'total' => 0,
                 'ternilai' => 0,
             ],
@@ -54,6 +57,14 @@ class AdminPengajarController extends Controller
             $status_tugas[$tipe]['total'] += $totalTugasByTipe;
             $status_tugas[$tipe]['ternilai'] += $totalTernilaiByTipe;
         }
+        foreach ($pengajar->kelas->pluck('siswa')->flatten() as $siswa) {
+            if ($siswa->nilai_akhir->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->count()) {
+                $status_tugas['assessment']['ternilai'] += 1;
+                $status_tugas['total_ternilai'] += 1;
+            }
+            $status_tugas['assessment']['total'] += 1;
+            $status_tugas['total_tugas'] += 1;
+        }
 
         return view('dashboard.admin.pages.adminPengajar.dashboard', [
             'title' => "Dashboard Pengajar",
@@ -64,12 +75,43 @@ class AdminPengajarController extends Controller
     }
 
     //? Daftar kelas untuk dashboard pengajar pada page admin
-    public function kelas(User $pengajar)
+    public function kelas(User $pengajar, Request $request)
     {
+        if ($request->query() == null || $request->input("filter")) {
+            $data_kelas = $pengajar->kelas();
+        } else {
+            $sekolah = $request->input('sekolah');
+            $tingkat = $request->input('tingkat');
+            $sort = $request->input('sort');
+            $semester = $request->input('semester');
+
+            $data_kelas = $pengajar->kelas();
+
+            if ($sekolah) {
+                $data_kelas->where('kelas.id_sekolah', $sekolah);
+            }
+
+            if ($tingkat) {
+                $data_kelas->where('tingkat', $tingkat);
+            }
+
+            if ($sort == 'edited') {
+                $data_kelas->orderBy('updated_at', 'DESC');
+            }
+
+            if ($sort == 'az') {
+                $data_kelas->orderBy('nama_kelas', 'DESC');
+            }
+
+            if ($semester) {
+                $data_kelas->where('kelas.semester', $semester);
+            }
+        }
         return view('dashboard.admin.pages.adminPengajar.kelas', [
             'title' => "Kelas Pengajar",
             'full' => true,
-            'info_pengajar' => $pengajar
+            'info_pengajar' => $pengajar,
+            'data_kelas' => $data_kelas
         ]);
     }
 
@@ -91,7 +133,7 @@ class AdminPengajarController extends Controller
     public function showTugas(User $pengajar, Kelas $kelas, PengajarMapel $mapel)
     {
         $daftar_tugas = collect([
-            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz']])->where('id_kelas', $kelas->id)->get(),
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->get(),
             'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
         ]);
         return view('dashboard.admin.pages.adminPengajar.selectTugas', [
@@ -201,7 +243,7 @@ class AdminPengajarController extends Controller
         ]);
     }
 
-    public function nilaiAkhir(User $pengajar, Kelas $kelas,)
+    public function nilaiAkhir(User $pengajar, Kelas $kelas)
     {
         $total_ternilai = $kelas->siswa()->withCount('nilai_akhir')->pluck('nilai_akhir_count')->sum();
         return view('dashboard.admin.pages.adminPengajar.nilaiAkhir', [
@@ -211,5 +253,53 @@ class AdminPengajarController extends Controller
             'info_kelas' => $kelas,
             'total_ternilai' => $total_ternilai
         ]);
+    }
+
+    public function inputNilaiAkhir(Request $request)
+    {
+        if (!$request->ajax()) {
+            abort(404);
+        }
+        $cek_data = NilaiAkhir::where('id_siswa', $request->id_siswa);
+        if ($request->get('nilai') <= 75 && $request->get('keterangan') == null) {
+            return response()->json(['nilai_kurang' => 'Nilai yang di bawah 75 harus disertai keterangan']);
+        }
+        $validatedData = $request->validate([
+            'id_siswa' => ['required'],
+            'nilai' => ['required', 'numeric', 'min:0', 'max:100'],
+            'keterangan' => ['required_if:nilai,<=,75'],
+            'tahun_ajar' => ['required', 'regex:/^\d{4}\/\d{4}$/'],
+            'semester' => ['required']
+        ]);
+        if (!$cek_data->count()) {
+            // ?? Jika nilai nya belum di tambahkan
+            if (NilaiAkhir::create($validatedData)) {
+                activity()
+                    ->event('created')
+                    ->useLog('nilai_akhir')
+                    ->performedOn(NilaiAkhir::latest()->first())
+                    ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
+                    ->log('Menambah data nilai akhir');
+                return response()->json(['success' => 'data_store', 'time' => date(now())]);
+            } else {
+                return response()->json(['error' => 'Nilai gagal di tambahkan!']);
+            }
+        } else {
+            // ?? Jika nilai nya sudah di tambahkan
+            $nilai = $cek_data;
+            if ($nilai->update($validatedData)) {
+                activity()
+                    ->event('update')
+                    ->useLog('nilai_akhir')
+                    ->performedOn($nilai->first())
+                    ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
+                    ->log('Mengubah data nilai akhir');
+                return response()->json(['success' => "data_update", 'time' => date(now())]);
+            } else {
+                return response()->json(['error' => 'Nilai gagal di ubah!']);
+            }
+        }
     }
 }

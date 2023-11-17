@@ -30,9 +30,10 @@
                     </div>
                     <div class="foto-edit hidden top-2 w-10 h-10 justify-center items-center right-2 absolute z-40 cursor-pointer text-white bg-bluesea-500 rounded-circle"
                         id="edit-pen-foto">
-                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        <i class="fa-solid fa-pen " aria-hidden="true"></i>
                         <input type="file" name="foto" id="foto-input"
-                            class="absolute opacity-0 w-full h-full rounded-circle cursor-pointer" accept="image/*">
+                            class="absolute opacity-0 z-10 rounded-circle cursor-pointer w-full h-full left-0 top-0"
+                            accept="image/*">
                     </div>
                 </div>
                 <div class="info flex flex-col w-full justify-center items-center gap-2">

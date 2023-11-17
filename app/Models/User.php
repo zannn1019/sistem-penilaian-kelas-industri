@@ -17,11 +17,7 @@ use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, LogsActivity, Searchable;
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->useLogName("user");
-    }
+    use HasApiTokens, HasFactory, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.

@@ -28,6 +28,12 @@
                             class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
                     </li>
                     <li>
+                        <a href="">ARSIP</a>
+                    </li>
+                    <li>
+                        <a href="">RIWAYAT EDIT</a>
+                    </li>
+                    <li>
                         <label for="my_modal_7" class="hover:text-crimson">
                             <span class="text-xs">LOG OUT</span></label>
                     </li>
@@ -63,18 +69,19 @@
             <a href="{{ route('kelas-pengajar') }}" class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
         </div>
         <div class="navbar-end">
-            <div id="global-search" class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black relative">
+            <div id="global-search"
+                class="max-md:flex search-bar bg-tosca-500 px-4 py-2 rounded-box text-black relative">
                 <div
                     class="search-result w-full overflow-x-hidden max-h-56 bg-tosca-500 absolute left-0 top-full mt-1 z-50 rounded-2xl shadow-xl hidden">
                     <div class="w-full rounded-box text-sm result-box">
-
                     </div>
                 </div>
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
+                    class=" bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
                     placeholder="Ketik di sini untuk mencari...">
-                <button
-                    class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>
+                <div
+                    class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1 ">
+                </div>
             </div>
         </div>
     </nav>
@@ -106,6 +113,15 @@
                     </li>
                     <li><a href="{{ route('pengajar.index') }}"
                             class="{{ $title == 'Pengajar' ? 'text-white' : '' }}">PENGAJAR</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('mapel.index') }}">MAPEL</a>
+                    </li>
+                    <li>
+                        <a href="">ARSIP</a>
+                    </li>
+                    <li>
+                        <a href="">RIWAYAT EDIT</a>
                     </li>
                     <li>
                         <label for="my_modal_7" class="hover:text-crimson">
@@ -146,21 +162,19 @@
                 class="{{ $title == 'Pengajar' ? 'text-white' : '' }}">PENGAJAR</a>
         </div>
         <div class="navbar-end">
-            <div id="global-search" class="search-bar bg-tosca-500 px-4 py-2 rounded-box text-black relative">
+            <div id="global-search"
+                class="max-md:flex search-bar bg-tosca-500 px-4 py-2 rounded-box text-black relative">
                 <div
                     class="search-result w-full overflow-x-hidden max-h-56 bg-tosca-500 absolute left-0 top-full mt-1 z-50 rounded-2xl shadow-xl hidden">
                     <div class="w-full rounded-box text-sm result-box">
-                        <div class="title w-full bg-tosca-600 px-4 py-1 font-semibold">Siswa</div>
-                        <a class="result-item px-4 py-2 hover:bg-tosca-300 w-full flex" href="">Item 1</a>
-                        <div class="title w-full bg-tosca-600 px-4 py-1 font-semibold">Sekolah</div>
-                        <a class="result-item px-4 py-2 hover:bg-tosca-300 w-full flex" href="">Item 1</a>
                     </div>
                 </div>
                 <input type="text"
-                    class="max-sm:hidden max-md:hidden bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
+                    class=" bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
                     placeholder="Ketik di sini untuk mencari...">
-                <button
-                    class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1"></button>
+                <div
+                    class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1">
+                </div>
             </div>
         </div>
     </nav>

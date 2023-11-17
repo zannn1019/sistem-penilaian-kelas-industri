@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\PengajarMapel;
 use App\Models\PengajarSekolah;
 use App\Models\Tugas;
@@ -167,7 +168,7 @@ class PengajarController extends Controller
                     $idPengajar = $pengajar->id;
                     PengajarSekolah::where('id_user', $idPengajar)
                         ->where('id_kelas', $idKelas)
-                        ->delete();
+                        ->forceDelete();
                     Tugas::where("id_kelas", $idKelas);
                     return response()->json(['success' => "Data berhasil di hapus"]);
                 } catch (\Exception $err) {

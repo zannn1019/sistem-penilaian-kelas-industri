@@ -57,7 +57,7 @@
                     </table>
                 </div>
             @else
-                <div class="w-full flex justify-center items-center flex-col text-gray-500">
+                <div class="w-full flex justify-center items-center flex-col text-gray-500 pointer-events-none select-none">
                     <img src="{{ asset('img/404_kelas.png') }}" alt="" draggable="false">
                     <h1>Belum ada siswa!</h1>
                 </div>

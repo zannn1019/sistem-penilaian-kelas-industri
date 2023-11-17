@@ -27,11 +27,17 @@ class KelasController extends Controller
             }
         }
         if (auth()->user()->role == "pengajar") {
+            dd('tes');
             //?Jika pengguna memiliki role 'pengajar'
+            if ($request->query() == null || $request->input("filter")) {
+                $data_kelas = auth()->user()->kelas;
+            } else {
+                $data_kelas = auth()->user()->kelas()->filter(['sekolah' => $request->input('sekolah'), 'tingkat' => $request->input('tingkat')]);
+            }
             return view('dashboard.pengajar.pages.kelas', [
                 'title' => "Kelas",
                 'full' => false,
-                'data_kelas' => auth()->user()->kelas,
+                'data_kelas' => $data_kelas,
                 'info_pengajar' => auth()->user(),
                 'data_mapel' => auth()->user()->mapel
             ]);
@@ -79,6 +85,7 @@ class KelasController extends Controller
             ->useLog('kelas')
             ->performedOn(Kelas::latest()->first())
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Menambah data kelas');
         return redirect()->route('kelas.show', ['kela' => Kelas::latest()->first()])->with('success', 'Data kelas berhasil ditambahkan!');
     }
@@ -139,6 +146,7 @@ class KelasController extends Controller
             ->useLog('kelas')
             ->performedOn($kela)
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Mengubah data kelas');
         return back()->with('success', 'Data kelas berhasil di ubah!');
     }
@@ -154,6 +162,7 @@ class KelasController extends Controller
             ->useLog('kelas')
             ->performedOn($kela)
             ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
             ->log('Mengarsipkan data kelas');
         return redirect()->route('sekolah.show', $kela->sekolah->id)->with('success', 'Data kelas berhasil diarsipkan');
     }

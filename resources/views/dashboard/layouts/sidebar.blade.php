@@ -24,25 +24,6 @@
             </a>
         </div>
     </div>
-
-    <div class="max-sm:flex hidden w-full absolute h-20 bottom-0 left-0 z-10 items-center justify-between p-5 ">
-        <div class="dropdown dropdown-top flex flex-col ">
-            <div tabindex="0"
-                class="bg-darkblue-500 py-2 px-1 rounded-circle w-16 h-16 flex items-center justify-center shadow-lg cursor-pointer">
-                <img src="{{ asset('img/logo_white.png') }}" alt="" class="w-10">
-            </div>
-            <div tabindex="0" class="dropdown-content z-[1] menu w-full flex flex-col gap-3 mb-2 ">
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa fa-archive"></i>
-                </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                </a>
-            </div>
-        </div>
-    </div>
 @else
     <div class="max-md:hidden sidebar h-full w-28 flex bottom-0 left-0 justify-between flex-col items-center py-3">
         <div class="log avatar p-5 ">
@@ -61,8 +42,8 @@
                 <i class="fa fa-archive" aria-hidden="true"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">ARSIP</h1>
             </a>
-            <a href=""
-                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat' ? 'bg-white text-black' : '' }}">
+            <a href="{{ route('riwayatEditAdmin') }}"
+                class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat Edit' ? 'bg-white text-black' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT EDIT</h1>
             </a>
@@ -73,30 +54,6 @@
                 <img src="{{ asset('storage/pengajar/' . auth()->user()->foto) }}" class="w-full h-full object-cover"
                     alt="">
             </a>
-        </div>
-    </div>
-
-    <div class="max-md:flex z-50 hidden w-full fixed h-20 bottom-0 left-0 items-center justify-between p-5 pointer-events-none select-none"
-        id="bubble-median">
-        <div class="dropdown dropdown-top flex flex-col pointer-events-auto">
-            <div tabindex="0"
-                class="bg-darkblue-500 py-2 px-1 rounded-circle w-16 h-16 flex items-center justify-center shadow-lg cursor-pointer">
-                <img src="{{ asset('img/logo_white.png') }}" alt="" class="w-10">
-            </div>
-            <div tabindex="0" class="dropdown-content z-[1] menu w-full flex flex-col gap-3 mb-2 ">
-                <a href="{{ route('mapel.index') }}"
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa fa-archive"></i>
-                </a>
-                <a href=""
-                    class="flex flex-col gap-2 text-center text-2xl justify-center items-center bg-bluesea-500 hover:bg-bluesea-700 text-white w-full p-3 rounded-circle">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                </a>
-            </div>
         </div>
     </div>
 @endif
