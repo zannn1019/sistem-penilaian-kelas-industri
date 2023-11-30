@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pengajar_mapel', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_mapel')->nullable()->constrained('mapel');
+            $table->foreignId('id_user')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('id_mapel')->nullable()->constrained('mapel')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

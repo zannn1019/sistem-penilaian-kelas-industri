@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,10 +11,11 @@ use Laravel\Scout\Searchable;
 
 class Sekolah extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes, Searchable, CascadeSoftDeletes;
     protected $guarded =  [
         'id'
     ];
+    protected $cascadeDeletes = ['pengajar', 'kelas', 'siswa'];
     protected $table = 'sekolah';
     protected $dates = ['deleted_at'];
     // protected $with = ['kelas', 'siswa'];

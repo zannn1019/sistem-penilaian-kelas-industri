@@ -13,9 +13,9 @@ class SearchController extends Controller
 {
     public function adminSearch(Request $request)
     {
-        // if (!$request->ajax()) {
-        //     abort(404);
-        // }
+        if (!$request->ajax()) {
+            abort(404);
+        }
         $result  = collect([]);
         $query = $request->input('query');
         $sekolah = Sekolah::select('id', 'nama')
@@ -71,6 +71,7 @@ class SearchController extends Controller
         $result = ['sekolah' => $sekolah, 'kelas' => $kelas, 'mapel' => $mapel, 'pengajar' => $pengajar, 'siswa' => $siswa];
         return response()->json($result, 200);
     }
+
     public function pengajarSearch(User $pengajar, Request $request)
     {
         if (!$request->ajax()) {

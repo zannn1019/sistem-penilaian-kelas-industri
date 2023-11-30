@@ -165,12 +165,14 @@ class SekolahController extends Controller
      */
     public function destroy(Sekolah $sekolah)
     {
-        $pengajar = PengajarSekolah::where("id_sekolah", $sekolah->id);
-        $pengajar->delete();
-        Tugas::whereIn('id_pengajar', $pengajar->pluck('id')->toArray())->delete();
-        $sekolah->siswa()->delete();
-        $sekolah->kelas()->delete();
         $sekolah->delete();
+        activity()
+            ->event('arsip')
+            ->useLog('sekolah')
+            ->performedOn($sekolah)
+            ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
+            ->log('Mengarsipkan data sekolah');
         return redirect()->route('sekolah.index')->with('success', "Data sekolah berhasil di arsipkan");
     }
 

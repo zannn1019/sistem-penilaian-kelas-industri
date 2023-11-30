@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pengajar')->constrained('pengajar_mapel');
-            $table->foreignId('id_kelas')->constrained('kelas');
+            $table->foreignId('id_pengajar')->constrained('pengajar_mapel')->cascadeOnDelete();
+            $table->foreignId('id_kelas')->constrained('kelas')->cascadeOnDelete();
             $table->enum('tipe', ['tugas', 'quiz', 'latihan', 'assessment_blok_a', 'assessment_blok_b']);
             $table->string("tahun_ajar");
             $table->enum("semester", ['ganjil', 'genap']);

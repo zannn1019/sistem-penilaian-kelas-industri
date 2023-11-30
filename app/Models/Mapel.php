@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,10 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mapel extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes, Searchable, CascadeSoftDeletes;
     protected $guarded = [
         'id'
     ];
+    protected $cascadeDeletes = ['pengajar', 'tugas', 'nilai'];
     protected $table = 'mapel';
     protected $dates = ['deleted_at'];
     protected $with = ['pengajar'];

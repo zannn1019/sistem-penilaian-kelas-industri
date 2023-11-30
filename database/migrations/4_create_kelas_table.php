@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_sekolah')->constrained('sekolah');
+            $table->foreignId('id_sekolah')->constrained('sekolah')->cascadeOnDelete();
             $table->string('nama_kelas');
             $table->enum('tingkat', ['10', '11', '12', '13']);
             $table->string('jurusan');

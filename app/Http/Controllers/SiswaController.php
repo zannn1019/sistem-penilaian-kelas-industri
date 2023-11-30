@@ -121,9 +121,18 @@ class SiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    //?? Destroy Siswa
     public function destroy(Siswa $siswa)
     {
-        //
+        $siswa->delete();
+        activity()
+            ->event('arsip')
+            ->useLog('mapel')
+            ->performedOn($siswa)
+            ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
+            ->log('Mengarsipkan data siswa');
+        return redirect()->route('kelas.show')->with('success', "Siswa berhasil di arsipkan");
     }
 
     public function getExcelFormat()

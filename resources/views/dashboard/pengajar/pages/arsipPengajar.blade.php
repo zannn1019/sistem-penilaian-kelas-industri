@@ -119,7 +119,7 @@
                 <form method="dialog">
                     <button class="btn btn-error text-white cancel-btn">Tutup</button>
                 </form>
-                <form action="{{ route('aksiArsip') }}" method="POST" id="form-aksi-arsip">
+                <form action="{{ route('aksiArsipPengajar') }}" method="POST" id="form-aksi-arsip">
                     @csrf
                     <input type="text" name="aksi" id="input-aksi" hidden>
                     <input type="submit" value="Konfirmasi" class="btn btn-success text-white">

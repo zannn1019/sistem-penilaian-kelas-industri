@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('nilai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_siswa')->constrained('siswa');
-            $table->foreignId('id_tugas')->constrained('tugas');
+            $table->foreignId('id_siswa')->constrained('siswa')->cascadeOnDelete();
+            $table->foreignId('id_tugas')->constrained('tugas')->cascadeOnDelete();
             $table->integer('nilai');
             $table->string("tahun_ajar");
             $table->enum("semester", ['ganjil', 'genap']);

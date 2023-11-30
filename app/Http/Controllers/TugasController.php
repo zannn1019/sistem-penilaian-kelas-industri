@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Mapel;
-use App\Models\User;
 use App\Models\Tugas;
 use App\Models\Pengajar;
 use Illuminate\Http\Request;
+use App\Models\PengajarMapel;
 use Illuminate\Support\Facades\DB;
 
 class TugasController extends Controller
@@ -75,6 +76,7 @@ class TugasController extends Controller
      */
     public function index(Kelas $kelas, Mapel $mapel)
     {
+        $pengajar_mapel = PengajarMapel::where('id_mapel', $mapel->id)->where('id_user', auth()->user()->id);
         $daftar_tugas = collect([
             'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->get(),
             'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
@@ -86,7 +88,7 @@ class TugasController extends Controller
             'info_kelas' => $kelas,
             'info_mapel' => $mapel,
             'daftar_tugas' => $daftar_tugas,
-            'pengajar_mapel' => $mapel
+            'pengajar_mapel' => $pengajar_mapel->first()
         ]);
     }
 
@@ -139,7 +141,6 @@ class TugasController extends Controller
                                 ->where('id_pengajar', $pengajarId)
                                 ->where('nama', $value)
                                 ->exists();
-
                             if ($exists) {
                                 $fail('Nama tugas harus unik untuk satu pengajar.');
                             }
@@ -150,6 +151,13 @@ class TugasController extends Controller
                 ]);
                 $validatedData['kode_tugas'] = $this->getKodeTugas($validatedData['tipe']);
                 Tugas::create($validatedData);
+                activity()
+                    ->event('created')
+                    ->useLog('tugas')
+                    ->performedOn(Tugas::first())
+                    ->causedBy(auth()->user()->id)
+                    ->withProperties(['role' => auth()->user()->role])
+                    ->log('Menambah data tugas!');
                 return back()->with('success', 'Tugas berhasil di tambahkan!');
             }
             return back()->with('error', 'Tugas gagal di tambahkan!');
@@ -210,14 +218,29 @@ class TugasController extends Controller
             'semester' => ['required'],
         ]);
         $tugas->update($validatedData);
+        activity()
+            ->event('update')
+            ->useLog('tugas')
+            ->performedOn($tugas)
+            ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
+            ->log('Mengubah data tugas!');
         return back()->with('success', 'Tugas berhasil di diubah!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    // ?? Destroy Tugas
     public function destroy(Tugas $tugas)
     {
         $tugas->delete();
+        activity()
+            ->event('arsip')
+            ->useLog('tugas')
+            ->performedOn($tugas)
+            ->causedBy(auth()->user()->id)
+            ->withProperties(['role' => auth()->user()->role])
+            ->log('Mengarsipkan data tugas');
     }
 }

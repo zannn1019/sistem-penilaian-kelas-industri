@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\CascadeRestore;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -12,13 +14,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kelas extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes, Searchable, CascadeSoftDeletes, CascadeRestore;
+    protected $cascadeDeletes = ['siswa', 'pengajar'];
     protected $logAttributes = ['nama_kelas', 'tingkat', 'kelas', 'tahun_ajar', 'semester'];
     protected $guarded = [
         'id'
     ];
     protected $dates = ['deleted_at'];
-    // protected $with = ['tugas'];
+    protected $with = ['siswa'];
 
     public function pengajar()
     {

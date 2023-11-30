@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminPengajarController;
+use App\Http\Controllers\ArsipController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
@@ -45,6 +46,9 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->n
 //*Route Pengajar
 Route::middleware(['auth', 'user:pengajar'])->group(function () {
     Route::prefix('/pengajar')->group(function () {
+        Route::get('/arsip', [ArsipController::class, 'pengajar'])->name('arsipPengajar');
+        Route::post('/arsip', [ArsipController::class, 'aksi'])->name('aksiArsipPengajar');
+        Route::get('/riwayatedit', [RiwayatEditController::class, 'pengajar'])->name('riwayatEditPengajar');
         Route::get('/search/{pengajar}', [SearchController::class, 'pengajarSearch'])->name('pengajarSearch');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-pengajar');
         Route::get('/profile', [DashboardController::class, 'profile'])->name('profile-pengajar');
@@ -60,6 +64,7 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
             Route::post('/tugas', 'store')->name('tugas.store');
             Route::get('/tugas/{tugas}', 'show')->name('tugas.show');
             Route::post('/tugas/{tugas}', 'update')->name('tugas.update');
+            Route::delete('/tugas/{tugas}', 'destroy')->name('tugas.destroy');
         });
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
@@ -76,6 +81,8 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 'full' => true
             ]);
         })->name('profile-admin');
+        Route::get('/arsip', [ArsipController::class, 'admin'])->name('arsipAdmin');
+        Route::post('/arsip', [ArsipController::class, 'aksi'])->name('aksiArsip');
         Route::get('/search', [SearchController::class, 'adminSearch'])->name('adminSearch');
         Route::get('/siswa/fileFormat', [SiswaController::class, 'getExcelFormat'])->name('siswa-excel-format');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
@@ -104,7 +111,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
             });
         });
         Route::post('/nilaiakhir', [AdminPengajarController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir');
-        Route::get('/riwayatedit', [RiwayatEditController::class, 'index'])->name('riwayatEditAdmin');
+        Route::get('/riwayatedit', [RiwayatEditController::class, 'admin'])->name('riwayatEditAdmin');
     });
 });
 

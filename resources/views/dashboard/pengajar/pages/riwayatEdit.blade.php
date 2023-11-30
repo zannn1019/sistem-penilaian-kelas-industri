@@ -1,34 +1,15 @@
 @extends('dashboard.layouts.main')
 @section('content')
     <div class="w-full h-full gap-2 p-5 text-black flex flex-col">
-        <div class="flex w-full h-24">
+        <div class="flex w-full">
             <div class="w-full h-full flex px-2 flex-col gap-2">
                 <div class="w-full flex items-center gap-4">
-                    <a href="{{ route('dashboard-admin') }}"
+                    <a href="{{ route('dashboard-pengajar') }}"
                         class="fa-solid fa-chevron-left max-md:text-lg text-black text-2xl"></a>
                     <div class="text-sm breadcrumbs">
                         <ul>
                             <li>Riwayat Edit</li>
                         </ul>
-                    </div>
-                </div>
-                <div class="w-full flex gap-5 h-12">
-                    <div
-                        class="switch flex-1 bg-gray-300 rounded-full flex justify-between overflow-hidden items-center p-1">
-                        <a href="?data=admin"
-                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold {{ request('data') == 'admin' || request('data') == null ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }} ">OLEH
-                            ADMIN</a>
-                        <a href="?data=pengajar"
-                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold {{ request('data') == 'pengajar' ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }}">OLEH
-                            PENGAJAR</a>
-                    </div>
-                    <div class="w-1/3 h-full rounded-full">
-                        <div
-                            class="input w-full  bg-transparent flex items-center gap-2 h-full border-none rounded-6xl bg-zinc-300">
-                            <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
-                            <input type="text" placeholder="Telusuri riwayat edit..."
-                                class=" w-full h-full bg-transparent" />
-                        </div>
                     </div>
                 </div>
             </div>
@@ -51,7 +32,7 @@
                             @php
                                 $carbonDate = \Carbon\Carbon::parse($data['tanggal']);
                                 $diff = $carbonDate->diffForHumans();
-                                if ((strpos($diff, 'menit yang lalu') !== false || strpos($diff, 'jam yang lalu') !== false || strpos($diff, 'detik yang lalu') !== false) && $carbonDate->diffInDays() == 0) {
+                                if ((strpos($diff, 'menit yang lalu') !== false || strpos($diff, 'detik yang lalu') !== false) && $carbonDate->diffInDays() == 0) {
                                     $diff = 'Hari ini';
                                 }
                             @endphp

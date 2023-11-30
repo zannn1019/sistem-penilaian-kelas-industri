@@ -10,12 +10,11 @@ use Spatie\Activitylog\Models\Activity;
 
 class RiwayatEditController extends Controller
 {
-    public function index(Request $request)
+    public function admin(Request $request)
     {
         $perPage = 1;
-
         if ($request->input('data') == 'admin' || $request->input('data') == null) {
-            $riwayat = Activity::select(
+            $riwayat = Activity::where('properties->role', 'admin')->select(
                 DB::raw('DATE(created_at) as tanggal'),
                 DB::raw('MAX(DATE_FORMAT(created_at, "%H:%i:%s")) as jam'),
                 DB::raw('COUNT(*) as jumlah')
@@ -24,7 +23,7 @@ class RiwayatEditController extends Controller
                 ->orderByDesc('tanggal')
                 ->paginate($perPage);
         } else {
-            $riwayat = Activity::select(
+            $riwayat = Activity::where('properties->role', 'pengajar')->select(
                 DB::raw('DATE(created_at) as tanggal'),
                 DB::raw('MAX(DATE_FORMAT(created_at, "%H:%i:%s")) as jam'),
                 DB::raw('COUNT(*) as jumlah')
@@ -34,14 +33,41 @@ class RiwayatEditController extends Controller
                 ->paginate($perPage);
         }
 
-        $riwayat->getCollection()->transform(function ($item) {
+        $riwayat->getCollection()->transform(function ($item) use ($request) {
             return [
                 'tanggal' => $item->tanggal . ' ' . $item->jam,
-                'data' => Activity::where('created_at', 'LIKE', '%' . $item->tanggal . '%')->whereNotNull('causer_id')->orderByDesc('id')->distinct()->get(),
+                'data' => Activity::where('properties->role', $request->get('data') ?? 'admin')->where('created_at', 'LIKE', '%' . $item->tanggal . '%')->whereNotNull('causer_id')->orderByDesc('id')->distinct()->get(),
             ];
         });
 
         return view('dashboard.admin.pages.riwayatEdit', [
+            'title' => "Riwayat Edit",
+            'full' => true,
+            'riwayat' => $riwayat,
+            'data_user' => User::all()
+        ]);
+    }
+
+    public function pengajar(Request $request)
+    {
+        $perPage = 1;
+        $riwayat = Activity::where('properties->role', 'pengajar')->where('causer_id', auth()->user()->id)->select(
+            DB::raw('DATE(created_at) as tanggal'),
+            DB::raw('MAX(DATE_FORMAT(created_at, "%H:%i:%s")) as jam'),
+            DB::raw('COUNT(*) as jumlah')
+        )
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderByDesc('tanggal')
+            ->paginate($perPage);
+
+        $riwayat->getCollection()->transform(function ($item) use ($request) {
+            return [
+                'tanggal' => $item->tanggal . ' ' . $item->jam,
+                'data' => Activity::where('properties->role', 'pengajar')->where('causer_id', auth()->user()->id)->where('created_at', 'LIKE', '%' . $item->tanggal . '%')->whereNotNull('causer_id')->orderByDesc('id')->distinct()->get(),
+            ];
+        });
+
+        return view('dashboard.pengajar.pages.riwayatEdit', [
             'title' => "Riwayat Edit",
             'full' => true,
             'riwayat' => $riwayat,

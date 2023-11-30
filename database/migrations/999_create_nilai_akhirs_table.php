@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('nilai_akhir', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_siswa')->constrained('siswa');
+            $table->foreignId('id_siswa')->constrained('siswa')->cascadeOnDelete();
             $table->integer('nilai');
             $table->text('keterangan')->nullable(true);
             $table->string('tahun_ajar');

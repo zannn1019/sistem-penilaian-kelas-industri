@@ -31,7 +31,7 @@
                         <a href="">ARSIP</a>
                     </li>
                     <li>
-                        <a href="">RIWAYAT EDIT</a>
+                        <a href="{{ route('riwayatEditPengajar') }}">RIWAYAT EDIT</a>
                     </li>
                     <li>
                         <label for="my_modal_7" class="hover:text-crimson">
@@ -121,7 +121,7 @@
                         <a href="">ARSIP</a>
                     </li>
                     <li>
-                        <a href="">RIWAYAT EDIT</a>
+                        <a href="{{ route('riwayatEditAdmin') }}">RIWAYAT EDIT</a>
                     </li>
                     <li>
                         <label for="my_modal_7" class="hover:text-crimson">

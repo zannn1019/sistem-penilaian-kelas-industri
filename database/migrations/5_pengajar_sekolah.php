@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pengajar_sekolah', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_sekolah')->nullable()->constrained('sekolah');
-            $table->foreignId('id_kelas')->nullable()->constrained('kelas');
+            $table->foreignId('id_user')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('id_sekolah')->nullable()->constrained('sekolah')->cascadeOnDelete();
+            $table->foreignId('id_kelas')->nullable()->constrained('kelas')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

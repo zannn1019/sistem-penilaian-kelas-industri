@@ -126,8 +126,13 @@
                                                     data-theme="light">
                                                     <button data-id="{{ $tugas->id }}" data-tipe="1"
                                                         class=" edit-btn hover:font-semibold py-1 px-4 w-full border-b border-black">Edit</button>
-                                                    <a href=""
-                                                        class="hover:font-semibold py-1 px-4 w-full ">Arsip</a>
+                                                    <form action="{{ route('tugas.destroy', ['tugas' => $tugas->id]) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="submit" value="Arsip"
+                                                            class="hover:font-semibold py-1 px-4 w-full cursor-pointer">
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

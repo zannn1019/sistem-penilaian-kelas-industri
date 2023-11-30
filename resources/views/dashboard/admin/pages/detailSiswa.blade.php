@@ -39,7 +39,9 @@
                                 class="dropdown-content z-[1] p-2 shadow bg-gray-300 rounded-box w-52 flex flex-col">
                                 <button class="w-full hover:font-semibold text-start border-b border-black p-2"
                                     onclick="editModal.showModal()">Edit</button>
-                                <a href="" class="w-full hover:font-semibold p-2">Arsip </a>
+                                <form method="POST" action="{{ route('siswa.destroy', ['siswa' => $info_siswa->id]) }}">
+                                    <input class="w-full hover:font-semibold p-2" type="submit" value="Arsip">
+                                </form>
                             </div>
                         </div>
                     </div>

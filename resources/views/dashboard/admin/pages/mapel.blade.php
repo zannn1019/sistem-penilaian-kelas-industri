@@ -51,7 +51,7 @@
                         Terbaru</a>
                 </div>
                 @if ($daftar_mapel->count())
-                    <div class="w-full h-full overflow-y-auto flex flex-col gap-4 scroll-arrow" dir="rtl">
+                    <div class="w-full min-h-auto flex flex-col gap-4 scroll-arrow" dir="rtl">
                         @foreach ($daftar_mapel as $mapel)
                             <div class="w-full h-36 bg-gradient-to-r from-tosca-200 to-bluesky-200 rounded-xl shadow-box border overflow-hidden flex"
                                 dir="ltr">
@@ -131,7 +131,7 @@
                 @endif
             </div>
             <button onclick="mapelAdd.showModal()"
-                class="self-end text-3xl max-sm:fixed right-10 bottom-10 btn rounded-circle p-2 aspect-square flex justify-center items-center bg-black ">
+                class="self-end fixed text-3xl max-sm:fixed right-10 bottom-10 btn rounded-circle p-2 aspect-square flex justify-center items-center bg-black ">
                 <i class="fa fa-plus text-white" aria-hidden="true"></i>
             </button>
         </div>

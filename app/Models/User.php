@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Clockwork\Request\Request;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +18,7 @@ use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Searchable;
+    use HasApiTokens, HasFactory, Notifiable, Searchable, CascadeSoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +48,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     // protected $with = ['kelas'];
+    protected $cascadeDeletes = ['kelas', 'mapel', 'sekolah'];
 
     public function tugas()
     {
