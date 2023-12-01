@@ -42,7 +42,7 @@
                         class="w-full flex items-center justify-center bg-gradient-to-r from-bluesky-500 from-20% to-darkblue-500 rounded-t-2xl">
                         <div class="w-auto text-center py-10">
                             <h1 class="bg-tosca-500 px-5 py-1 rounded-2xl max-sm:text-xs">{{ date('d M Y') }}</h1>
-                            <h1 class="text-8xl text-white max-sm:text-2xl">{{ $daftar_pengajar->count() }}</h1>
+                            <h1 class="text-8xl text-white max-sm:text-2xl">{{ $count_pengajar->count() }}</h1>
                             <span class="text-white text-xl max-sm:text-sm">Pengajar</span>
                         </div>
                         <img src="{{ asset('img/meet.png') }}" alt=""
@@ -55,7 +55,10 @@
                             <div class="h-full flex flex-col gap-1 overflow-y-auto bg-white shadow-box">
                                 <div class="p-2">
                                     <div class="w-full rounded-box bg-gray-300 flex justify-between items-center px-2">
-                                        <input type="text" class="bg-transparent p-2 w-full">
+                                        <form action="">
+                                            <input type="text" name="search" class="bg-transparent p-2 w-full">
+                                            <input type="submit" hidden>
+                                        </form>
                                         <i class="fa-solid fa-magnifying-glass border-l-2 border-black pl-2"></i>
                                     </div>
                                 </div>

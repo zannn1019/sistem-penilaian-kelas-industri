@@ -68,7 +68,7 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
         });
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
-        Route::get('/kelas/{kelas}/nilaiakhir', [DashboardController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir');
+        Route::get('/kelas/{kelas}/nilaiakhir', [DashboardController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir-pengajar');
     });
 });
 

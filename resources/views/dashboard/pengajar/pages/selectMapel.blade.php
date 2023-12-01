@@ -20,7 +20,8 @@
                         {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
-            <a href="{{ route('input-nilai-akhir', ['kelas' => $info_kelas->id]) }}"
+
+            <a href="{{ route('input-nilai-akhir-pengajar', ['kelas' => $info_kelas->id]) }}"
                 class="self-end m-2 btn text-xs text-white">
                 <i class="fa-solid fa-graduation-cap"></i>
                 Assessment

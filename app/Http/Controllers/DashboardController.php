@@ -18,7 +18,7 @@ use NumberToWords\NumberToWords;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->role == "pengajar") {
             $pengajar = auth()->user();
@@ -72,7 +72,12 @@ class DashboardController extends Controller
                 'status_tugas' => $status_tugas
             ]);
         } else if (auth()->user()->role == "admin") {
-            $data_pengajar = User::where('role', 'pengajar')->withCount([
+            $data_pengajar = User::where('role', 'pengajar')->where('nama', "LIKE", $request->get('search') . "%")->withCount([
+                'sekolah as jumlah_sekolah' => function ($query) {
+                    $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
+                },
+            ]);
+            $count_pengajar = User::where('role', 'pengajar')->withCount([
                 'sekolah as jumlah_sekolah' => function ($query) {
                     $query->select(DB::raw('COUNT(DISTINCT id_sekolah)'));
                 },
@@ -82,6 +87,7 @@ class DashboardController extends Controller
                 'full' => false,
                 'data_sekolah' => Sekolah::orderBy("id", "DESC")->get(),
                 'daftar_pengajar' => $data_pengajar->get(),
+                'count_pengajar' => $count_pengajar,
                 'mapel' => Mapel::all()->count(),
                 'kelas' => Kelas::all()->count(),
                 'siswa' => Siswa::all()->count()
