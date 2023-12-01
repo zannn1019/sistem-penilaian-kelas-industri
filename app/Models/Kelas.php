@@ -41,22 +41,23 @@ class Kelas extends Model
     }
     public function scopeFilter($query, array $params)
     {
-        if ($params['sekolah'] != null) {
+        if (isset($params['sekolah']) && $params['sekolah'] !== null) {
             $query->when(
-                $params['sekolah'] ?? null,
+                $params['sekolah'],
                 fn ($query, $sekolah) =>
                 $query->where('id_sekolah', $sekolah)
             );
         }
-        if ($params['tingkat'] != 'all') {
+
+        if (isset($params['tingkat']) && $params['tingkat'] !== 'all') {
             $query->when(
-                $params['tingkat'] ?? null,
+                $params['tingkat'],
                 fn ($query, $tingkat) =>
                 $query->where('tingkat', $tingkat)
             );
         }
 
-        if ($params['jurusan'] != 'all') {
+        if (isset($params['jurusan']) && $params['jurusan'] !== 'all') {
             $semuaJurusan = $query->pluck('jurusan')->unique()->values()->all();
             $jurusanUnik = collect($semuaJurusan)->mapWithKeys(function ($jurusan) {
                 return [
@@ -64,20 +65,23 @@ class Kelas extends Model
                 ];
             })->toArray();
             $query->when(
-                $params['jurusan'] ?? null,
+                $params['jurusan'],
                 fn ($query, $jurusan) =>
-                $query->where('jurusan', $jurusanUnik[$params['jurusan']])
+                $query->where('jurusan', $jurusanUnik[$jurusan])
             );
         }
-        if ($params['ajaran'] != 'all') {
+
+        if (isset($params['ajaran']) && $params['ajaran'] !== 'all') {
             $query->when(
-                $params['ajaran'] ?? null,
+                $params['ajaran'],
                 fn ($query, $ajaran) =>
                 $query->where('tahun_ajar', $ajaran)
             );
         }
+
         return $query;
     }
+
 
     public function toSearchableArray()
     {

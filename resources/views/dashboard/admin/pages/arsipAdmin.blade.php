@@ -21,7 +21,11 @@
                     <div
                         class="input px-4 py-2 w-full bg-transparent flex items-center gap-2 h-full border-none rounded-6xl bg-zinc-300">
                         <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
-                        <input type="text" placeholder="Telusuri arsip..." class=" w-full h-full bg-transparent" />
+                        <form action="">
+                            <input type="text" placeholder="Telusuri arsip..." name="search"
+                                class=" w-full h-full bg-transparent" />
+                            <input type="submit" value="" hidden>
+                        </form>
                     </div>
                 </div>
                 <p class="text-sm max-w-xl">

@@ -14,7 +14,7 @@ class RiwayatEditController extends Controller
     {
         $perPage = 1;
         if ($request->input('data') == 'admin' || $request->input('data') == null) {
-            $riwayat = Activity::where('properties->role', 'admin')->select(
+            $riwayat = Activity::where('properties->role', 'admin')->where("event", "LIKE", $request->get('search') . "%")->select(
                 DB::raw('DATE(created_at) as tanggal'),
                 DB::raw('MAX(DATE_FORMAT(created_at, "%H:%i:%s")) as jam'),
                 DB::raw('COUNT(*) as jumlah')
@@ -23,7 +23,7 @@ class RiwayatEditController extends Controller
                 ->orderByDesc('tanggal')
                 ->paginate($perPage);
         } else {
-            $riwayat = Activity::where('properties->role', 'pengajar')->select(
+            $riwayat = Activity::where('properties->role', 'pengajar')->where("event", "LIKE", $request->get('search') . "%")->select(
                 DB::raw('DATE(created_at) as tanggal'),
                 DB::raw('MAX(DATE_FORMAT(created_at, "%H:%i:%s")) as jam'),
                 DB::raw('COUNT(*) as jumlah')
@@ -36,7 +36,7 @@ class RiwayatEditController extends Controller
         $riwayat->getCollection()->transform(function ($item) use ($request) {
             return [
                 'tanggal' => $item->tanggal . ' ' . $item->jam,
-                'data' => Activity::where('properties->role', $request->get('data') ?? 'admin')->where('created_at', 'LIKE', '%' . $item->tanggal . '%')->whereNotNull('causer_id')->orderByDesc('id')->distinct()->get(),
+                'data' => Activity::where('properties->role', $request->get('data') ?? 'admin')->where("event", "LIKE", $request->get('search') . "%")->where('created_at', 'LIKE', '%' . $item->tanggal . '%')->whereNotNull('causer_id')->orderByDesc('id')->distinct()->get(),
             ];
         });
 

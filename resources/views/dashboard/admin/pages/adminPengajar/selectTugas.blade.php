@@ -50,44 +50,6 @@
                 </div>
             </div>
             <div class="px-5 py-2 max-sm:px-0 w-full h-full text-black flex flex-col gap-2">
-                {{--
-                    ?? HAPUS JIKA SUDAH
-                    @if ($daftar_tugas['ujian']->count())
-                    <h1 class="font-semibold">Assesmen</h1>
-                    <div class="w-full grid grid-cols-3 max-sm:grid-cols-1 max-md:grid-cols-2">
-                        @foreach ($daftar_tugas['ujian'] as $ujian)
-                            <div class="box w-full h-56 p-2">
-                                <a href="{{ route('admin-show-nilai-pertugas-pengajar', ['pengajar' => $info_pengajar->id, 'kelas' => $info_kelas->id, 'tugas' => $ujian->id]) }}"
-                                    class="w-full flex h-full bg-tosca-100 rounded-box p-5 shadow-lg flex-col">
-                                    <div class="w-full flex justify-between h-2/6">
-                                        <div class="flex justify-between items-center w-full">
-                                            <h1 class="text-black text-2xl font-bold w-52">{{ $ujian->nama }}</h1>
-                                            <span
-                                                class="bg-black flex justify-center items-center p-2 px-2.5 rounded-circle"><i
-                                                    class="fa-solid fa-arrow-right text-white"></i></span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="w-full h-full grid grid-cols-2 gap-4 justify-between items-center text-black">
-                                        <img src="{{ asset('img/_' . $ujian->tipe . '.png') }}" alt=""
-                                            class="">
-                                        <div class=" w-full h-full flex justify-center items-center">
-                                            <div
-                                                class="flex justify-center flex-col items-center overflow-hidden w-28 aspect-square bg-tosca-500 rounded-circle">
-                                                <div class="w-full flex items-end justify-center">
-                                                    <span
-                                                        class="font-semibold text-3xl">{{ $ujian->nilai->count() }}</span>
-                                                    <span class="text-sm">/{{ $ujian->kelas->siswa->count() }}</span>
-                                                </div>
-                                                <span>Ternilai</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif --}}
                 @if ($daftar_tugas['tugas']->count())
                     <h1 class="font-semibold">Tugas</h1>
                     <div class="w-full grid grid-cols-3  max-sm:grid-cols-1 max-md:grid-cols-2">

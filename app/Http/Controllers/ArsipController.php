@@ -13,22 +13,22 @@ use Termwind\Components\Dd;
 
 class ArsipController extends Controller
 {
-    public function admin()
+    public function admin(Request $request)
     {
         if (auth()->user()->role != 'admin') {
             abort(404);
         }
-        $sekolah = Sekolah::onlyTrashed()->get()->map(function ($item) {
+        $sekolah = Sekolah::onlyTrashed()->where('nama', "LIKE", $request->get('search') . "%")->get()->map(function ($item) {
             $item['tipe'] = 'sekolah';
             return $item;
         });
 
-        $kelas = Kelas::onlyTrashed()->get()->map(function ($item) {
+        $kelas = Kelas::onlyTrashed()->where('nama_kelas', "LIKE", $request->get('search') . "%")->get()->map(function ($item) {
             $item['tipe'] = 'kelas';
             return $item;
         });
 
-        $mapel = Mapel::onlyTrashed()->get()->map(function ($item) {
+        $mapel = Mapel::onlyTrashed()->where('nama_mapel', "LIKE", $request->get('search') . "%")->get()->map(function ($item) {
             $item['tipe'] = 'mapel';
             return $item;
         });
@@ -53,18 +53,17 @@ class ArsipController extends Controller
         ]);
     }
 
-    public function pengajar()
+    public function pengajar(Request $request)
     {
         if (auth()->user()->role != 'pengajar') {
             abort(404);
         }
         $pengajar = auth()->user();
-        $tugas = $pengajar->tugas()->onlyTrashed()->get()->map(function ($tugas) {
+        $tugas = $pengajar->tugas()->onlyTrashed()->where('nama', "LIKE", $request->get('search') . "%")->get()->map(function ($tugas) {
             $tugas['tipe'] = "tugas";
             return $tugas;
         });
         $mergeData = $tugas;
-
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 10;
 

@@ -242,5 +242,6 @@ class TugasController extends Controller
             ->causedBy(auth()->user()->id)
             ->withProperties(['role' => auth()->user()->role])
             ->log('Mengarsipkan data tugas');
+        return redirect()->back()->with('success', "Tugas berhasil diarsipkan!");
     }
 }

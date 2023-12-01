@@ -84,6 +84,7 @@ class AdminPengajarController extends Controller
             $tingkat = $request->input('tingkat');
             $sort = $request->input('sort');
             $semester = $request->input('semester');
+            $search = $request->input('search');
 
             $data_kelas = $pengajar->kelas();
 
@@ -105,6 +106,9 @@ class AdminPengajarController extends Controller
 
             if ($semester) {
                 $data_kelas->where('kelas.semester', $semester);
+            }
+            if ($search) {
+                $data_kelas->where("nama_kelas", "LIKE", $search . "%");
             }
         }
         return view('dashboard.admin.pages.adminPengajar.kelas', [

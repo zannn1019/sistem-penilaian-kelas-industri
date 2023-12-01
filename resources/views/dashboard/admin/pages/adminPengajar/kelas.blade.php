@@ -29,7 +29,11 @@
                 <div
                     class="input w-full max-w-xs bg-transparent flex items-center gap-2 border-none rounded-6xl bg-zinc-300">
                     <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
-                    <input type="text" placeholder="Telusuri Kelas" class=" w-full h-full bg-transparent" />
+                    <form action="">
+                        <input type="text" placeholder="Telusuri Kelas" name="search"
+                            class=" w-full h-full bg-transparent" />
+                        <input type="submit" hidden>
+                    </form>
                 </div>
             </div>
             <div class="w-full flex justify-end items-end gap-2">

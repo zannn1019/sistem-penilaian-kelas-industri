@@ -26,8 +26,13 @@
                         <div
                             class="input w-full  bg-transparent flex items-center gap-2 h-full border-none rounded-6xl bg-zinc-300">
                             <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
-                            <input type="text" placeholder="Telusuri riwayat edit..."
-                                class=" w-full h-full bg-transparent" />
+                            <form action="{{ url('admin/riwayatedit') }}" method="GET">
+                                <input type="text" name="search" placeholder="Telusuri riwayat edit..."
+                                    class="w-full h-full bg-transparent" />
+                                <input type="hidden" name="data" value="{{ request('data') }}">
+                                <input type="submit" value="" hidden>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -86,7 +91,7 @@
                         @endforeach
                     </div>
                 @endforeach
-                {{ $riwayat->links('components.pagination') }}
+                {{ $riwayat->withQueryString()->links('components.pagination') }}
             @else
                 <div
                     class="w-full h-full flex flex-col text-black justify-center items-center pointer-events-none select-none">

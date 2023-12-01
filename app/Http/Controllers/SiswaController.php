@@ -121,7 +121,6 @@ class SiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    //?? Destroy Siswa
     public function destroy(Siswa $siswa)
     {
         $siswa->delete();
