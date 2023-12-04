@@ -28,7 +28,7 @@
                             class="{{ $title == 'Kelas' ? 'text-white' : '' }}">KELAS</a>
                     </li>
                     <li>
-                        <a href="">ARSIP</a>
+                        <a href="{{ route('arsipPengajar') }}">ARSIP</a>
                     </li>
                     <li>
                         <a href="{{ route('riwayatEditPengajar') }}">RIWAYAT EDIT</a>
@@ -118,7 +118,7 @@
                         <a href="{{ route('mapel.index') }}">MAPEL</a>
                     </li>
                     <li>
-                        <a href="">ARSIP</a>
+                        <a href="{{ route('arsipAdmin') }}">ARSIP</a>
                     </li>
                     <li>
                         <a href="{{ route('riwayatEditAdmin') }}">RIWAYAT EDIT</a>
@@ -170,8 +170,8 @@
                     </div>
                 </div>
                 <input type="text"
-                    class=" bg-transparent focus:border-none focus:outline-none text-black placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
-                    placeholder="Ketik di sini untuk mencari...">
+                    class=" bg-transparent focus:border-none placeholder:truncate focus:outline-none text-black max-sm:w-40 max-md:w-full placeholder:text-sm placeholder:italic  placeholder:text-gray-500"
+                    placeholder="Ketik di sini untuk mencari">
                 <div
                     class="fa-solid fa-magnifying-glass max-sm:border-none max-md:border-none max-md:pl-0 max-sm:pl-0 border-l-black border-l pl-3 py-1">
                 </div>

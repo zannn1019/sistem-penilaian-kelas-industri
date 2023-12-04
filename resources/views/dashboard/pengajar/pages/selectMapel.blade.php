@@ -1,5 +1,4 @@
 @extends('dashboard.layouts.main')
-
 @section('content')
     <div class="w-full h-full p-5 flex flex-col gap-2">
         <header class="w-full flex justify-between  border-b border-black gap-3 items-center text-2xl text-black">
@@ -12,15 +11,16 @@
                             <li>Mata Pelajaran</li>
                         </ul>
                     </div>
-                    <h1 class="text-3xl font-semibold max-sm:text-sm"><span class="max-sm:hidden"> Kelas Industri - </span>
-                        {{ $info_kelas->sekolah->nama }}</h1>
+                    <h1 class="text-3xl font-semibold max-sm:text-sm">
+                        <span class="max-sm:hidden"> Kelas Industri - </span>
+                        {{ $info_kelas->sekolah->nama }}
+                    </h1>
                     <h1 class="text-5xl font-semibold max-sm:text-xl">
                         {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</h1>
                     <h1 class="text-2xl font-semibold max-sm:text-sm">
                         {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
-
             <a href="{{ route('input-nilai-akhir-pengajar', ['kelas' => $info_kelas->id]) }}"
                 class="self-end m-2 btn text-xs text-white">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -106,14 +106,12 @@
             let filter = $("#filter");
             let filterOption = $("#filter-option");
             let isOpen = filter.data('toggle') == "open";
-
             filter.velocity({
                 width: isOpen ? "auto" : "100%"
             });
             setTimeout(() => {
                 filterOption.css("display", isOpen ? "none" : "flex");
             }, isOpen ? 250 : 500);
-
             filter.data('toggle', isOpen ? "closed" : "open");
         });
     </script>

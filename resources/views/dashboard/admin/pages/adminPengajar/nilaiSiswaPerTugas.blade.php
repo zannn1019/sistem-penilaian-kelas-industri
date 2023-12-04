@@ -104,16 +104,13 @@
             $('.filter-link').not($(this)).removeClass('bg-tosca-500 text-black')
             $('.filter-link').not($(this)).addClass('bg-gray-200 text-gray-400')
             let filter = $(this).attr('href').split('=')[1];
-
             history.pushState({}, '', '?filter=' + filter);
-
             setFilter(filter);
         });
 
         function setFilter(filter) {
             let rows = $('.table tbody tr');
             let visibleRowCount = 0;
-
             rows.each(function(index) {
                 let row = $(this);
                 let tds = row.find('td');
@@ -134,7 +131,6 @@
                         }
                     }
                 });
-
                 if (row.is(':visible')) {
                     visibleRowCount++;
                 }

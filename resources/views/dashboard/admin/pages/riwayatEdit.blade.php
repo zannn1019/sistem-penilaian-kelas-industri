@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 @section('content')
     <div class="w-full h-full gap-2 p-5 text-black flex flex-col">
-        <div class="flex w-full h-24">
+        <div class="flex w-full">
             <div class="w-full h-full flex px-2 flex-col gap-2">
                 <div class="w-full flex items-center gap-4">
                     <a href="{{ route('dashboard-admin') }}"
@@ -12,17 +12,17 @@
                         </ul>
                     </div>
                 </div>
-                <div class="w-full flex gap-5 h-12">
+                <div class="w-full flex gap-5 max-md:gap-1 flex-wrap ">
                     <div
-                        class="switch flex-1 bg-gray-300 rounded-full flex justify-between overflow-hidden items-center p-1">
+                        class="switch flex-1 h-12 bg-gray-300 rounded-full flex justify-between overflow-hidden items-center p-1">
                         <a href="?data=admin"
-                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold {{ request('data') == 'admin' || request('data') == null ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }} ">OLEH
+                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold max-md:text-xs {{ request('data') == 'admin' || request('data') == null ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }} ">OLEH
                             ADMIN</a>
                         <a href="?data=pengajar"
-                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold {{ request('data') == 'pengajar' ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }}">OLEH
+                            class="w-1/2 h-full rounded-full flex justify-center items-center font-semibold max-md:text-xs {{ request('data') == 'pengajar' ? 'text-white bg-darkblue-500' : 'text-gray-500 bg-transparent' }}">OLEH
                             PENGAJAR</a>
                     </div>
-                    <div class="w-1/3 h-full rounded-full">
+                    <div class="w-1/3 max-md:w-full h-12 rounded-full ">
                         <div
                             class="input w-full  bg-transparent flex items-center gap-2 h-full border-none rounded-6xl bg-zinc-300">
                             <i class="fa-solid fa-search border-r pr-4 py-2 border-black"></i>
@@ -32,13 +32,12 @@
                                 <input type="hidden" name="data" value="{{ request('data') }}">
                                 <input type="submit" value="" hidden>
                             </form>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="h-full w-full flex flex-col overflow-auto gap-2 p-5">
+        <div class="h-full w-full flex flex-col overflow-auto gap-2 p-5 max-md:px-0">
             @php
                 $event = collect([
                     'created' => 'bg-green-500',
@@ -69,12 +68,13 @@
                                         <div
                                             class="w-6 rounded-l-xl h-full {{ $event->get($riwayatItem->event) ?? 'bg-darkblue-500' }} inline-block">
                                         </div>
-                                        <div class="p-5 px-10 w-40 h-full flex justify-center items-center">
+                                        <div class="p-5 px-10 w-40 max-md:hidden h-full flex justify-center items-center">
                                             <img src="{{ asset('img/' . $riwayatItem->event . '.png') }}" alt="">
                                         </div>
                                         <div class="info flex py-5 flex-col capitalize">
-                                            <h1 class="text-3xl font-semibold mb-5">{{ $riwayatItem->description }}</h1>
-                                            <div class="max-w-full grid grid-rows-2 grid-flow-col gap-2">
+                                            <h1 class="text-3xl font-semibold mb-5 max-md:text-xl">
+                                                {{ $riwayatItem->description }}</h1>
+                                            <div class="max-w-full grid grid-rows-2 grid-flow-col gap-2 max-md:text-lg">
                                                 <span>Oleh : <strong>
                                                         {{ $data_user->find($riwayatItem->causer_id)->nama }}</strong></span>
                                                 <span>Role :
@@ -82,8 +82,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="absolute
-                                                top-0 right-0 p-5">
+                                    <div class="absolute top-0 right-0 p-5 max-sm:hidden">
                                         <span class="font-semibold">{{ $riwayatItem->created_at }}</span>
                                     </div>
                                 </div>

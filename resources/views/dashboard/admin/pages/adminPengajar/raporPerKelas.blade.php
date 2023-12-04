@@ -82,7 +82,6 @@
                                                     $totalTugas++;
                                                 }
                                             }
-
                                             $avgNilai = $nilaiKosong ? 'Belum dinilai' : number_format($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
                                             $isKosong = $nilaiKosong ? 'belum_dinilai' : 'dinilai';
                                         @endphp
@@ -123,20 +122,16 @@
             $('.filter-link').not($(this)).removeClass('bg-tosca-500 text-black')
             $('.filter-link').not($(this)).addClass('bg-gray-200 text-gray-400')
             let filter = $(this).attr('href').split('=')[1];
-
             history.pushState({}, '', '?filter=' + filter);
-
             setFilter(filter);
         });
 
         function setFilter(filter) {
             let rows = $('.table tbody tr');
             let visibleRowCount = 0;
-
             rows.each(function(index) {
                 let row = $(this);
                 let tds = row.children('td').slice(2);
-
                 tds.each(function() {
                     if (filter === 'all' || $(this).data('avg') === filter) {
                         row.show();
@@ -145,12 +140,10 @@
                         row.hide();
                     }
                 });
-
                 if (row.is(':visible')) {
                     visibleRowCount++;
                 }
             });
-
             rows.filter(':visible').each(function(index) {
                 $(this).find('td:first').text(index + 1);
             });

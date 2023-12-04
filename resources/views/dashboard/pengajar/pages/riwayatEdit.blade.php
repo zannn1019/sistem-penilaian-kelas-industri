@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="h-full w-full flex flex-col overflow-auto gap-2 p-5">
+        <div class="h-full w-full flex flex-col overflow-auto gap-2 p-5 max-sm:px-0">
             @php
                 $event = collect([
                     'created' => 'bg-green-500',
@@ -45,12 +45,13 @@
                                         <div
                                             class="w-6 rounded-l-xl h-full {{ $event->get($riwayatItem->event) ?? 'bg-darkblue-500' }} inline-block">
                                         </div>
-                                        <div class="p-5 px-10 w-40 h-full flex justify-center items-center">
+                                        <div class="p-5 px-10 w-40 max-md:hidden h-full flex justify-center items-center">
                                             <img src="{{ asset('img/' . $riwayatItem->event . '.png') }}" alt="">
                                         </div>
                                         <div class="info flex py-5 flex-col capitalize">
-                                            <h1 class="text-3xl font-semibold mb-5">{{ $riwayatItem->description }}</h1>
-                                            <div class="max-w-full grid grid-rows-2 grid-flow-col gap-2">
+                                            <h1 class="text-3xl font-semibold mb-5 max-md:text-xl">
+                                                {{ $riwayatItem->description }}</h1>
+                                            <div class="max-w-full grid grid-rows-2 grid-flow-col gap-2 max-md:text-lg">
                                                 <span>Oleh : <strong>
                                                         {{ $data_user->find($riwayatItem->causer_id)->nama }}</strong></span>
                                                 <span>Role :
@@ -58,8 +59,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="absolute
-                                                top-0 right-0 p-5">
+                                    <div class="absolute top-0 right-0 p-5 max-sm:hidden">
                                         <span class="font-semibold">{{ $riwayatItem->created_at }}</span>
                                     </div>
                                 </div>

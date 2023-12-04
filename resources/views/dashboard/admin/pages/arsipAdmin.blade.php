@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-10">
+        <div class="px-10 max-md:px-0">
             <div class="flex justify-between gap-2 text-4xl py-5 flex-wrap border-gray-400 border-b-2">
                 <span class="font-semibold">Data Yang Diarsipkan</span>
                 <div class="w-1/3 max-lg:w-full h-full max-h-14 rounded-full">
@@ -85,7 +85,7 @@
                                     <td class="border-r-2 border-darkblue-500">
                                         {{ \Carbon\Carbon::parse($arsip_value['deleted_at'])->format('d-m-Y H:i:s') }}
                                     </td>
-                                    <td class="border-r-2 border-darkblue-500">
+                                    <td class="border-r-2 border-darkblue-500 flex gap-2 justify-center">
                                         <button class="btn btn-error text-white delete-btn" onclick="arsipModal.showModal()"
                                             data-id="{{ $arsip_value['id'] }}" data-tipe="{{ $arsip_value['tipe'] }}"
                                             data-aksi="hapus">

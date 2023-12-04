@@ -38,7 +38,7 @@
                 </div>
                 <div class="info flex flex-col w-full justify-center items-center gap-2">
                     <span class="font-semibold text-white capitalize">{{ auth()->user()->role }}</span>
-                    <div class="w-full relative flex">
+                    <div class="w-full relative flex">  
                         <input type="text" class="absolute left-0 top-0 w-full input input-bordered opacity-0" disabled
                             data-theme="light" id="input-nama" name="nama" value="{{ auth()->user()->nama }}">
                         <span id="nama"
