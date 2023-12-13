@@ -16,6 +16,11 @@
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT EDIT</h1>
             </a>
+            <a
+                href="{{ route('kehadiran.index') }}"class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Kehadiran' ? 'bg-white text-black' : '' }}">
+                <i class="fa-solid fa-calendar"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">KEHADIRAN</h1>
+            </a>
         </div>
         <div class="user text-white p-5 text-2xl flex flex-col justify-center items-center gap-3 max-sm:flex-row">
             <a href="{{ route('profile-pengajar') }}" class=" rounded-full shadow-lg aspect-square overflow-hidden">
@@ -46,6 +51,11 @@
                 class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Riwayat Edit' ? 'bg-white text-black' : '' }}">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <h1 class="text-2xs leading-3 max-sm:hidden">RIWAYAT EDIT</h1>
+            </a>
+            <a
+                href="{{ route('daftarKehadiran') }}"class="flex flex-col gap-2 text-center text-2xl justify-center items-center w-full py-3 rounded-l-6xl {{ $title == 'Kehadiran' ? 'bg-white text-black' : '' }}">
+                <i class="fa-solid fa-calendar"></i>
+                <h1 class="text-2xs leading-3 max-sm:hidden">KEHADIRAN</h1>
             </a>
         </div>
         <div

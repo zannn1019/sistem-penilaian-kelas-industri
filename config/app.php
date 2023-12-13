@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'max_jam' => env("MAX_JAM", "24"),
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -163,6 +164,7 @@ return [
         /*
         * Application Service Providers...
         */
+        Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,

@@ -163,7 +163,7 @@
                 <i class="fa-solid fa-up-right-from-square"></i>
             </a>
             <img src="{{ asset('storage/pengajar/ahmad-fauza.jpg') }}" alt=""
-                class="aspect-square w-20 rounded-circle" id="foto_pengajar">
+                class="aspect-square w-20 rounded-circle object-cover" id="foto_pengajar">
             <span class="text-black font-semibold leading-3 text-lg" id="nama_pengajar">Ahmad Fauzan</span>
             <span class="text-gray-400 text-xs py-0.5">Pengajar</span>
             <table>

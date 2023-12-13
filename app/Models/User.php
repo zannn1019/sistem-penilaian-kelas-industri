@@ -47,7 +47,6 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
-    // protected $with = ['kelas'];
     protected $cascadeDeletes = ['kelas', 'mapel', 'sekolah'];
 
     public function tugas()
@@ -72,6 +71,10 @@ class User extends Authenticatable
     public function sekolah()
     {
         return $this->belongsToMany(Sekolah::class, 'pengajar_sekolah', 'id_user', 'id_sekolah')->withTimestamps();
+    }
+    public function kehadiran()
+    {
+        return $this->hasMany(Kehadiran::class);
     }
 
     public function toSearchableArray()

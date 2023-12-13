@@ -19,7 +19,8 @@
             </div>
         </header>
         <form action="{{ route('users.update', ['user' => auth()->user()->id]) }}" method="POST"
-            class="w-full h-full flex justify-center items-center gap-5" enctype="multipart/form-data">
+            class="w-full max-sm:h-auto my-5 flex justify-center items-center gap-5 max-sm:flex-col h-full"
+            enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class=" flex flex-col profile bg-darkblue-500 p-10 rounded-2xl w-72 gap-2">
@@ -38,7 +39,7 @@
                 </div>
                 <div class="info flex flex-col w-full justify-center items-center gap-2">
                     <span class="font-semibold text-white capitalize">{{ auth()->user()->role }}</span>
-                    <div class="w-full relative flex">  
+                    <div class="w-full relative flex">
                         <input type="text" class="absolute left-0 top-0 w-full input input-bordered opacity-0" disabled
                             data-theme="light" id="input-nama" name="nama" value="{{ auth()->user()->nama }}">
                         <span id="nama"
@@ -46,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col items-end w-1/2" data-theme="light">
+            <div class="flex flex-col items-end w-1/2 max-sm:w-full" data-theme="light">
                 <div class="form-control w-full">
                     <label class="label">
                         <span class="label-text">NIK</span>

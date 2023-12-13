@@ -12,14 +12,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         if (User::where('nik', '1')->count() == 0) {
-            $defaultImagePath = public_path('img/user.png'); // Update this path to the actual location of your default image
-            $destinationPath = 'public/pengajar/user.png'; // Update this path to the desired storage path
+            $defaultImagePath = public_path('img/user.png');
+            $destinationPath = 'public/pengajar/user.png';
 
             if (!Storage::disk('public')->exists($destinationPath)) {
-                // Make sure the directory structure exists before copying
                 Storage::disk('public')->makeDirectory('public/pengajar');
 
-                // Copy the default image to the storage
                 Storage::disk('public')->copy($defaultImagePath, $destinationPath);
             }
 

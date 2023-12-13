@@ -23,7 +23,8 @@
                                 class="hidden z-10 w-full h-full rounded-circle cursor-pointer opacity-0 absolute top-0 left-0"
                                 accept="image/*">
                             <img src="{{ asset('storage/pengajar/' . $data_pengajar->foto) }}" alt=""
-                                class="absolute top-0 left-0 w-full h-full pointer-events-none z-20" id="photo-preview">
+                                class="absolute top-0 left-0 w-full object-cover h-full pointer-events-none z-20"
+                                id="photo-preview">
                         </div>
                     </div>
                 </div>

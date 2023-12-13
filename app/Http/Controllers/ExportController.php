@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KehadiranExports;
 use App\Exports\NilaiExport;
 use App\Exports\NilaiSiswaExport;
+use App\Models\Kehadiran;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Siswa;
+use Carbon\Carbon;
+use Clockwork\Request\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\Return_;
 
 class ExportController extends Controller
 {
@@ -58,5 +63,10 @@ class ExportController extends Controller
             $mapel
         ), 'nilai_tugas_mapel_'  . $mapel->nama_mapel . '_kelas_'  .  $kelas->tingkat . '-' . $kelas->jurusan . '-' . $kelas->kelas . '.xlsx');
         return redirect()->back();
+    }
+
+    public function ExportKehadiranPengajar($tipe)
+    {
+        return Excel::download(new KehadiranExports($tipe), 'Kehadiran Pengajar.xlsx');
     }
 }

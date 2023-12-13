@@ -6,6 +6,45 @@
     font-family: "Montserrat";
 }
 
+:root {
+    --fc-border-color: #656565;
+}
+
+.fullcalendar-container .fc-day-today {
+    background: #bbffe3 !important;
+}
+.fullcalendar-container .fc-today-button {
+    display: flex !important;
+    border: 1px solid black !important;
+    text-transform: capitalize;
+}
+.fullcalendar-container .fc-today-button:disabled {
+    background: black !important;
+    color: white !important;
+}
+
+.fullcalendar-container .fc-today-button:hover:not(:disabled) {
+    background: black !important;
+    color: white !important;
+}
+
+.fullcalendar-container .fc-daygrid-day-events {
+    display: inline-block !important;
+    width: 100%;
+    cursor: pointer;
+}
+
+.fullcalendar-container .fc-daygrid-event {
+    cursor: pointer;
+}
+.fullcalendar-container .fc-button-group button:hover {
+    background: #bdbdbd !important;
+    transition: all 100ms;
+}
+.fullcalendar-container .fc-button-group button {
+    border: 1px solid #bdbdbd !important;
+}
+
 /* Mengatur warna latar belakang dan warna teks untuk Autocomplete */
 .ui-autocomplete {
     background-color: #fff;

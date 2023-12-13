@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiAkhirController;
@@ -66,6 +68,10 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
             Route::post('/tugas/{tugas}', 'update')->name('tugas.update');
             Route::delete('/tugas/{tugas}', 'destroy')->name('tugas.destroy');
         });
+        Route::resource('/kehadiran', KehadiranController::class)->names('kehadiran');
+        Route::patch("/kegiatan/{kegiatan}", [KegiatanController::class, 'update'])->name('kegiatan.update');
+        Route::delete("/kegiatan/{kegiatan}", [KegiatanController::class, 'destroy'])->name('kegiatan.destroy');
+        Route::get('/getKehadiranData', [KehadiranController::class, 'getKehadiranData'])->name('getKehadiranData');
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
         Route::get('/kelas/{kelas}/nilaiakhir', [DashboardController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir-pengajar');
@@ -83,6 +89,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
         })->name('profile-admin');
         Route::get('/arsip', [ArsipController::class, 'admin'])->name('arsipAdmin');
         Route::post('/arsip', [ArsipController::class, 'aksi'])->name('aksiArsip');
+        Route::get('/kehadiran', [KehadiranController::class, 'index'])->name('daftarKehadiran');
         Route::get('/search', [SearchController::class, 'adminSearch'])->name('adminSearch');
         Route::get('/siswa/fileFormat', [SiswaController::class, 'getExcelFormat'])->name('siswa-excel-format');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard-admin');
@@ -110,6 +117,7 @@ Route::middleware(['auth', 'user:admin'])->group(function () {
                 Route::get('/kelas/{kelas}/nilaiakhir', 'nilaiAkhir')->name('nilai-akhir');
             });
         });
+        Route::get('/getKehadiranData', [KehadiranController::class, 'getKehadiranData'])->name('getKehadiranDataAdmin');
         Route::post('/nilaiakhir', [AdminPengajarController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir');
         Route::get('/riwayatedit', [RiwayatEditController::class, 'admin'])->name('riwayatEditAdmin');
     });
@@ -120,4 +128,5 @@ Route::controller(ExportController::class)->group(function () {
     Route::get('/export/kelas/{kelas}', 'ExportPerKelas')->name('ExportPerKelas');
     Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
     Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
+    Route::get("/export/kehadiran/{tipe}", 'ExportKehadiranPengajar')->name('ExportKehadiran')->middleware(['auth', 'user:admin']);
 });

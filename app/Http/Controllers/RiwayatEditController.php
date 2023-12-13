@@ -50,6 +50,7 @@ class RiwayatEditController extends Controller
 
     public function pengajar(Request $request)
     {
+
         $perPage = 1;
         $riwayat = Activity::where('properties->role', 'pengajar')->where('causer_id', auth()->user()->id)->select(
             DB::raw('DATE(created_at) as tanggal'),
@@ -59,7 +60,6 @@ class RiwayatEditController extends Controller
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderByDesc('tanggal')
             ->paginate($perPage);
-
         $riwayat->getCollection()->transform(function ($item) use ($request) {
             return [
                 'tanggal' => $item->tanggal . ' ' . $item->jam,

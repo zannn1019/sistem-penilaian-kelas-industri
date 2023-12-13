@@ -67,7 +67,7 @@ class NilaiSiswaExport implements
         $result = collect([]);
         $no = 0;
 
-        // Loop melalui daftar mata pelajaran
+        // ?Loop melalui daftar mata pelajaran
         foreach ($daftar_mapel as $mapel) {
             $nilaiKosong = false;
             $totalNilai = 0;
@@ -75,7 +75,7 @@ class NilaiSiswaExport implements
             $tugasBelumDinilai = [];
             $daftar_tugas = [];
 
-            // Loop melalui tugas dalam mata pelajaran
+            // ?Loop melalui tugas dalam mata pelajaran
             foreach ($mapel->tugas
                 ->where('id_kelas', $kelas->id)
                 ->where('tahun_ajar', $kelas->tahun_ajar)
@@ -105,11 +105,11 @@ class NilaiSiswaExport implements
                 ];
             }
 
-            // Hitung nilai rata-rata atau gunakan tanda - jika nilai kosong
+            // ?Hitung nilai rata-rata atau gunakan tanda - jika nilai kosong
             $avgNilai = $nilaiKosong ? '-' : number_format($totalTugas > 0 ? $totalNilai / $totalTugas : 0);
             $isKosong = $nilaiKosong ? 'belum_dinilai' : 'dinilai';
 
-            // Simpan informasi mata pelajaran di indeks ke-0
+            // ?Simpan informasi mata pelajaran di indeks ke-0
             if ($avgNilai != '-') {
                 $deskripsi = $mapel->tugas->where('tahun_ajar', $kelas->tahun_ajar)->where('semester', $kelas->semester)->avg(function ($tugas) use ($siswa) {
                     return $tugas->nilai->where('id_siswa', $siswa->id)->where('tahun_ajar', $siswa->kelas->tahun_ajar)->where('semester', $siswa->kelas->semester)->avg('nilai');
