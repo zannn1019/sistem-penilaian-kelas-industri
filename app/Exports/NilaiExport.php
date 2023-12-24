@@ -66,26 +66,32 @@ class NilaiExport implements
                 $siswaData[$mapel->nama_mapel] = ($nilai !== null) ? $nilai : "Belum lengkap";
             }
             if ($tugasTuntas) {
-                $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
-                if ($siswaData['Nilai Akhir'] >= 65 && $siswaData['Nilai Akhir'] <= 75) {
-                    $siswaData['Nilai Mapel'] = ($nilai_mapel->avg() / 10) +  (70 - $siswaData['Nilai Akhir']);
-                    $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'] + $siswaData['Nilai Mapel'];
-                }
-                if ($siswaData['Nilai Akhir'] >= 76 && $siswaData['Nilai Akhir'] <= 100) {
-                    $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
-                    $siswaData['Nilai Mapel'] = "-";
-                    $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'];
-                }
-                if ($siswaData['Nilai Akhir'] <= 50) {
-                    $siswaData['Nilai Akhir'] = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first()->nilai;
-                    $siswaData['Nilai Mapel'] = "Remedial";
-                    $siswaData['Total Nilai'] = "Remedial";
+                $nilaiAkhir = $siswa->nilai_akhir()->where('tahun_ajar', $data_kelas->tahun_ajar)->where('semester', $data_kelas->semester)->first();
+
+                if ($nilaiAkhir) {
+                    $siswaData['Nilai Akhir'] = $nilaiAkhir->nilai ?? 0;
+
+                    if ($siswaData['Nilai Akhir'] >= 65 && $siswaData['Nilai Akhir'] <= 75) {
+                        $siswaData['Nilai Mapel'] = ($nilai_mapel->avg() / 10) +  (70 - $siswaData['Nilai Akhir']);
+                        $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'] + $siswaData['Nilai Mapel'];
+                    } elseif ($siswaData['Nilai Akhir'] >= 76 && $siswaData['Nilai Akhir'] <= 100) {
+                        $siswaData['Nilai Mapel'] = "-";
+                        $siswaData['Total Nilai'] = $siswaData['Nilai Akhir'];
+                    } elseif ($siswaData['Nilai Akhir'] <= 50) {
+                        $siswaData['Nilai Mapel'] = "Remedial";
+                        $siswaData['Total Nilai'] = "Remedial";
+                    }
+                } else {
+                    $siswaData['Nilai Mapel'] = "Belum lengkap";
+                    $siswaData['Nilai Akhir'] = "Belum lengkap";
+                    $siswaData['Total Nilai'] = "Belum lengkap";
                 }
             } else {
                 $siswaData['Nilai Mapel'] = "Belum lengkap";
                 $siswaData['Nilai Akhir'] = "Belum lengkap";
                 $siswaData['Total Nilai'] = "Belum lengkap";
             }
+
 
             $data_siswa->push($siswaData);
         }
