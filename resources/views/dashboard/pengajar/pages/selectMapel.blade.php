@@ -51,7 +51,7 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['tugas'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['tugas'], 'id_kelas' => $info_kelas->id])->where('id_pengajar', $pengajar_mapel->id)->count() }}</span>
                                     <span class="text-xs text-bluesea-500">Tugas Harian</span>
                                 </div>
                                 <div class="w-full text-white flex items-center gap-1">
@@ -62,7 +62,7 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['quiz'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['quiz'], 'id_kelas' => $info_kelas->id])->where('id_pengajar', $pengajar_mapel->id)->count() }}</span>
                                     <span class="text-xs text-bluesky-500">Kuis</span>
                                 </div>
                                 <div class="w-full text-white flex items-center gap-1">
@@ -73,7 +73,7 @@
                                             fill="black" />
                                     </svg>
                                     <span
-                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['latihan'], 'id_kelas' => $info_kelas->id])->count() }}</span>
+                                        class="text-black">{{ $mapel->tugas()->tipe(['tipe' => ['latihan'], 'id_kelas' => $info_kelas->id])->where('id_pengajar', $pengajar_mapel->id)->count() }}</span>
                                     <span class="text-xs text-tosca-500">Latihan</span>
                                 </div>
                             </div>

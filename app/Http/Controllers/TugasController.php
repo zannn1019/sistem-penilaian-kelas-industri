@@ -78,8 +78,8 @@ class TugasController extends Controller
     {
         $pengajar_mapel = PengajarMapel::where('id_mapel', $mapel->id)->where('id_user', auth()->user()->id);
         $daftar_tugas = collect([
-            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->get(),
-            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->where('id_pengajar', $pengajar_mapel->get()->first()->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->where('id_pengajar', $pengajar_mapel->get()->first()->id)->get(),
         ]);
         return view('dashboard.pengajar.pages.selectTugas', [
             'title' => "Pilih Tugas",

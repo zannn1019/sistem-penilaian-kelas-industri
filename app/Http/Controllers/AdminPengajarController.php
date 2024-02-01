@@ -137,8 +137,8 @@ class AdminPengajarController extends Controller
     public function showTugas(User $pengajar, Kelas $kelas, PengajarMapel $mapel)
     {
         $daftar_tugas = collect([
-            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->get(),
-            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->get(),
+            'tugas' => $mapel->tugas()->tipe(['tipe' => ['tugas', 'quiz', 'latihan']])->where('id_kelas', $kelas->id)->where('id_pengajar', $mapel->id)->get(),
+            'ujian' => $mapel->tugas()->tipe(['tipe' => ['assessment_blok_a', 'assessment_blok_b']])->where('id_kelas', $kelas->id)->where('id_pengajar', $mapel->id)->get(),
         ]);
         return view('dashboard.admin.pages.adminPengajar.selectTugas', [
             'title' => "Pilih Tugas",

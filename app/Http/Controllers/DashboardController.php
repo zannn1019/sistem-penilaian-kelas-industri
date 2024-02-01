@@ -224,7 +224,8 @@ class DashboardController extends Controller
             'full' => true,
             'info_pengajar' => auth()->user(),
             'info_kelas' => $kelas,
-            'data_mapel' => auth()->user()->mapel()
+            'data_mapel' => auth()->user()->mapel(),
+            'pengajar_mapel' => PengajarMapel::all()->where('id_user', auth()->user()->id)->first()
         ]);
     }
 
