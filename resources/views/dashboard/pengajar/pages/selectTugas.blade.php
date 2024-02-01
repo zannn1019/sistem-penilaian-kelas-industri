@@ -22,6 +22,9 @@
                         {{ $info_kelas->tahun_ajar . ' - Semester ' . $info_kelas->semester }}</h1>
                 </div>
             </div>
+            <button class="btn btn-success text-white mb-2 self-end" onclick="importNilai.showModal()">
+                <i class="fa-solid fa-file-import"></i>
+            </button>
         </header>
         <div class="flex h-auto max-sm:h-full relative">
             <div class="self-end sticky bottom-0 py-5 flex flex-col gap-2 max-sm:fixed max-sm:right-5 max-sm:bottom-2">
@@ -246,6 +249,27 @@
             <button>close</button>
         </form>
     </dialog>
+    <dialog id="importNilai" class="modal text-black" data-theme="light">
+        <div class="modal-box flex flex-col gap-2">
+            <h3 class="font-bold text-2xl text-center">Import nilai tugas siswa!</h3>
+            <label for="" class="font-bold">Format file</label>
+            <a href="{{ route('ExportInputNilai', ['kelas' => $info_kelas->id]) }}"
+                class="underline text-blue-500">Format nilai Kelas<b>
+                    {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</b> Mapel
+                {{ $info_mapel->nama_mapel }}</a>
+            <label for="" class="font-bold">File</label>
+            <form method="POST"
+                action="{{ route('import-nilai-siswa', ['kelas' => $info_kelas->id, 'mapel' => $pengajar_mapel->id]) }}"
+                class="flex flex-col gap-2" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="file" class="file-input file-input-bordered file-input-accent w-full " />
+                <div class="w-full flex justify-end gap-2">
+                    <input type="submit" class="btn btn-success text-white" value="Import">
+                    <button class="btn btn-error text-white" id="closeBtn">Tutup</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
     <template id="edit-template">
         <dialog id="edit_modal" class="modal" data-theme="light">
             <div class="modal-box text-black">
@@ -344,6 +368,11 @@
                 return clone;
             }
 
+            $("#closeBtn").click(function(e) {
+                e.preventDefault();
+                importNilai.close();
+            })
+
             $(".edit-btn").click(function() {
                 let id = $(this).data("id");
                 let tipe = $(this).data("tipe");
@@ -356,6 +385,8 @@
             $("#add-btn").click(function() {
                 $(this).toggleClass("rotate-45");
             });
+
+
             $(".dropdown-btn").click(function() {
                 $('.dropdown-btn').not($(this)).parent().removeAttr('open')
                 $('.dropdown-btn').not($(this)).removeClass("rotate-45")

@@ -89,7 +89,9 @@
                 eventClick: function(info) {
                     const childEvents = info.event.extendedProps.child;
                     const tanggal = new Date(info.event.start);
-                    const tanggal_kegiatan = tanggal.getFullYear() + "-" + (tanggal.getMonth() + 1) +
+                    let tanggal_temp = tanggal.getMonth() > 9 ? tanggal.getMonth() + 1 : "0" + (tanggal
+                        .getMonth() + 1)
+                    const tanggal_kegiatan = tanggal.getFullYear() + "-" + tanggal_temp +
                         "-" + tanggal.getDate();
                     $("#daftarKegiatan").find("#tanggalKegiatan").val(tanggal_kegiatan);
                     $("#listKegiatan").empty()

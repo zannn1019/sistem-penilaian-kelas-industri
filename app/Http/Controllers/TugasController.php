@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Tugas;
-use App\Models\Pengajar;
 use Illuminate\Http\Request;
 use App\Models\PengajarMapel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\InputNilaiSiswaImport;
 
 class TugasController extends Controller
 {

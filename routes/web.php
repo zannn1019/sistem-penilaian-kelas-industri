@@ -75,6 +75,7 @@ Route::middleware(['auth', 'user:pengajar'])->group(function () {
         Route::resource('/nilai', NilaiController::class)->names('nilai');
         Route::resource('/nilaiakhir', NilaiAkhirController::class)->names('nilai-akhir');
         Route::get('/kelas/{kelas}/nilaiakhir', [DashboardController::class, 'inputNilaiAkhir'])->name('input-nilai-akhir-pengajar');
+        Route::post('/kelas/{kelas}/mapel/{mapel}/importNilai', [NilaiController::class,  'importNilaiSiswa'])->name('import-nilai-siswa');
     });
 });
 
@@ -129,4 +130,5 @@ Route::controller(ExportController::class)->group(function () {
     Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
     Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
     Route::get("/export/kehadiran/{tipe}", 'ExportKehadiranPengajar')->name('ExportKehadiran')->middleware(['auth', 'user:admin']);
+    Route::get('/export/kelas/{kelas}/inputnilai', 'ExportInputtNilai')->name('ExportInputNilai')->middleware(['auth', 'user:pengajar']);
 });

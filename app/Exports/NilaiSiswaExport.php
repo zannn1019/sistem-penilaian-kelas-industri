@@ -135,34 +135,58 @@ class NilaiSiswaExport implements
             }
         }
         $nilai_akhir = $siswa->nilai_akhir()->where('tahun_ajar', $kelas->tahun_ajar)->where('semester', $kelas->semester)->first()->nilai;
-        $nilaiMapel = [
-            "#",
-            "Nilai Mapel",
-            $avgNilai,
-            strtoupper(NumberToWords::transformNumber('id', $avgNilai)) ?? "-",
-        ];
-        $result->push($nilaiMapel);
-        $nilaiAkhir = [
-            "#",
-            "Nilai Akhir",
-            $nilai_akhir ?? "-",
-            strtoupper(NumberToWords::transformNumber('id', $nilai_akhir)) ?? "-",
-        ];
-        $result->push($nilaiAkhir);
-        $nilaiTambah = [
-            "#",
-            "Nilai Tambahan",
-            ($avgNilai / 10) + (70 - $nilai_akhir),
-            strtoupper(NumberToWords::transformNumber('id', ($avgNilai / 10) + (70 - $nilai_akhir)))
-        ];
-        $result->push($nilaiTambah);
-        $nilaiTotal = [
-            "#",
-            "Total Nilai",
-            $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir),
-            strtoupper(NumberToWords::transformNumber('id', $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir)))
-        ];
-        $result->push($nilaiTotal);
+        if ($avgNilai != "-") {
+            $nilaiMapel = [
+                "#",
+                "Nilai Mapel",
+                $avgNilai,
+                strtoupper(NumberToWords::transformNumber('id', $avgNilai)) ?? "-",
+            ];
+            $result->push($nilaiMapel);
+            $nilaiAkhir = [
+                "#",
+                "Nilai Akhir",
+                $nilai_akhir ?? "-",
+                strtoupper(NumberToWords::transformNumber('id', $nilai_akhir)) ?? "-",
+            ];
+            $result->push($nilaiAkhir);
+            $nilaiTambah = [
+                "#",
+                "Nilai Tambahan",
+                ($avgNilai / 10) + (70 - $nilai_akhir),
+                strtoupper(NumberToWords::transformNumber('id', ($avgNilai / 10) + (70 - $nilai_akhir)))
+            ];
+            $result->push($nilaiTambah);
+            $nilaiTotal = [
+                "#",
+                "Total Nilai",
+                $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir),
+                strtoupper(NumberToWords::transformNumber('id', $nilai_akhir + ($avgNilai / 10) + (70 - $nilai_akhir)))
+            ];
+            $result->push($nilaiTotal);
+        } else {
+            $nilaiAkhir = [
+                "#",
+                "Nilai Akhir",
+                $nilai_akhir ?? "-",
+                strtoupper(NumberToWords::transformNumber('id', $nilai_akhir)) ?? "-",
+            ];
+            $result->push($nilaiAkhir);
+            $nilaiTambah = [
+                "#",
+                "Nilai Tambahan",
+                "-",
+                "Belum Lengkap"
+            ];
+            $result->push($nilaiTambah);
+            $nilaiTotal = [
+                "#",
+                "Total Nilai",
+                "-",
+                "Belum Lengkap"
+            ];
+            $result->push($nilaiTotal);
+        }
         return $result;
     }
 

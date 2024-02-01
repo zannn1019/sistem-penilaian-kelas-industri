@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\inputNilaiTugasExport;
 use App\Exports\KehadiranExports;
 use App\Exports\NilaiExport;
 use App\Exports\NilaiSiswaExport;
-use App\Models\Kehadiran;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Siswa;
-use Carbon\Carbon;
-use Clockwork\Request\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpParser\Node\Stmt\Return_;
 
 class ExportController extends Controller
 {
@@ -68,5 +65,10 @@ class ExportController extends Controller
     public function ExportKehadiranPengajar($tipe)
     {
         return Excel::download(new KehadiranExports($tipe), 'Kehadiran Pengajar.xlsx');
+    }
+
+    public function ExportInputtNilai(Kelas $kelas)
+    {
+        return Excel::download(new inputNilaiTugasExport($kelas), 'Format input nilai siswa.xlsx');
     }
 }

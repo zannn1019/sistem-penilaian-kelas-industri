@@ -8,6 +8,8 @@ use App\Models\Siswa;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use App\Models\PengajarMapel;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\InputNilaiSiswaImport;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class NilaiController extends Controller
@@ -91,14 +93,6 @@ class NilaiController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -149,34 +143,13 @@ class NilaiController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Nilai $nilai)
+    public function importNilaiSiswa(Kelas $kelas, PengajarMapel $mapel, Request $request)
     {
-    }
+        if ($request->hasFile('file')) {
+            $import = new InputNilaiSiswaImport($kelas, $mapel);
+            Excel::import($import, $request->file('file'));
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(NIlai $nIlai)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, NIlai $nIlai)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(NIlai $nIlai)
-    {
-        //
+            return redirect()->back()->with("success", "Nilai siswa berhasil di tambahkan!");
+        }
     }
 }
