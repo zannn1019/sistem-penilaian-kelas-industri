@@ -253,7 +253,7 @@
         <div class="modal-box flex flex-col gap-2">
             <h3 class="font-bold text-2xl text-center">Import nilai tugas siswa!</h3>
             <label for="" class="font-bold">Format file</label>
-            <a href="{{ route('ExportInputNilai', ['kelas' => $info_kelas->id]) }}"
+            <a href="{{ route('ExportInputNilai', ['kelas' => $info_kelas->id, 'mapel' => $pengajar_mapel->id]) }}"
                 class="underline text-blue-500">Format nilai Kelas<b>
                     {{ $info_kelas->tingkat . ' ' . $info_kelas->jurusan . ' ' . $info_kelas->kelas }}</b> Mapel
                 {{ $info_mapel->nama_mapel }}</a>

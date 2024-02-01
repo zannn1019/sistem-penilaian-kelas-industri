@@ -8,6 +8,7 @@ use App\Exports\NilaiExport;
 use App\Exports\NilaiSiswaExport;
 use App\Models\Kelas;
 use App\Models\Mapel;
+use App\Models\PengajarMapel;
 use App\Models\Siswa;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -67,8 +68,8 @@ class ExportController extends Controller
         return Excel::download(new KehadiranExports($tipe), 'Kehadiran Pengajar.xlsx');
     }
 
-    public function ExportInputtNilai(Kelas $kelas)
+    public function ExportInputNilai(Kelas $kelas, PengajarMapel $mapel)
     {
-        return Excel::download(new inputNilaiTugasExport($kelas), 'Format input nilai siswa.xlsx');
+        return Excel::download(new inputNilaiTugasExport($kelas, $mapel), 'Format input nilai siswa.xlsx');
     }
 }

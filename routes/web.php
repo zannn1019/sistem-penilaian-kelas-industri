@@ -130,5 +130,5 @@ Route::controller(ExportController::class)->group(function () {
     Route::get('/export/siswa/{siswa}', 'ExportPerSiswa')->name('ExportPerSiswa');
     Route::get('/export/kelas/{kelas}/mapel/{mapel}', 'ExportPerTugas')->name('ExportPerTugas');
     Route::get("/export/kehadiran/{tipe}", 'ExportKehadiranPengajar')->name('ExportKehadiran')->middleware(['auth', 'user:admin']);
-    Route::get('/export/kelas/{kelas}/inputnilai', 'ExportInputtNilai')->name('ExportInputNilai')->middleware(['auth', 'user:pengajar']);
+    Route::get('/export/kelas/{kelas}/mapel/{mapel}/exportInputNilai', 'ExportInputNilai')->name('ExportInputNilai')->middleware(['auth', 'user:pengajar']);
 });

@@ -17,10 +17,11 @@ class inputNilaiTugasExport implements
     WithColumnFormatting,
     WithEvents
 {
-    protected $kelas;
-    public function __construct($kelas)
+    protected $kelas, $pengajar;
+    public function __construct($kelas, $mapel)
     {
         $this->kelas = $kelas;
+        $this->pengajar = $mapel;
     }
 
     public function columnFormats(): array
@@ -37,7 +38,7 @@ class inputNilaiTugasExport implements
             "NIS",
             'Nama Siswa'
         ];
-        foreach ($this->kelas->tugas as $tugas) {
+        foreach ($this->kelas->tugas->where('id_pengajar', $this->pengajar->id) as $tugas) {
             array_push($heading, $tugas->nama);
         }
         return $heading;
@@ -58,6 +59,7 @@ class inputNilaiTugasExport implements
         $no = 0;
         $tempt = [];
         $nilai = Nilai::all();
+
         foreach ($this->kelas->siswa as $siswa) {
             $data_siswa = [];
             //? Push data siswa
@@ -66,7 +68,7 @@ class inputNilaiTugasExport implements
             $data_siswa['nama_siswa'] = $siswa->nama;
 
             //? Push nilai siswa
-            foreach ($this->kelas->tugas as $tugas) {
+            foreach ($this->kelas->tugas->where('id_pengajar', $this->pengajar->id) as $tugas) {
                 $nilai_siswa = $nilai->where('id_tugas', $tugas->id)->where('id_siswa', $siswa->id)->first();
                 if ($nilai_siswa) {
                     $data_siswa[$tugas->nama] = $nilai_siswa->nilai;
