@@ -30,7 +30,7 @@
             <div class="self-end sticky bottom-0 py-5 flex flex-col gap-2 max-sm:fixed max-sm:right-5 max-sm:bottom-2">
                 <div class="relative w-12 rounded-circle aspect-square flex items-end">
                     <details class="dropdown dropdown-top">
-                        <summary
+                        <summary    
                             class="dropdown-btn absolute bottom-0 bg-darkblue-500 z-[1] p-3 shadow-box btn rounded-circle text-white text-2xl flex justify-center items-center aspect-square"
                             id="list-btn"><i class="fa-solid fa-bars-staggered"></i></summary>
                         <div

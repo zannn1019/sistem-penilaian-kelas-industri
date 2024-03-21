@@ -38,7 +38,7 @@ class inputNilaiTugasExport implements
             "NIS",
             'Nama Siswa'
         ];
-        foreach ($this->kelas->tugas->where('id_pengajar', $this->pengajar->id)->get() as $tugas) {
+        foreach ($this->kelas->tugas->where('id_pengajar', $this->pengajar->id) as $tugas) {
             array_push($heading, $tugas->nama);
         }
         return $heading;

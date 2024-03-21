@@ -59,7 +59,6 @@ class KegiatanController extends Controller
 
         $jam_mulai = Carbon::parse($validatedData['jam_mulai']);
         $jam_selesai = Carbon::parse($validatedData['jam_selesai']);
-
         if ($jam_mulai->diffInMinutes($jam_selesai) <= env("MAX_JAM", 24) * 60) {
             $kegiatan->nama_kegiatan = $validatedData['kegiatan'];
             $kegiatan->jam_mulai = $validatedData['jam_mulai'];

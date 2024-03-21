@@ -117,15 +117,20 @@ class KehadiranController extends Controller
             foreach ($validatedData['kegiatan'] as  $index => $kegiatan) {
                 $mulai = Carbon::parse($validatedData['jam_mulai'][$index]);
                 $selesai = Carbon::parse($validatedData['jam_selesai'][$index]);
-                if ($selesai->isAfter($mulai)) {
-                    Kegiatan::create([
-                        'id_kehadiran' => $kehadiran->id,
-                        'nama_kegiatan' => $kegiatan,
-                        'jam_mulai' => $mulai,
-                        'jam_selesai' => $selesai
-                    ]);
+
+                if ($mulai->diffInMinutes($selesai) <= (env("MAX_JAM", 24) * 60)) {
+                    if ($selesai->isAfter($mulai)) {
+                        Kegiatan::create([
+                            'id_kehadiran' => $kehadiran->id,
+                            'nama_kegiatan' => $kegiatan,
+                            'jam_mulai' => $mulai,
+                            'jam_selesai' => $selesai
+                        ]);
+                    } else {
+                        $errors[] = "Waktu selesai harus lebih besar dari waktu mulai untuk kegiatan ke-$index";
+                    }
                 } else {
-                    $errors[] = "Waktu selesai harus lebih besar dari waktu mulai untuk kegiatan ke-$index";
+                    return redirect()->back()->withErrors("Jam tidak boleh melebihi " . env("MAX_JAM", 24) . " Jam");
                 }
             }
         } else {
@@ -138,15 +143,19 @@ class KehadiranController extends Controller
                 foreach ($validatedData['kegiatan'] as $index => $kegiatan) {
                     $mulai = Carbon::parse($validatedData['jam_mulai'][$index]);
                     $selesai = Carbon::parse($validatedData['jam_selesai'][$index]);
-                    if ($selesai->isAfter($mulai)) {
-                        Kegiatan::create([
-                            'id_kehadiran' => $kehadiran->id,
-                            'nama_kegiatan' => $kegiatan,
-                            'jam_mulai' => $mulai,
-                            'jam_selesai' => $selesai
-                        ]);
+                    if ($mulai->diffInMinutes($selesai) <= (env("MAX_JAM", 24) * 60)) {
+                        if ($selesai->isAfter($mulai)) {
+                            Kegiatan::create([
+                                'id_kehadiran' => $kehadiran->id,
+                                'nama_kegiatan' => $kegiatan,
+                                'jam_mulai' => $mulai,
+                                'jam_selesai' => $selesai
+                            ]);
+                        } else {
+                            $errors[] = "Waktu selesai harus lebih besar dari waktu mulai untuk kegiatan ke-$index";
+                        }
                     } else {
-                        $errors[] = "Waktu selesai harus lebih besar dari waktu mulai untuk kegiatan ke-$index";
+                        return redirect()->back()->withErrors("Jam tidak boleh melebihi " . env("MAX_JAM", 24) . " Jam");
                     }
                 }
             }

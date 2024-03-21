@@ -7,13 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <title>{{ $title }}</title>
-    <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet" async>
     @vite('resources/css/app.css')
 </head>
 
 <body>
     <div class="container-fluid w-full h-screen max-sm:flex-col max-md:flex-col bg-darkblue-500 flex">
-        <img src="{{ asset('img/index_img.png') }}" alt="" class="h-full max-sm:hidden max-md:hidden"
+        <img src="{{ asset('img/index_img.png') }}" alt="" class="max-sm:hidden max-md:hidden"
             draggable="false">
         <div
             class="greating w-full h-full text-end max-md:items-center max-md:text-center max-sm:items-center max-sm:text-center items-end flex p-10 flex-col justify-center gap-2">
