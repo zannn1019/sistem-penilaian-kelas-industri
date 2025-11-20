@@ -111,13 +111,6 @@ class UserController extends Controller
     }
 
     //? End of password reset
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -154,22 +147,6 @@ class UserController extends Controller
             ->withProperties(['role' => auth()->user()->role])
             ->log('Menambah data pengajar!');
         return redirect()->route('pengajar.index')->with('success', 'Pengajar berhasil ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
     }
 
     /**
@@ -225,12 +202,5 @@ class UserController extends Controller
         } else {
             return back()->with('success', "Informasi gagal diubah!");
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
     }
 }
