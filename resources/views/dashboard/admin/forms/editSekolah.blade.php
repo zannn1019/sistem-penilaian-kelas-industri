@@ -95,82 +95,91 @@
         </form>
     </div>
 @endsection
-
 @section('script')
-    <script>
-        $(document).ready(function() {
-            $("#input-photo").on("change", function(e) {
-                const file = URL.createObjectURL(e.target.files[0]);
-                $("#photo-preview").attr("src", file);
-            });
-            $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/provinsi', function(data) {
-                let dataProvinsi = "{{ $data->provinsi }}";
-                $.each(data.provinsi, function(index, provinsi) {
-                    let isSelected = provinsi.nama.toLowerCase() === dataProvinsi.toLowerCase() ?
-                        'selected' : '';
-                    $('#provinsi').append(
-                        `<option value="${provinsi.nama}" data-id='${provinsi.id}' ${isSelected}>${provinsi.nama}</option>`
-                    );
-                });
-                $('#provinsi').trigger('change');
-            });
+<script>
+    $(document).ready(function() {
+        $("#nama-sekolah").keyup(function() {
+            $("#indicator").text($(this).val().length)
+        })
+        $("#nama-sekolah").keydown(function() {
+            $("#indicator").text($(this).val().length)
+        })
+        $("#input-photo").on("change", function(e) {
+            const file = URL.createObjectURL(e.target.files[0]);
+            $("#photo-preview").attr("src", file);
+        });
 
-            $('#provinsi').on('change', function() {
-                let selectedProvinsi = $(this).find(":selected").data('id');
-                let dataProv = "{{ $data->kabupaten_kota }}"
-                $('#kabupaten-kota').empty();
-                $('#kabupaten-kota').append(new Option('Pilih Kabupaten/Kota', ''));
-
-                $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' +
-                    selectedProvinsi,
-                    function(data) {
-                        $.each(data.kota_kabupaten, function(index, kabupaten) {
-                            let isSelected = kabupaten.nama.toLowerCase() === dataProv
-                                .toLowerCase() ? 'selected' : '';
-                            $('#kabupaten-kota').append(
-                                `<option value="${kabupaten.nama}" data-id='${kabupaten.id}' ${isSelected}>${kabupaten.nama}</option>`
-                            );
-                        });
-                        $("#kabupaten-kota").trigger("change");
-                    });
-            });
-
-            $('#kabupaten-kota').change(function() {
-                let selectedKabupaten = $(this).find(':selected').data('id');
-                let dataKec = "{{ $data->kecamatan }}"
-                $('#kecamatan').empty();
-                $('#kecamatan').append(new Option('Pilih Kecamatan', ''));
-                $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=' +
-                    selectedKabupaten,
-                    function(data) {
-                        $.each(data.kecamatan, function(index, kecamatan) {
-                            let isSelected = kecamatan.nama.toLowerCase() === dataKec
-                                .toLowerCase() ? 'selected' : '';
-                            $('#kecamatan').append(
-                                `<option value="${kecamatan.nama}"data-id='${kecamatan.id}' ${isSelected}>${kecamatan.nama}</option>`
-                            );
-                        });
-                        $("#kecamatan").trigger("change");
-                    });
-            });
-
-            $('#kecamatan').change(function() {
-                let selectedKec = $(this).find(':selected').data('id');
-                let dataKel = "{{ $data->kelurahan }}"
-                $('#kelurahan').empty();
-                $('#kelurahan').append(new Option('Pilih Kelurahan', ''));
-                $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=' +
-                    selectedKec,
-                    function(data) {
-                        $.each(data.kelurahan, function(index, kelurahan) {
-                            let isSelected = kelurahan.nama.toLowerCase() === dataKel
-                                .toLowerCase() ? 'selected' : '';
-                            $('#kelurahan').append(
-                                `<option value="${kelurahan.nama}"data-id='${kelurahan.id}' ${isSelected}>${kelurahan.nama}</option>`
-                            );
-                        });
-                    });
+        
+        $.getJSON('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json', function(data) {
+            $.each(data, function(index, provinsi) {
+                $('#provinsi').append(
+                    `<option value="${provinsi.name}" data-id="${provinsi.id}">${provinsi.name}</option>`
+                );
             });
         });
-    </script>
+
+        $('#provinsi').change(function() {
+            let selectedProvinsi = $(this).find(':selected').data('id');
+            
+            $('#kabupaten-kota').empty();
+            $('#kabupaten-kota').append(new Option('Pilih Kabupaten/Kota', ''));
+            $('#kecamatan').empty().append(new Option('Pilih Kecamatan', '')); 
+            $('#kelurahan').empty().append(new Option('Pilih Kelurahan', ''));
+            
+            if (selectedProvinsi) {
+                $('#kabupaten-kota').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${selectedProvinsi}.json`, function(data) {
+                    $.each(data, function(index, kabupaten) {
+                        $('#kabupaten-kota').append(
+                            `<option value="${kabupaten.name}" data-id="${kabupaten.id}">${kabupaten.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kabupaten-kota').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#kabupaten-kota').change(function() {
+            let selectedKabupaten = $(this).find(':selected').data('id');
+            
+            $('#kecamatan').empty();
+            $('#kecamatan').append(new Option('Pilih Kecamatan', ''));
+            $('#kelurahan').empty().append(new Option('Pilih Kelurahan', '')); 
+
+            if (selectedKabupaten) {
+                $('#kecamatan').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${selectedKabupaten}.json`, function(data) {
+                    $.each(data, function(index, kecamatan) {
+                        $('#kecamatan').append(
+                            `<option value="${kecamatan.name}" data-id="${kecamatan.id}">${kecamatan.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kecamatan').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#kecamatan').change(function() {
+            let selectedKecamatan = $(this).find(':selected').data('id');
+            
+            $('#kelurahan').empty();
+            $('#kelurahan').append(new Option('Pilih Kelurahan', ''));
+
+            if (selectedKecamatan) {
+                $('#kelurahan').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${selectedKecamatan}.json`, function(data) {
+                    $.each(data, function(index, kelurahan) {
+                        $('#kelurahan').append(
+                            `<option value="${kelurahan.name}" data-id="${kelurahan.id}">${kelurahan.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kelurahan').attr('disabled', 'disabled');
+            }
+        });
+    });
+</script>
 @endsection
