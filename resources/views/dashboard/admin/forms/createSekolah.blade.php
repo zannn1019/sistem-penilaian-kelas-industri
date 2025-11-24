@@ -105,82 +105,89 @@
     </div>
 @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $("#nama-sekolah").keyup(function() {
-                $("#indicator").text($(this).val().length)
-            })
-            $("#nama-sekolah").keydown(function() {
-                $("#indicator").text($(this).val().length)
-            })
-            $("#input-photo").on("change", function(e) {
-                const file = URL.createObjectURL(e.target.files[0]);
-                $("#photo-preview").attr("src", file);
-            });
-            $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/provinsi', function(data) {
-                $.each(data.provinsi, function(index, provinsi) {
-                    $('#provinsi').append(
-                        `<option value="${provinsi.nama}"data-id='${provinsi.id}'>${provinsi.nama}</option>`
-                    );
-                });
-            });
+<script>
+    $(document).ready(function() {
+        $("#nama-sekolah").keyup(function() {
+            $("#indicator").text($(this).val().length)
+        })
+        $("#nama-sekolah").keydown(function() {
+            $("#indicator").text($(this).val().length)
+        })
+        $("#input-photo").on("change", function(e) {
+            const file = URL.createObjectURL(e.target.files[0]);
+            $("#photo-preview").attr("src", file);
+        });
 
-            $('#provinsi').change(function() {
-                let selectedProvinsi = $(this).find(':selected').data('id');
-                $('#kabupaten-kota').empty();
-                $('#kabupaten-kota').removeAttr('disabled');
-                $('#kabupaten-kota').append(new Option('Pilih Kabupaten/Kota', ''));
-
-                if (selectedProvinsi !== '') {
-                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' +
-                        selectedProvinsi,
-                        function(data) {
-                            $.each(data.kota_kabupaten, function(index, kabupaten) {
-                                $('#kabupaten-kota').append(
-                                    `<option value="${kabupaten.nama}"data-id='${kabupaten.id}'>${kabupaten.nama}</option>`
-                                );
-                            });
-                        });
-                }
-            });
-
-            $('#kabupaten-kota').change(function() {
-                let selectedKabupaten = $(this).find(':selected').data('id');
-                $('#kecamatan').empty();
-                $('#kecamatan').removeAttr('disabled');
-                $('#kecamatan').append(new Option('Pilih Kecamatan', ''));
-
-                if (selectedKabupaten !== '') {
-                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=' +
-                        selectedKabupaten,
-                        function(data) {
-                            $.each(data.kecamatan, function(index, kecamatan) {
-                                $('#kecamatan').append(
-                                    `<option value="${kecamatan.nama}"data-id='${kecamatan.id}'>${kecamatan.nama}</option>`
-                                );
-                            });
-                        });
-                }
-            });
-            $('#kecamatan').change(function() {
-                let selectedKecamatan = $(this).find(':selected').data('id');
-                $('#kelurahan').empty();
-                $('#kelurahan').removeAttr('disabled');
-                $('#kelurahan').append(new Option('Pilih Kelurahan', ''));
-
-                if (selectedKecamatan !== '') {
-                    $.getJSON('https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=' +
-                        selectedKecamatan,
-                        function(data) {
-                            $.each(data.kelurahan, function(index, kelurahan) {
-                                $('#kelurahan').append(
-                                    `<option value="${kelurahan.nama}"data-id='${kelurahan.id}'>${kelurahan.nama}</option>`
-                                );
-                            });
-                        });
-                }
+        
+        $.getJSON('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json', function(data) {
+            $.each(data, function(index, provinsi) {
+                $('#provinsi').append(
+                    `<option value="${provinsi.name}" data-id="${provinsi.id}">${provinsi.name}</option>`
+                );
             });
         });
-    </script>
-@endsection
+
+        $('#provinsi').change(function() {
+            let selectedProvinsi = $(this).find(':selected').data('id');
+            
+            $('#kabupaten-kota').empty();
+            $('#kabupaten-kota').append(new Option('Pilih Kabupaten/Kota', ''));
+            $('#kecamatan').empty().append(new Option('Pilih Kecamatan', '')); 
+            $('#kelurahan').empty().append(new Option('Pilih Kelurahan', ''));
+            
+            if (selectedProvinsi) {
+                $('#kabupaten-kota').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${selectedProvinsi}.json`, function(data) {
+                    $.each(data, function(index, kabupaten) {
+                        $('#kabupaten-kota').append(
+                            `<option value="${kabupaten.name}" data-id="${kabupaten.id}">${kabupaten.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kabupaten-kota').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#kabupaten-kota').change(function() {
+            let selectedKabupaten = $(this).find(':selected').data('id');
+            
+            $('#kecamatan').empty();
+            $('#kecamatan').append(new Option('Pilih Kecamatan', ''));
+            $('#kelurahan').empty().append(new Option('Pilih Kelurahan', '')); 
+
+            if (selectedKabupaten) {
+                $('#kecamatan').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${selectedKabupaten}.json`, function(data) {
+                    $.each(data, function(index, kecamatan) {
+                        $('#kecamatan').append(
+                            `<option value="${kecamatan.name}" data-id="${kecamatan.id}">${kecamatan.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kecamatan').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#kecamatan').change(function() {
+            let selectedKecamatan = $(this).find(':selected').data('id');
+            
+            $('#kelurahan').empty();
+            $('#kelurahan').append(new Option('Pilih Kelurahan', ''));
+
+            if (selectedKecamatan) {
+                $('#kelurahan').removeAttr('disabled');
+                $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${selectedKecamatan}.json`, function(data) {
+                    $.each(data, function(index, kelurahan) {
+                        $('#kelurahan').append(
+                            `<option value="${kelurahan.name}" data-id="${kelurahan.id}">${kelurahan.name}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#kelurahan').attr('disabled', 'disabled');
+            }
+        });
+    });
+</script>
