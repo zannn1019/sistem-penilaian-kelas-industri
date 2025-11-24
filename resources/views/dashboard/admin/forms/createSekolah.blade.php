@@ -104,7 +104,7 @@
         </form>
     </div>
 @endsection
-
+@section('script')
 <script>
     $(document).ready(function() {
         $("#nama-sekolah").keyup(function() {
@@ -191,3 +191,4 @@
         });
     });
 </script>
+@endsection
